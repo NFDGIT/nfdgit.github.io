@@ -6,9 +6,24 @@
     <title>Page Title</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
-    <script src="main.js"></script>
+    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js">
+    </script>
+    <script src="js/main.js"></script>
+    <script>
+		var name = $.getUrlParam('name');
+		var id = $.getUrlParam('id');
+ 
+		window.onload = function(){
+			$("#addname").val(name);
+			$("#addid").val(id);
+		}
+	</script>
 </head>
 <body>
-    
+    <label>测试URL中的name是：</label>
+    <input type="text" id="addname" />
+    <label>测试URL中的id是：</label>
+    <input type="text" id="addid" />
+
 </body>
 </html>
