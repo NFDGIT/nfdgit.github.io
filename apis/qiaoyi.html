@@ -7,16 +7,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js">
     </script>
-    <script src="js/main.js"></script>
+    <script src="../js/main.js"></script>
     <script>
 		var name = $.getUrlParam('name');
         var id = $.getUrlParam('id');
-
-        if (name == 'api') {
-            alert(name);
+      
+        if (name=='api') {
+       
             window.location.href = "https://nfdgit.github.io/jsons/api.json";
-        }else if(name == 'news'){
-            alert(name);
+        }else if(name=='news'){
+          
             window.location.href = "https://nfdgit.github.io/jsons/news.json";
         }
 
