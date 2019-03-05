@@ -10,10 +10,13 @@
     <script src="js/main.js"></script>
     <script>
 		var name = $.getUrlParam('name');
-		var id = $.getUrlParam('id');
+        var id = $.getUrlParam('id');
+
         if (name == 'api') {
+            alert(name);
             window.location.href = "https://nfdgit.github.io/jsons/api.json";
         }else if(name == 'news'){
+            alert(name);
             window.location.href = "https://nfdgit.github.io/jsons/news.json";
         }
 
