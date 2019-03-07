@@ -1,6 +1,8 @@
 {"success":true,
     "message":"成功",
-    "data":[{"avatar":"https://tgi1.jia.com/123/863/23863253.jpg",
+    "data":[{
+             "goodsId":"100",
+             "avatar":"https://tgi1.jia.com/123/863/23863253.jpg",
              "name":"美式混搭三居室榻榻米装修",
              "content":"贴心设计，来自龙之美！",
              "price":"9877",
@@ -24,7 +26,9 @@
                      {"url":"https://tgi1.jia.com/123/828/23828871.jpg"},
                      {"url":"https://tgi1.jia.com/123/828/23828872.jpg"},
                      {"url":"https://tgi13.jia.com/123/863/23863269.jpg"}]},
-             {"avatar":"https://tgi1.jia.com/120/564/20564432.jpg",
+             {
+              "goodsId":"101",
+              "avatar":"https://tgi1.jia.com/120/564/20564432.jpg",
               "name":"日式风格两居室客厅装修效果图",
               "content":"贴心设计，来自龙之美！",
               "price":"9566",
