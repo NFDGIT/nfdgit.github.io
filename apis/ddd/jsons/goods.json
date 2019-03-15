@@ -4,21 +4,21 @@
         "data": [
           {
             "goodsId": "100",
-            "avatar": "https://tgi12.jia.com/123/635/23635135.jpg",
-            "name": "美式混搭三居室榻榻米装修",
-            "content": "贴心设计，来自龙之美！",
-            "price": "9877",
-            "decorationCompanyDesc": "用户的满意 ，我们的追求！",
-            "decorationCompany": "龙之美装饰公司",
+            "avatar": "https://img.alicdn.com/imgextra/i2/1799729846/O1CN01uBn92R2MbWA00lxWT_!!1799729846.jpg_2200x2200Q100s50.jpg_.webp",
+            "name": "安溪铁观音500g",
+            "content": "安溪铁观音茶叶",
+            "price": "38",
+            "decorationCompanyDesc": "10年好店，权威认证，买退无忧",
+            "decorationCompany": "",
             "phone": "13385887878",
-            "style": "美式混搭",
-            "type": "三居室",
+            "style": "铁观音",
+            "type": "铁观音",
             "imgs": [
               {
-                "url": "https://tgi1.jia.com/123/863/23863251.jpg"
+                "url": "https://img.alicdn.com/imgextra/i3/1799729846/O1CN01JqMZpL2MbWAVeP6dD_!!1799729846.jpg_2200x2200Q100s50.jpg_.webp"
               },
               {
-                "url": "https://tgi1.jia.com/123/863/23863253.jpg"
+                "url": "https://img.alicdn.com/imgextra/i2/1799729846/O1CN01sN9PeL2MbWATOEnsI_!!1799729846.jpg_2200x2200Q100s50.jpg_.webp"
               }
             ]
           }
