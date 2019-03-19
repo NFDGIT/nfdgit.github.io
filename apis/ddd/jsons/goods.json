@@ -14,12 +14,36 @@
             "style": "铁观音",
             "type": "铁观音",
             "imgs": [
-              {
-                "url": "https://img.alicdn.com/imgextra/i3/1799729846/O1CN01JqMZpL2MbWAVeP6dD_!!1799729846.jpg_2200x2200Q100s50.jpg_.webp"
-              },
-              {
-                "url": "https://img.alicdn.com/imgextra/i2/1799729846/O1CN01sN9PeL2MbWATOEnsI_!!1799729846.jpg_2200x2200Q100s50.jpg_.webp"
-              }
+            ]
+          },
+          {
+            "goodsId": "101",
+            "avatar": "https://nfdgit.github.io/apis/ddd/resource/avatar/101.png",
+            "name": "正山王 金骏眉红茶",
+            "content": "正山王 金骏眉红茶 武夷山春茶桐木关",
+            "price": "238",
+            "decorationCompanyDesc": "10年好店，权威认证，买退无忧",
+            "decorationCompany": "",
+            "phone": "13385887878",
+            "style": "金骏眉",
+            "type": "金骏眉",
+            "imgs": [
+              
+            ]
+          },
+          {
+            "goodsId": "102",
+            "avatar": "https://nfdgit.github.io/apis/ddd/resource/avatar/102.png",
+            "name": "特级明前旗枪250g 洞庭碧螺春2019新茶叶",
+            "content": "特级明前旗枪250g 洞庭碧螺春2019新茶叶",
+            "price": "408",
+            "decorationCompanyDesc": "10年好店，权威认证，买退无忧",
+            "decorationCompany": "",
+            "phone": "13385887878",
+            "style": "洞庭碧螺春",
+            "type": "洞庭碧螺春",
+            "imgs": [
+              
             ]
           }
         ]
