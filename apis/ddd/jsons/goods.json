@@ -45,6 +45,21 @@
             "imgs": [
               
             ]
+          },
+          {
+            "goodsId": "103",
+            "avatar": "https://nfdgit.github.io/apis/ddd/resource/avatar/103.png",
+            "name": "买一发四 大红袍茶叶礼盒装",
+            "content": "武夷山岩茶浓香型乌龙茶",
+            "price": "68",
+            "decorationCompanyDesc": "10年好店，权威认证，买退无忧",
+            "decorationCompany": "",
+            "phone": "13385887878",
+            "style": "大红袍",
+            "type": "大红袍",
+            "imgs": [
+              
+            ]
           }
         ]
       }
