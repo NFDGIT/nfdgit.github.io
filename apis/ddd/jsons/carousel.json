@@ -1,35 +1,30 @@
 {"success":true,"message":"成功","data":[        
         {
-                "goodsId": "100",
-                "avatar": "https://nfdgit.github.io/apis/ddd/resource/avatar/100.png",
-                "name": "安溪铁观音500g",
-                "content": "安溪铁观音茶叶",
-                "price": "38",
+                "goodsId": "101",
+                "avatar": "https://nfdgit.github.io/apis/ddd/resource/avatar/101.png",
+                "name": "正山王 金骏眉红茶",
+                "content": "正山王 金骏眉红茶 武夷山春茶桐木关",
+                "price": "238",
                 "decorationCompanyDesc": "10年好店，权威认证，买退无忧",
                 "decorationCompany": "",
                 "phone": "13385887878",
-                "style": "铁观音",
-                "type": "铁观音",
+                "style": "金骏眉",
+                "type": "金骏眉",
                 "imgs": [
-                  {
-                    "url": "https://img.alicdn.com/imgextra/i3/1799729846/O1CN01JqMZpL2MbWAVeP6dD_!!1799729846.jpg_2200x2200Q100s50.jpg_.webp"
-                  },
-                  {
-                    "url": "https://img.alicdn.com/imgextra/i2/1799729846/O1CN01sN9PeL2MbWATOEnsI_!!1799729846.jpg_2200x2200Q100s50.jpg_.webp"
-                  }
+                  
                 ]
               },
               {
-                "goodsId": "104",
-                "avatar": "https://nfdgit.github.io/apis/ddd/resource/avatar/104.png",
-                "name": "西湖牌2018新茶龙井茶",
-                "content": "西湖牌2018新茶龙井茶 正宗雨前龙井茶200g醇香纸包",
-                "price": "80",
+                "goodsId": "109",
+                "avatar": "https://nfdgit.github.io/apis/ddd/resource/avatar/109.png",
+                "name": "任君乌龙大红袍",
+                "content": "任君乌龙大红袍 木质礼盒袋装",
+                "price": "158",
                 "decorationCompanyDesc": "10年好店，权威认证，买退无忧",
                 "decorationCompany": "",
                 "phone": "13385887878",
-                "style": "西湖龙井",
-                "type": "西湖龙井",
+                "style": "大红袍",
+                "type": "大红袍",
                 "imgs": [
                   
                 ]
