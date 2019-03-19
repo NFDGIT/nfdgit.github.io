@@ -34,7 +34,7 @@
           {
             "goodsId": "102",
             "avatar": "https://nfdgit.github.io/apis/ddd/resource/avatar/102.png",
-            "name": "特级明前旗枪250g 洞庭碧螺春2019新茶叶",
+            "name": "特级明前旗枪250g",
             "content": "特级明前旗枪250g 洞庭碧螺春2019新茶叶",
             "price": "408",
             "decorationCompanyDesc": "10年好店，权威认证，买退无忧",
@@ -50,13 +50,28 @@
             "goodsId": "103",
             "avatar": "https://nfdgit.github.io/apis/ddd/resource/avatar/103.png",
             "name": "买一发四 大红袍茶叶礼盒装",
-            "content": "武夷山岩茶浓香型乌龙茶",
+            "content": "武夷山岩茶浓香型乌龙茶 买一发四 大红袍茶叶礼盒装",
             "price": "68",
             "decorationCompanyDesc": "10年好店，权威认证，买退无忧",
             "decorationCompany": "",
             "phone": "13385887878",
             "style": "大红袍",
             "type": "大红袍",
+            "imgs": [
+              
+            ]
+          },
+          {
+            "goodsId": "104",
+            "avatar": "https://nfdgit.github.io/apis/ddd/resource/avatar/104.png",
+            "name": "西湖牌2018新茶龙井茶",
+            "content": "西湖牌2018新茶龙井茶 正宗雨前龙井茶200g醇香纸包",
+            "price": "80",
+            "decorationCompanyDesc": "10年好店，权威认证，买退无忧",
+            "decorationCompany": "",
+            "phone": "13385887878",
+            "style": "西湖龙井",
+            "type": "西湖龙井",
             "imgs": [
               
             ]
