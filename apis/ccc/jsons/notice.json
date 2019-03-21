@@ -1,0 +1,32 @@
+{"success":true,"message":"成功","data":[
+    {
+        "goodsId": "101",
+        "avatar": "https://nfdgit.github.io/apis/ddd/resource/avatar/101.png",
+        "name": "正山王 金骏眉红茶",
+        "content": "正山王 金骏眉红茶 武夷山春茶桐木关",
+        "price": "238",
+        "decorationCompanyDesc": "10年好店，权威认证，买退无忧",
+        "decorationCompany": "",
+        "phone": "13385887878",
+        "style": "金骏眉",
+        "type": "金骏眉",
+        "imgs": [
+          
+        ]
+      },
+      {
+        "goodsId": "109",
+        "avatar": "https://nfdgit.github.io/apis/ddd/resource/avatar/109.png",
+        "name": "任君乌龙大红袍",
+        "content": "任君乌龙大红袍 木质礼盒袋装",
+        "price": "158",
+        "decorationCompanyDesc": "10年好店，权威认证，买退无忧",
+        "decorationCompany": "",
+        "phone": "13385887878",
+        "style": "大红袍",
+        "type": "大红袍",
+        "imgs": [
+          
+        ]
+      }
+]}
