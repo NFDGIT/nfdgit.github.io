@@ -48,75 +48,75 @@
           },
           {
             "goodsId": "103",
-            "avatar": "https://nfdgit.github.io/apis/ddd/resource/avatar/103.png",
-            "name": "买一发四 大红袍茶叶礼盒装",
-            "content": "武夷山岩茶浓香型乌龙茶 买一发四 大红袍茶叶礼盒装",
-            "price": "68",
+            "avatar": "https://nfdgit.github.io/apis/ccc/resource/avatar/103.png",
+            "name": "不粘锅炒锅煎锅汤锅",
+            "content": "三禾锅具套装组合麦饭石三件套不粘锅炒锅煎锅汤锅无烟电磁炉通用",
+            "price": "245",
             "decorationCompanyDesc": "10年好店，权威认证，买退无忧",
             "decorationCompany": "",
             "phone": "13385887878",
-            "style": "大红袍",
-            "type": "大红袍",
+            "style": "",
+            "type": "不粘锅",
             "imgs": [
               
             ]
           },
           {
             "goodsId": "104",
-            "avatar": "https://nfdgit.github.io/apis/ddd/resource/avatar/104.png",
-            "name": "西湖牌2018新茶龙井茶",
-            "content": "西湖牌2018新茶龙井茶 正宗雨前龙井茶200g醇香纸包",
-            "price": "80",
+            "avatar": "https://nfdgit.github.io/apis/ccc/resource/avatar/104.png",
+            "name": "加厚饭盒便当盒 圆形2层",
+            "content": "欧格曼304不锈钢快餐杯成人加厚饭盒便当盒学生食堂简约圆形2层",
+            "price": "40",
             "decorationCompanyDesc": "10年好店，权威认证，买退无忧",
             "decorationCompany": "",
             "phone": "13385887878",
-            "style": "西湖龙井",
-            "type": "西湖龙井",
+            "style": "饭盒",
+            "type": "饭盒",
             "imgs": [
               
             ]
           },
           {
             "goodsId": "105",
-            "avatar": "https://nfdgit.github.io/apis/ddd/resource/avatar/105.png",
-            "name": "西湖龙井2019 ",
-            "content": "西湖龙井2019  新茶龙井茶  杭州明前特级春茶杭州龙井",
-            "price": "468",
+            "avatar": "https://nfdgit.github.io/apis/ccc/resource/avatar/105.png",
+            "name": "美的不沾锅具专用 ",
+            "content": "电磁炉燃气煤气灶适用平底锅炒菜不沾锅具专用",
+            "price": "210",
             "decorationCompanyDesc": "10年好店，权威认证，买退无忧",
             "decorationCompany": "",
             "phone": "13385887878",
-            "style": "西湖龙井",
-            "type": "西湖龙井",
+            "style": "",
+            "type": "不粘锅",
             "imgs": [
               
             ]
           },
           {
             "goodsId": "106",
-            "avatar": "https://nfdgit.github.io/apis/ddd/resource/avatar/106.png",
-            "name": "浓香型小金罐装 450g",
-            "content": "新茶秋季安溪铁观音 浓香型小金罐装 450g",
+            "avatar": "https://nfdgit.github.io/apis/ccc/resource/avatar/106.png",
+            "name": "饭碗简约日式北欧ins餐具好看",
+            "content": "碗碟套装陶瓷碗筷盘子家用4人组合吃饭碗简约日式北欧ins餐具好看",
             "price": "168",
             "decorationCompanyDesc": "10年好店，权威认证，买退无忧",
             "decorationCompany": "",
             "phone": "13385887878",
-            "style": "铁观音",
-            "type": "铁观音",
+            "style": "",
+            "type": "碗碟",
             "imgs": [
               
             ]
           },
           {
             "goodsId": "107",
-            "avatar": "https://nfdgit.github.io/apis/ddd/resource/avatar/107.png",
-            "name": "金骏眉红茶 ",
-            "content": "金骏眉红茶 特级武夷山礼盒罐装 ",
+            "avatar": "https://nfdgit.github.io/apis/ccc/resource/avatar/107.png",
+            "name": "西餐牛排盘餐具套装 ",
+            "content": "创意牛排刀叉套装日式陶瓷简约黑线家用餐盘 西餐牛排盘餐具套装",
             "price": "68",
             "decorationCompanyDesc": "10年好店，权威认证，买退无忧",
             "decorationCompany": "",
             "phone": "13385887878",
-            "style": "金骏眉",
-            "type": "金骏眉",
+            "style": "碗碟",
+            "type": "碗碟",
             "imgs": [
               
             ]
