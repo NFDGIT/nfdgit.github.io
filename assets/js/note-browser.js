@@ -46,9 +46,10 @@
         li.appendChild(childrenEl);
       } else {
         const div = document.createElement('div');
-        div.className = 'note-tree-node file ' + (node.name.endsWith('.md') ? 'md' : 'html');
+        const isMd = node.name.toLowerCase().endsWith('.md');
+        div.className = 'note-tree-node file ' + (isMd ? 'md' : 'html');
         div.dataset.path = node.path;
-        div.dataset.ext = node.name.endsWith('.md') ? 'md' : 'html';
+        div.dataset.ext = isMd ? 'md' : 'html';
 
         const arrow = document.createElement('span');
         arrow.className = 'note-tree-arrow empty';
@@ -62,7 +63,7 @@
 
         div.addEventListener('click', (e) => {
           e.preventDefault();
-          if (node.name.endsWith('.md')) {
+          if (node.name.toLowerCase().endsWith('.md')) {
             loadMarkdown(node.path, node.content);
           } else {
             loadHtml(node.path, node.content);

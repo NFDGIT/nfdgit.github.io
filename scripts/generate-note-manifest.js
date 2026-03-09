@@ -17,7 +17,11 @@ function scanDir(dirPath, basePath = '') {
 
   const dirs = entries.filter((e) => e.isDirectory()).sort();
   const files = entries
-    .filter((e) => e.isFile() && (e.name.endsWith('.md') || e.name.endsWith('.html')) && !EXCLUDE.includes(e.name))
+    .filter((e) => {
+      if (!e.isFile() || EXCLUDE.includes(e.name)) return false;
+      const lower = e.name.toLowerCase();
+      return lower.endsWith('.md') || lower.endsWith('.html');
+    })
     .sort();
 
   for (const d of dirs) {
@@ -34,7 +38,8 @@ function scanDir(dirPath, basePath = '') {
     const relPath = basePath ? `${basePath}/${f.name}` : f.name;
     const fullPath = path.join(dirPath, f.name);
     const node = { name: f.name, type: 'file', path: relPath };
-    if (f.name.endsWith('.md') || f.name.endsWith('.html')) {
+    const lower = f.name.toLowerCase();
+    if (lower.endsWith('.md') || lower.endsWith('.html')) {
       try {
         node.content = fs.readFileSync(fullPath, 'utf8');
       } catch (err) {
