@@ -57,7 +57,8 @@
     }
   }
 
-  function renderTree(children, container) {
+  function renderTree(children, container, basePath) {
+    basePath = basePath || '';
     if (!children || children.length === 0) return;
 
     const ul = document.createElement('ul');
@@ -68,8 +69,10 @@
       li.className = 'note-tree-item';
 
       if (node.type === 'dir') {
+        const dirPath = basePath ? basePath + '/' + node.name : node.name;
         const div = document.createElement('div');
         div.className = 'note-tree-node dir';
+        div.dataset.path = dirPath;
         div.dataset.expanded = 'true';
 
         const arrow = document.createElement('span');
@@ -93,7 +96,7 @@
 
         const childrenEl = document.createElement('ul');
         childrenEl.className = 'note-tree-children';
-        renderTree(node.children, childrenEl);
+        renderTree(node.children, childrenEl, dirPath);
         li.appendChild(childrenEl);
       } else {
         const div = document.createElement('div');
@@ -114,11 +117,8 @@
 
         div.addEventListener('click', (e) => {
           e.preventDefault();
-          if (node.name.toLowerCase().endsWith('.md')) {
-            loadMarkdown(node.path, node.content);
-          } else {
-            loadHtml(node.path, node.content);
-          }
+          location.hash = node.path;
+          loadFileByPath(node.path);
           if (isMobile()) closeSidebar();
         });
 
@@ -140,6 +140,66 @@
     nodes.forEach(function (node) {
       node.classList.toggle('active', node.dataset.path === path);
     });
+  }
+
+  function getFileFromHash() {
+    var hash = location.hash.slice(1);
+    return hash && hash.indexOf('#') === -1 ? hash : null;
+  }
+
+  function findNodeByPath(children, path) {
+    if (!children) return null;
+    for (var i = 0; i < children.length; i++) {
+      var node = children[i];
+      if (node.type === 'file' && node.path === path) return node;
+      if (node.type === 'dir') {
+        var found = findNodeByPath(node.children, path);
+        if (found) return found;
+      }
+    }
+    return null;
+  }
+
+  function loadFileByPath(path) {
+    var data = window.NOTE_MANIFEST;
+    if (!data || !data.children) return;
+    var node = findNodeByPath(data.children, path);
+    var isMd = path.toLowerCase().endsWith('.md');
+    if (node && (node.content !== undefined && node.content !== null)) {
+      if (isMd) {
+        loadMarkdown(path, node.content);
+      } else {
+        loadHtml(path, node.content);
+      }
+    } else {
+      if (isMd) {
+        loadMarkdown(path, undefined);
+      } else {
+        loadHtml(path, undefined);
+      }
+    }
+    expandParentDirs(path);
+  }
+
+  function expandParentDirs(path) {
+    var parts = path.split('/');
+    if (parts.length <= 1) return;
+    var dirNodes = document.querySelectorAll('.note-tree-node.dir');
+    for (var i = 1; i < parts.length; i++) {
+      var parentPath = parts.slice(0, i).join('/');
+      for (var j = 0; j < dirNodes.length; j++) {
+        var dirNode = dirNodes[j];
+        if (dirNode.dataset.path !== parentPath) continue;
+        dirNode.dataset.expanded = 'true';
+        var arrow = dirNode.querySelector('.note-tree-arrow');
+        if (arrow) arrow.classList.add('expanded');
+        var childrenEl = dirNode.nextElementSibling;
+        if (childrenEl && childrenEl.classList.contains('note-tree-children')) {
+          childrenEl.classList.remove('collapsed');
+        }
+        break;
+      }
+    }
   }
 
   function loadMarkdown(path, content) {
@@ -220,6 +280,21 @@
       container.innerHTML = '<p style="padding:1rem;color:#999">无法加载目录</p>';
     }
     initSidebarToggle();
+    var path = getFileFromHash();
+    if (path) {
+      loadFileByPath(path);
+    }
+    window.addEventListener('hashchange', function () {
+      var p = getFileFromHash();
+      if (p) {
+        loadFileByPath(p);
+      } else {
+        PLACEHOLDER_EL.style.display = 'block';
+        PREVIEW_EL.style.display = 'none';
+        PREVIEW_EL.innerHTML = '';
+        setActiveFile('');
+      }
+    });
   }
 
   if (document.readyState === 'loading') {
