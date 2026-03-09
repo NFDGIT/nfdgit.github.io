@@ -49,6 +49,7 @@ body {
   cursor: pointer;
   user-select: none;
   font-size: 0.9rem;
+  min-height: 44px;
 }
 
 .note-tree-node:hover {
@@ -128,6 +129,7 @@ body {
   border-radius: 6px;
   overflow-x: auto;
   font-size: 0.85rem;
+  -webkit-overflow-scrolling: touch;
 }
 
 .note-preview-content code {
@@ -168,20 +170,110 @@ body {
   color: #333;
 }
 
-/* 响应式：小屏上下布局 */
-@media (max-width: 640px) {
-  .note-layout {
-    flex-direction: column;
+/* 移动端目录按钮与关闭按钮（仅小屏显示） */
+.note-sidebar-toggle,
+.note-sidebar-overlay,
+.note-sidebar-close {
+  display: none;
+}
+
+/* 响应式：移动端抽屉式目录 */
+@media (max-width: 768px) {
+  .note-sidebar-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    z-index: 100;
+    width: 44px;
+    height: 44px;
+    min-height: 44px;
+    padding: 0;
+    border: none;
+    border-radius: 8px;
+    background: #f8f9fa;
+    color: #495057;
+    font-size: 1.2rem;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .note-sidebar-toggle:hover {
+    background: #e9ecef;
+  }
+
+  .note-sidebar-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: rgba(0, 0, 0, 0.4);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+
+  body.note-sidebar-open .note-sidebar-overlay {
+    opacity: 1;
+    pointer-events: auto;
   }
 
   .note-sidebar {
-    width: 100%;
-    max-height: 40vh;
-    border-right: none;
-    border-bottom: 1px solid #e9ecef;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 85%;
+    max-width: 320px;
+    z-index: 300;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+    box-shadow: 4px 0 16px rgba(0, 0, 0, 0.1);
+  }
+
+  body.note-sidebar-open .note-sidebar {
+    transform: translateX(0);
+  }
+
+  body.note-sidebar-open {
+    overflow: hidden;
+  }
+
+  .note-sidebar-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    width: 36px;
+    height: 36px;
+    min-height: 36px;
+    padding: 0;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    color: #6c757d;
+    font-size: 1.25rem;
+    cursor: pointer;
+  }
+
+  .note-sidebar-close:hover {
+    background: #e9ecef;
+  }
+
+  .note-sidebar-header {
+    padding-right: 3rem;
   }
 
   .note-preview {
     padding: 1rem;
+    padding-top: 4rem;
+  }
+
+  .note-preview-placeholder {
+    padding: 2rem 1rem;
   }
 }

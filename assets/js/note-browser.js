@@ -5,6 +5,57 @@
 (function () {
   const PREVIEW_EL = document.getElementById('note-preview-content');
   const PLACEHOLDER_EL = document.getElementById('note-preview-placeholder');
+  const MOBILE_BREAKPOINT = 768;
+
+  function isMobile() {
+    return window.matchMedia('(max-width: ' + MOBILE_BREAKPOINT + 'px)').matches;
+  }
+
+  function openSidebar() {
+    document.body.classList.add('note-sidebar-open');
+    var btn = document.getElementById('note-sidebar-toggle');
+    if (btn) btn.setAttribute('aria-expanded', 'true');
+    var overlay = document.getElementById('note-sidebar-overlay');
+    if (overlay) overlay.setAttribute('aria-hidden', 'false');
+  }
+
+  function closeSidebar() {
+    document.body.classList.remove('note-sidebar-open');
+    var btn = document.getElementById('note-sidebar-toggle');
+    if (btn) btn.setAttribute('aria-expanded', 'false');
+    var overlay = document.getElementById('note-sidebar-overlay');
+    if (overlay) overlay.setAttribute('aria-hidden', 'true');
+    var sidebar = document.getElementById('note-sidebar');
+    if (sidebar && isMobile()) sidebar.setAttribute('aria-hidden', 'true');
+  }
+
+  function initSidebarToggle() {
+    var toggle = document.getElementById('note-sidebar-toggle');
+    var closeBtn = document.getElementById('note-sidebar-close');
+    var overlay = document.getElementById('note-sidebar-overlay');
+    var sidebar = document.getElementById('note-sidebar');
+    if (sidebar && isMobile()) {
+      sidebar.setAttribute('aria-hidden', 'true');
+    }
+    if (toggle) {
+      toggle.addEventListener('click', function () {
+        if (isMobile()) {
+          document.body.classList.toggle('note-sidebar-open');
+          var open = document.body.classList.contains('note-sidebar-open');
+          toggle.setAttribute('aria-expanded', open);
+          if (overlay) overlay.setAttribute('aria-hidden', !open);
+          var sidebar = document.getElementById('note-sidebar');
+          if (sidebar) sidebar.setAttribute('aria-hidden', !open);
+        }
+      });
+    }
+    if (closeBtn) {
+      closeBtn.addEventListener('click', closeSidebar);
+    }
+    if (overlay) {
+      overlay.addEventListener('click', closeSidebar);
+    }
+  }
 
   function renderTree(children, container) {
     if (!children || children.length === 0) return;
@@ -68,6 +119,7 @@
           } else {
             loadHtml(node.path, node.content);
           }
+          if (isMobile()) closeSidebar();
         });
 
         li.appendChild(div);
@@ -156,6 +208,7 @@
     } else if (container) {
       container.innerHTML = '<p style="padding:1rem;color:#999">无法加载目录</p>';
     }
+    initSidebarToggle();
   }
 
   if (document.readyState === 'loading') {

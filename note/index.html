@@ -11,15 +11,18 @@
 </head>
 
 <body>
+  <button type="button" class="note-sidebar-toggle" id="note-sidebar-toggle" aria-label="打开目录" aria-expanded="false">≡</button>
+  <div class="note-sidebar-overlay" id="note-sidebar-overlay" aria-hidden="true"></div>
   <div class="note-layout">
-    <aside class="note-sidebar">
+    <aside class="note-sidebar" id="note-sidebar">
+      <button type="button" class="note-sidebar-close" id="note-sidebar-close" aria-label="关闭目录">×</button>
       <div class="note-sidebar-header">目录</div>
       <div id="note-tree"></div>
     </aside>
     <main class="note-preview">
       <a href="../index.html" class="note-back">← 返回首页</a>
       <div id="note-preview-placeholder" class="note-preview-placeholder">
-        点击左侧目录中的 Markdown 文件预览内容
+        点击目录中的 Markdown 文件预览内容
       </div>
       <div id="note-preview-content" class="note-preview-content" style="display:none"></div>
     </main>
