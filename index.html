@@ -1,36 +1,50 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta http-equiv="Permissions-Policy" content="interest-cohort=()">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>个人主页</title>
+    <link rel="stylesheet" href="./assets/css/home.css">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9650960674621514"
         crossorigin="anonymous"></script>
 </head>
-<style>
-    html,
-    body {
-        height: 100%
-    }
 
-    a {
-        width: 100px;
-        height: 100px;
-        color: #000;
-        text-decoration: none;
-        border-radius: 5px;
-    }
-</style>
+<body>
+    <header class="home-header">
+        <h1>个人主页</h1>
+        <p>笔记 · 小游戏 · 相册 · 小工具</p>
+    </header>
 
-<body style="margin: 0px;padding: 0px;">
-    <ol>
-        <li><a href="./projects/保险/index.html">保险</a></li>
-        <li><a href="./projects/相册/index.html">相册</a></li>
-        <li><a href="./projects/HTML5Games/index.html">赛车小游戏</a></li>
-        <li><a href="./projects/note/README.md">笔记</a></li>
-    </ol>
+    <nav class="home-grid">
+        <a href="./note/index.html" class="home-card">
+            <span class="home-card-icon">📝</span>
+            <div class="home-card-title">笔记</div>
+            <div class="home-card-desc">技术笔记与学习记录</div>
+        </a>
+        <a href="./games/index.html" class="home-card">
+            <span class="home-card-icon">🎮</span>
+            <div class="home-card-title">小游戏</div>
+            <div class="home-card-desc">赛车等 HTML5 小游戏</div>
+        </a>
+        <a href="./album/index.html" class="home-card">
+            <span class="home-card-icon">🖼️</span>
+            <div class="home-card-title">相册</div>
+            <div class="home-card-desc">照片与回忆</div>
+        </a>
+        <a href="./tools/index.html" class="home-card">
+            <span class="home-card-icon">🔧</span>
+            <div class="home-card-title">小工具</div>
+            <div class="home-card-desc">实用小工具合集</div>
+        </a>
+        <a href="./insurance/index.html" class="home-card">
+            <span class="home-card-icon">📋</span>
+            <div class="home-card-title">保险</div>
+            <div class="home-card-desc">贷款与保险服务</div>
+        </a>
+    </nav>
 </body>
 
 </html>

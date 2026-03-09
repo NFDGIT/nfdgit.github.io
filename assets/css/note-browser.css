@@ -1,0 +1,187 @@
+/* 笔记浏览页 - 左右分栏布局 */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB",
+    "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.note-layout {
+  display: flex;
+  height: 100%;
+}
+
+/* 左侧目录树 */
+.note-sidebar {
+  width: 260px;
+  min-width: 200px;
+  background: #f8f9fa;
+  border-right: 1px solid #e9ecef;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.note-sidebar-header {
+  padding: 1rem;
+  border-bottom: 1px solid #e9ecef;
+  font-weight: 600;
+}
+
+.note-tree {
+  padding: 0.5rem 0;
+}
+
+.note-tree-item {
+  list-style: none;
+}
+
+.note-tree-node {
+  display: flex;
+  align-items: center;
+  padding: 0.35rem 1rem;
+  cursor: pointer;
+  user-select: none;
+  font-size: 0.9rem;
+}
+
+.note-tree-node:hover {
+  background: #e9ecef;
+}
+
+.note-tree-node.dir {
+  font-weight: 500;
+}
+
+.note-tree-node.file {
+  padding-left: 1.5rem;
+  font-weight: 400;
+}
+
+.note-tree-node.file.md {
+  color: #495057;
+}
+
+.note-tree-node.file.html {
+  color: #6c757d;
+}
+
+.note-tree-arrow {
+  width: 1rem;
+  margin-right: 0.25rem;
+  transition: transform 0.2s;
+}
+
+.note-tree-arrow.expanded {
+  transform: rotate(90deg);
+}
+
+.note-tree-arrow.empty {
+  visibility: hidden;
+}
+
+.note-tree-children {
+  overflow: hidden;
+}
+
+.note-tree-children.collapsed {
+  display: none;
+}
+
+/* 右侧预览区 */
+.note-preview {
+  flex: 1;
+  overflow-y: auto;
+  padding: 2rem;
+  background: #fff;
+}
+
+.note-preview-placeholder {
+  color: #adb5bd;
+  text-align: center;
+  padding: 4rem 2rem;
+  font-size: 0.95rem;
+}
+
+.note-preview-content {
+  max-width: 720px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.note-preview-content h1,
+.note-preview-content h2,
+.note-preview-content h3 {
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.note-preview-content pre {
+  background: #f1f3f5;
+  padding: 1rem;
+  border-radius: 6px;
+  overflow-x: auto;
+  font-size: 0.85rem;
+}
+
+.note-preview-content code {
+  background: #f1f3f5;
+  padding: 0.2em 0.4em;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+.note-preview-content pre code {
+  background: none;
+  padding: 0;
+}
+
+.note-preview-content ul,
+.note-preview-content ol {
+  margin: 0.5rem 0 0.5rem 1.5rem;
+}
+
+.note-preview-content a {
+  color: #0d6efd;
+  text-decoration: none;
+}
+
+.note-preview-content a:hover {
+  text-decoration: underline;
+}
+
+.note-back {
+  display: inline-block;
+  margin-bottom: 1rem;
+  color: #6c757d;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.note-back:hover {
+  color: #333;
+}
+
+/* 响应式：小屏上下布局 */
+@media (max-width: 640px) {
+  .note-layout {
+    flex-direction: column;
+  }
+
+  .note-sidebar {
+    width: 100%;
+    max-height: 40vh;
+    border-right: none;
+    border-bottom: 1px solid #e9ecef;
+  }
+
+  .note-preview {
+    padding: 1rem;
+  }
+}
