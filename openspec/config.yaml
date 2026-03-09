@@ -2,12 +2,18 @@ schema: spec-driven
 
 # Project context (optional)
 # This is shown to AI when creating artifacts.
-# Add your tech stack, conventions, style guides, domain knowledge, etc.
-# Example:
-#   context: |
-#     Tech stack: TypeScript, React, Node.js
-#     We use conventional commits
-#     Domain: e-commerce platform
+context: |
+  Tech stack: 纯静态 HTML/CSS/JS，无构建工具、无框架
+  目录结构:
+    - index.html: 首页入口
+    - assets/css/: 共享样式（home.css, note-browser.css）
+    - assets/js/: 共享脚本（theme.js, note-browser.js）
+    - note/: 笔记浏览器，左树右预览，manifest.json 由 scripts/generate-note-manifest.js 生成
+    - games/, album/, tools/, insurance/: 各子模块
+  编码约定:
+    - 使用 CSS 变量支持主题（data-theme="light"|"dark"）
+    - 页面 lang="zh-CN"
+    - 移动端优先，支持响应式
 
 # Per-artifact rules (optional)
 # Add custom rules for specific artifacts.
