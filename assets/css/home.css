@@ -1,5 +1,26 @@
 /* 个人主页样式 - 现代卡片式布局 */
 
+/* 主题变量：亮色 */
+:root,
+[data-theme="light"] {
+    --bg: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+    --text: #333;
+    --text-muted: #666;
+    --card-bg: #fff;
+    --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    --card-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+/* 主题变量：暗色 */
+[data-theme="dark"] {
+    --bg: linear-gradient(135deg, #1a1d21 0%, #252830 100%);
+    --text: #e4e6eb;
+    --text-muted: #b0b3b8;
+    --card-bg: #2d3139;
+    --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    --card-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -11,14 +32,23 @@ body {
     height: 100%;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB",
         "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
-    color: #333;
+    background: var(--bg);
+    color: var(--text);
 }
 
 /* 顶部个人简介区 */
 .home-header {
-    text-align: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
     padding: 3rem 1.5rem 2rem;
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+.home-header > div {
+    text-align: center;
+    flex: 1;
 }
 
 .home-header h1 {
@@ -29,7 +59,7 @@ body {
 
 .home-header p {
     font-size: 0.95rem;
-    color: #666;
+    color: var(--text-muted);
 }
 
 /* 入口卡片网格 */
@@ -47,16 +77,16 @@ body {
     display: block;
     text-decoration: none;
     color: inherit;
-    background: #fff;
+    background: var(--card-bg);
     border-radius: 12px;
     padding: 1.5rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    box-shadow: var(--card-shadow);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .home-card:hover {
     transform: scale(1.02);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    box-shadow: var(--card-shadow-hover);
 }
 
 .home-card-icon {
@@ -73,7 +103,24 @@ body {
 
 .home-card-desc {
     font-size: 0.8rem;
-    color: #888;
+    color: var(--text-muted);
+}
+
+/* 主题切换按钮 */
+.theme-toggle {
+    padding: 0.5rem;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    cursor: pointer;
+    font-size: 1.25rem;
+    line-height: 1;
+    opacity: 0.85;
+    transition: opacity 0.2s;
+}
+
+.theme-toggle:hover {
+    opacity: 1;
 }
 
 /* 响应式：平板 2 列 */

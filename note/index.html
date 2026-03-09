@@ -3,6 +3,9 @@
 
 <head>
   <meta charset="UTF-8">
+  <script>
+    (function(){var t=localStorage.getItem('theme')||(window.matchMedia&&matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);})();
+  </script>
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>笔记</title>
@@ -16,7 +19,10 @@
   <div class="note-layout">
     <aside class="note-sidebar" id="note-sidebar">
       <button type="button" class="note-sidebar-close" id="note-sidebar-close" aria-label="关闭目录">×</button>
-      <div class="note-sidebar-header">目录</div>
+      <div class="note-sidebar-header">
+        <span>目录</span>
+        <button type="button" class="theme-toggle" aria-label="切换主题">🌙</button>
+      </div>
       <div id="note-tree"></div>
     </aside>
     <main class="note-preview">
@@ -27,6 +33,7 @@
       <div id="note-preview-content" class="note-preview-content" style="display:none"></div>
     </main>
   </div>
+  <script src="../assets/js/theme.js"></script>
   <script src="./manifest.js"></script>
   <script src="../assets/js/note-browser.js"></script>
 </body>

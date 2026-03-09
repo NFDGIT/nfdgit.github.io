@@ -111,36 +111,11 @@ AI：好的（又改一版，可能引入新问题）
 
 ### 1. OpenSpec（Fission-AI）
 
-**定位**：轻量 CLI + 工作流规范，专为 AI 编程助手设计。
+轻量 Spec-Driven Development 框架，人与 AI 先对齐规范再写代码。每个变更有独立目录（proposal、specs、design、tasks），支持 20+ AI 工具，规范与代码同仓持久化。
 
-**工作流**：Proposal（提案）→ Apply（执行）→ Archive（归档）
+**安装与使用**：`npm install -g @fission-ai/openspec@latest` → `openspec init` → 对 AI 说 `/opsx:new <功能名>` 开始。需 Node.js 20.19.0+。
 
-**目录结构**：
-
-```
-openspec/
-├── specs/           # 系统当前规范（真实来源）
-├── changes/         # 变更提案目录
-│   └── [change-name]/
-│       ├── proposal.md   # 变更原因和内容
-│       ├── tasks.md     # 执行清单
-│       └── specs/       # 规范增量
-└── project.md       # 项目全局上下文
-```
-
-**优点**：
-
-- 无需 API Key，基于本地 Markdown
-- 流程简单：先写规范，再写代码
-- 支持 Cursor、Claude Code、Copilot 等
-- 有中文版（OpenSpec-cn）
-
-**缺点**：
-
-- 需要团队养成「先写规范」的习惯
-- 规范粒度需要自己把握
-
-**安装**：`npm install -g @fission-ai/openspec`
+**完整文档**：[openspec.pro](https://openspec.pro/) · [GitHub](https://github.com/Fission-AI/OpenSpec)
 
 ---
 
@@ -235,47 +210,10 @@ openspec/
 | 希望规范可版本管理、团队共享 | OpenSpec |
 | 需要更结构化、可复用的流程 | Spec Kit |
 
-### 以 OpenSpec 为例：目录与用法
-
-```
-你的项目根目录/
-├── openspec/
-│   ├── project.md          # 项目全局说明：技术栈、目录约定、编码规范
-│   ├── specs/              # 当前生效的规范
-│   │   ├── auth.md         # 例如：认证模块规范
-│   │   └── api.md          # 例如：API 规范
-│   └── changes/            # 每次变更的提案
-│       └── add-login/
-│           ├── proposal.md # 为什么要加登录、做成什么样
-│           ├── tasks.md    # 具体任务清单
-│           └── specs/      # 本次变更涉及的规范
-├── src/
-└── ...
-```
-
-**各目录作用**：
-
-| 目录/文件 | 作用 | 使用方式 |
-|-----------|------|----------|
-| `project.md` | 项目全局上下文，让 AI 了解技术栈、目录结构、规范 | 新建项目时写一次，大改动时更新 |
-| `specs/` | 系统当前规范，AI 实现的「宪法」 | 每次功能稳定后，把变更规范合并到这里 |
-| `changes/[name]/` | 单次变更的提案与任务 | 新功能/重构时新建，包含 proposal、tasks、specs |
-| `proposal.md` | 变更原因、目标、范围 | 用自然语言写清楚「要做什么」「为什么」 |
-| `tasks.md` | 可执行的任务清单 | 拆成小步骤，便于 AI 逐步实现和人工检查 |
-
-**典型流程**：
-
-1. 在 `changes/add-xxx/` 下写 `proposal.md`，描述要加的功能
-2. 让 AI 根据 proposal 生成 `tasks.md` 和 `specs/`
-3. 人工审核，确认无误
-4. 让 AI 按 tasks 逐项实现
-5. 完成后，把 `specs/` 合并到根目录 `specs/`，归档本次变更
-
 ### 老项目起步建议
 
-1. **先写 `project.md`**：技术栈、目录结构、现有模块说明、编码约定
-2. **小步试点**：选一个小功能（如加一个 API、修一个 Bug），用一次 OpenSpec 或 Plan 模式
-3. **逐步推广**：习惯后再用于重构、新模块开发
+1. **小步试点**：选一个小功能（如加一个 API、修一个 Bug），用 OpenSpec 或 Cursor Plan 模式试一次
+2. **逐步推广**：习惯后再用于重构、新模块开发
 
 ---
 
@@ -286,6 +224,6 @@ openspec/
 | **本质** | 先定规范，再写代码；规范即需求、约束和文档 |
 | **解决的问题** | 需求漂移、文档滞后、AI 随意发挥、重构恐惧 |
 | **Cursor Plan** | 是规范式编程的一种实现，先计划后执行 |
-| **老项目** | 推荐 OpenSpec 或 Cursor Plan，从 `project.md` 和小功能试点开始 |
+| **老项目** | 推荐 OpenSpec 或 Cursor Plan，从小功能试点开始 |
 
 规范式编程不是银弹，但能显著提升可控性和可维护性。在 AI 时代，**把规范写清楚，就是给 AI 一份「施工图」**——图越清晰，实现越靠谱。

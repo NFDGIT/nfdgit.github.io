@@ -3,6 +3,9 @@
 
 <head>
     <meta charset="utf-8" />
+    <script>
+      (function(){var t=localStorage.getItem('theme')||(window.matchMedia&&matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);})();
+    </script>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta http-equiv="Permissions-Policy" content="interest-cohort=()">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -14,8 +17,11 @@
 
 <body>
     <header class="home-header">
-        <h1>个人主页</h1>
-        <p>笔记 · 小游戏 · 相册 · 小工具</p>
+        <div>
+            <h1>个人主页</h1>
+            <p>笔记 · 小游戏 · 相册 · 小工具</p>
+        </div>
+        <button type="button" class="theme-toggle" aria-label="切换主题">🌙</button>
     </header>
 
     <nav class="home-grid">
@@ -45,6 +51,7 @@
             <div class="home-card-desc">贷款与保险服务</div>
         </a>
     </nav>
+    <script src="./assets/js/theme.js"></script>
 </body>
 
 </html>
