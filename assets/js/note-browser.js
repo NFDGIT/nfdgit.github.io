@@ -135,11 +135,19 @@
     PREVIEW_EL.style.display = 'block';
   }
 
+  function setActiveFile(path) {
+    var nodes = document.querySelectorAll('.note-tree-node.file');
+    nodes.forEach(function (node) {
+      node.classList.toggle('active', node.dataset.path === path);
+    });
+  }
+
   function loadMarkdown(path, content) {
     PLACEHOLDER_EL.style.display = 'none';
     clearPreview();
 
     if (content !== undefined && content !== null) {
+      setActiveFile(path);
       if (typeof marked !== 'undefined') {
         PREVIEW_EL.innerHTML = marked.parse(content);
       } else {
@@ -148,6 +156,7 @@
       return;
     }
 
+    setActiveFile(path);
     const url = './' + path.split('/').map(encodeURIComponent).join('/');
     PREVIEW_EL.innerHTML = '<p style="color:#999">加载中...</p>';
     fetch(url)
@@ -172,6 +181,7 @@
     clearPreview();
 
     if (content !== undefined && content !== null) {
+      setActiveFile(path);
       const iframe = document.createElement('iframe');
       iframe.setAttribute('sandbox', 'allow-same-origin allow-scripts');
       iframe.style.cssText = 'width:100%;height:80vh;min-height:400px;border:none;border-radius:6px;';
@@ -180,6 +190,7 @@
       return;
     }
 
+    setActiveFile(path);
     const url = './' + path.split('/').map(encodeURIComponent).join('/');
     PREVIEW_EL.innerHTML = '<p style="color:#999">加载中...</p>';
     fetch(url)
