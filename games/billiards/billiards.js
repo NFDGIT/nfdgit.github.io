@@ -9,35 +9,40 @@
   var overlaySubEl = document.getElementById('overlay-sub');
   var startBtn = document.getElementById('start-btn');
   var resetBtn = document.getElementById('reset-btn');
+  var powerFill = document.getElementById('power-fill');
 
-  var LOGIC_W = 760;
-  var LOGIC_H = 420;
-  var RAIL_W = 28;
+  var mobileStartBtn = document.getElementById('mobile-start-btn');
+  var mobileResetBtn = document.getElementById('mobile-reset-btn');
+  var mobileStatus = document.getElementById('mobile-status');
+  var mobileScore = document.getElementById('mobile-score');
+  var mobileBallsLeft = document.getElementById('mobile-balls-left');
+
+  var BASE_LOGIC_W = 760;
+  var BASE_LOGIC_H = 420;
+  var NARROW_LOGIC_W = 420;
+  var NARROW_LOGIC_H = 280;
+  var NARROW_BREAKPOINT = 500;
+
+  var LOGIC_W = BASE_LOGIC_W;
+  var LOGIC_H = BASE_LOGIC_H;
+  var RAIL_W = 24;
   var TABLE_X = RAIL_W;
   var TABLE_Y = RAIL_W;
   var TABLE_W = LOGIC_W - RAIL_W * 2;
   var TABLE_H = LOGIC_H - RAIL_W * 2;
   var BALL_R = 11;
-  var POCKET_R = 17;
+  var POCKET_R = 16;
+  var POCKET_SNAP = POCKET_R - 2;
   var FRICTION = 0.985;
   var STOP_THRESHOLD = 0.08;
-  var MAX_DRAG = 120;
+  var MAX_DRAG = 150;
   var MAX_SPEED = 18;
-  var POCKET_SNAP = POCKET_R - 2;
+  var POCKETS = [];
 
   var BALL_COLORS = [
     '#f5c800', '#003caa', '#c80000', '#7b0080', '#ff6000',
     '#006a1c', '#8b1000', '#1a1a1a', '#f5c800', '#003caa',
     '#c80000', '#7b0080', '#ff6000', '#006a1c', '#8b1000'
-  ];
-
-  var POCKETS = [
-    { x: TABLE_X + POCKET_R, y: TABLE_Y + POCKET_R },
-    { x: TABLE_X + TABLE_W / 2, y: TABLE_Y },
-    { x: TABLE_X + TABLE_W - POCKET_R, y: TABLE_Y + POCKET_R },
-    { x: TABLE_X + POCKET_R, y: TABLE_Y + TABLE_H - POCKET_R },
-    { x: TABLE_X + TABLE_W / 2, y: TABLE_Y + TABLE_H },
-    { x: TABLE_X + TABLE_W - POCKET_R, y: TABLE_Y + TABLE_H - POCKET_R }
   ];
 
   var state = 'idle';
@@ -47,11 +52,39 @@
   var aimCurrent = null;
   var scale = 1;
 
+  function computeLayout(availW) {
+    if (availW < NARROW_BREAKPOINT) {
+      LOGIC_W = NARROW_LOGIC_W;
+      LOGIC_H = NARROW_LOGIC_H;
+      BALL_R = 14;
+      POCKET_R = 19;
+    } else {
+      LOGIC_W = BASE_LOGIC_W;
+      LOGIC_H = BASE_LOGIC_H;
+      BALL_R = 11;
+      POCKET_R = 16;
+    }
+    RAIL_W = Math.round(LOGIC_W * 0.032);
+    TABLE_X = RAIL_W;
+    TABLE_Y = RAIL_W;
+    TABLE_W = LOGIC_W - RAIL_W * 2;
+    TABLE_H = LOGIC_H - RAIL_W * 2;
+    POCKET_SNAP = POCKET_R - 2;
+    POCKETS = [
+      { x: TABLE_X + POCKET_R, y: TABLE_Y + POCKET_R },
+      { x: TABLE_X + TABLE_W / 2, y: TABLE_Y },
+      { x: TABLE_X + TABLE_W - POCKET_R, y: TABLE_Y + POCKET_R },
+      { x: TABLE_X + POCKET_R, y: TABLE_Y + TABLE_H - POCKET_R },
+      { x: TABLE_X + TABLE_W / 2, y: TABLE_Y + TABLE_H },
+      { x: TABLE_X + TABLE_W - POCKET_R, y: TABLE_Y + TABLE_H - POCKET_R }
+    ];
+  }
+
   function createBalls() {
     var b = [];
-    var cx = TABLE_X + TABLE_W * 0.68;
+    var cx = TABLE_X + TABLE_W * 0.66;
     var cy = TABLE_Y + TABLE_H / 2;
-    var spacing = BALL_R * 2.1;
+    var spacing = BALL_R * 2.12;
     var idx = 0;
     for (var row = 0; row < 5; row++) {
       for (var col = 0; col <= row; col++) {
@@ -59,8 +92,7 @@
           id: idx + 1,
           x: cx + row * spacing * 0.866,
           y: cy - row * spacing / 2 + col * spacing,
-          vx: 0,
-          vy: 0,
+          vx: 0, vy: 0,
           color: BALL_COLORS[idx % BALL_COLORS.length],
           solid: idx < 8,
           pocketed: false,
@@ -69,17 +101,15 @@
         idx++;
       }
     }
-    var cue = {
+    b.push({
       id: 0,
       x: TABLE_X + TABLE_W * 0.28,
       y: TABLE_Y + TABLE_H / 2,
-      vx: 0,
-      vy: 0,
+      vx: 0, vy: 0,
       color: '#f5f5f0',
       pocketed: false,
       isCue: true
-    };
-    b.push(cue);
+    });
     return b;
   }
 
@@ -93,9 +123,7 @@
   function allStopped() {
     for (var i = 0; i < balls.length; i++) {
       var b = balls[i];
-      if (!b.pocketed && (Math.abs(b.vx) > STOP_THRESHOLD || Math.abs(b.vy) > STOP_THRESHOLD)) {
-        return false;
-      }
+      if (!b.pocketed && (Math.abs(b.vx) > STOP_THRESHOLD || Math.abs(b.vy) > STOP_THRESHOLD)) return false;
     }
     return true;
   }
@@ -110,8 +138,9 @@
 
   function resizeCanvas() {
     var wrap = canvas.parentElement;
-    var availW = wrap.clientWidth || LOGIC_W;
-    scale = Math.min(availW / LOGIC_W, 1);
+    var availW = wrap.clientWidth || BASE_LOGIC_W;
+    computeLayout(availW);
+    scale = availW / LOGIC_W;
     var dpr = Math.max(window.devicePixelRatio || 1, 1);
     canvas.width = Math.round(LOGIC_W * scale * dpr);
     canvas.height = Math.round(LOGIC_H * scale * dpr);
@@ -130,7 +159,7 @@
   function drawTable() {
     ctx.fillStyle = getCss('--billiards-rail') || '#5c3b1e';
     ctx.beginPath();
-    ctx.roundRect(0, 0, LOGIC_W, LOGIC_H, 6);
+    ctx.roundRect(0, 0, LOGIC_W, LOGIC_H, 5);
     ctx.fill();
 
     ctx.fillStyle = getCss('--billiards-felt') || '#1a5c2a';
@@ -152,25 +181,52 @@
     ctx.save();
     ctx.beginPath();
     ctx.arc(b.x, b.y, BALL_R, 0, Math.PI * 2);
-
-    var grad = ctx.createRadialGradient(b.x - BALL_R * 0.3, b.y - BALL_R * 0.35, BALL_R * 0.1, b.x, b.y, BALL_R);
+    var grad = ctx.createRadialGradient(
+      b.x - BALL_R * 0.3, b.y - BALL_R * 0.35, BALL_R * 0.1,
+      b.x, b.y, BALL_R
+    );
     grad.addColorStop(0, lightenColor(b.color, 0.35));
     grad.addColorStop(0.6, b.color);
     grad.addColorStop(1, darkenColor(b.color, 0.3));
     ctx.fillStyle = grad;
     ctx.fill();
-
     ctx.strokeStyle = 'rgba(0,0,0,0.25)';
     ctx.lineWidth = 0.8;
     ctx.stroke();
-
     if (!b.isCue && b.id >= 9) {
       ctx.beginPath();
       ctx.arc(b.x, b.y, BALL_R * 0.58, 0, Math.PI * 2);
       ctx.fillStyle = '#f5f5f2';
       ctx.fill();
     }
+    ctx.restore();
+  }
 
+  function drawArrow(ctx, x1, y1, x2, y2, color, lineW, headLen) {
+    var dx = x2 - x1;
+    var dy = y2 - y1;
+    var dist = Math.sqrt(dx * dx + dy * dy);
+    if (dist < 2) return;
+    var angle = Math.atan2(dy, dx);
+    ctx.save();
+    ctx.strokeStyle = color;
+    ctx.lineWidth = lineW;
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(x2, y2);
+    ctx.lineTo(
+      x2 - headLen * Math.cos(angle - Math.PI / 6),
+      y2 - headLen * Math.sin(angle - Math.PI / 6)
+    );
+    ctx.moveTo(x2, y2);
+    ctx.lineTo(
+      x2 - headLen * Math.cos(angle + Math.PI / 6),
+      y2 - headLen * Math.sin(angle + Math.PI / 6)
+    );
+    ctx.stroke();
     ctx.restore();
   }
 
@@ -181,24 +237,32 @@
     var dist = Math.sqrt(dx * dx + dy * dy);
     if (dist < 4) return;
 
-    var nx = -dx / dist;
-    var ny = -dy / dist;
+    var nx = (cue.x - aimStart.x);
+    var ny = (cue.y - aimStart.y);
+    var nd = Math.sqrt(nx * nx + ny * ny);
+    if (nd === 0) { nx = -dx / dist; ny = -dy / dist; }
+    else { nx /= nd; ny /= nd; }
+
+    var projLen = Math.min(dist * 2.8, LOGIC_W * 0.55);
+    var ex = cue.x + nx * projLen;
+    var ey = cue.y + ny * projLen;
+
+    drawArrow(ctx, cue.x, cue.y, ex, ey, 'rgba(255,255,255,0.75)', 2, BALL_R * 0.8);
 
     ctx.save();
-    ctx.setLineDash([6, 4]);
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.55)';
+    ctx.strokeStyle = 'rgba(255,180,50,0.65)';
     ctx.lineWidth = 1.5;
+    ctx.setLineDash([5, 4]);
     ctx.beginPath();
-    ctx.moveTo(cue.x, cue.y);
-    ctx.lineTo(cue.x + nx * Math.min(dist * 2.5, 200), cue.y + ny * Math.min(dist * 2.5, 200));
+    ctx.moveTo(aimStart.x, aimStart.y);
+    ctx.lineTo(aimCurrent.x, aimCurrent.y);
     ctx.stroke();
     ctx.setLineDash([]);
 
     ctx.beginPath();
-    ctx.strokeStyle = 'rgba(255, 200, 100, 0.7)';
-    ctx.lineWidth = 1.2;
-    ctx.moveTo(cue.x, cue.y);
-    ctx.lineTo(aimCurrent.x, aimCurrent.y);
+    ctx.strokeStyle = 'rgba(255,255,255,0.35)';
+    ctx.lineWidth = 2.5;
+    ctx.arc(cue.x, cue.y, BALL_R + 3, 0, Math.PI * 2);
     ctx.stroke();
     ctx.restore();
   }
@@ -206,15 +270,17 @@
   function render() {
     ctx.clearRect(0, 0, LOGIC_W, LOGIC_H);
     drawTable();
-
     var cue = getCueBall();
     if (state !== 'idle' && cue && aimStart) {
       drawAimLine(cue);
     }
+    activeBalls().forEach(function (b) { drawBall(b); });
+  }
 
-    activeBalls().forEach(function (b) {
-      drawBall(b);
-    });
+  function updatePowerBar(pct) {
+    if (!powerFill) return;
+    var w = Math.min(Math.max(pct, 0), 1) * 100;
+    powerFill.style.width = w + '%';
   }
 
   function updatePhysics() {
@@ -227,22 +293,10 @@
       if (Math.abs(b.vx) < STOP_THRESHOLD) b.vx = 0;
       if (Math.abs(b.vy) < STOP_THRESHOLD) b.vy = 0;
 
-      if (b.x - BALL_R < TABLE_X) {
-        b.x = TABLE_X + BALL_R;
-        b.vx = Math.abs(b.vx) * 0.9;
-      }
-      if (b.x + BALL_R > TABLE_X + TABLE_W) {
-        b.x = TABLE_X + TABLE_W - BALL_R;
-        b.vx = -Math.abs(b.vx) * 0.9;
-      }
-      if (b.y - BALL_R < TABLE_Y) {
-        b.y = TABLE_Y + BALL_R;
-        b.vy = Math.abs(b.vy) * 0.9;
-      }
-      if (b.y + BALL_R > TABLE_Y + TABLE_H) {
-        b.y = TABLE_Y + TABLE_H - BALL_R;
-        b.vy = -Math.abs(b.vy) * 0.9;
-      }
+      if (b.x - BALL_R < TABLE_X) { b.x = TABLE_X + BALL_R; b.vx = Math.abs(b.vx) * 0.9; }
+      if (b.x + BALL_R > TABLE_X + TABLE_W) { b.x = TABLE_X + TABLE_W - BALL_R; b.vx = -Math.abs(b.vx) * 0.9; }
+      if (b.y - BALL_R < TABLE_Y) { b.y = TABLE_Y + BALL_R; b.vy = Math.abs(b.vy) * 0.9; }
+      if (b.y + BALL_R > TABLE_Y + TABLE_H) { b.y = TABLE_Y + TABLE_H - BALL_R; b.vy = -Math.abs(b.vy) * 0.9; }
     });
 
     for (var i = 0; i < active.length; i++) {
@@ -260,15 +314,12 @@
             b.pocketed = false;
             b.x = TABLE_X + TABLE_W * 0.28;
             b.y = TABLE_Y + TABLE_H / 2;
-            b.vx = 0;
-            b.vy = 0;
+            b.vx = 0; b.vy = 0;
           } else {
             b.pocketed = true;
-            b.vx = 0;
-            b.vy = 0;
+            b.vx = 0; b.vy = 0;
             score++;
-            scoreEl.textContent = String(score);
-            ballsLeftEl.textContent = String(coloredLeft());
+            syncStatus();
           }
         }
       });
@@ -280,26 +331,20 @@
     var dy = b.y - a.y;
     var dist = Math.sqrt(dx * dx + dy * dy);
     if (dist > BALL_R * 2 || dist === 0) return;
-
     var overlap = BALL_R * 2 - dist;
     var nx = dx / dist;
     var ny = dy / dist;
-
     a.x -= nx * overlap * 0.5;
     a.y -= ny * overlap * 0.5;
     b.x += nx * overlap * 0.5;
     b.y += ny * overlap * 0.5;
-
     var dvx = b.vx - a.vx;
     var dvy = b.vy - a.vy;
     var dot = dvx * nx + dvy * ny;
     if (dot > 0) return;
-
     var impulse = dot * 0.95;
-    a.vx += impulse * nx;
-    a.vy += impulse * ny;
-    b.vx -= impulse * nx;
-    b.vy -= impulse * ny;
+    a.vx += impulse * nx; a.vy += impulse * ny;
+    b.vx -= impulse * nx; b.vy -= impulse * ny;
   }
 
   var lastTs = 0;
@@ -307,31 +352,34 @@
     requestAnimationFrame(loop);
     var dt = ts - lastTs;
     lastTs = ts;
-    if (dt > 100) {
-      render();
-      return;
-    }
+    if (dt > 100) { render(); return; }
 
     if (state === 'playing' || state === 'moving') {
       updatePhysics();
-
       if (state === 'moving' && allStopped()) {
         if (coloredLeft() === 0) {
           state = 'won';
           showOverlay('🎉 通关！', '全部彩球已进袋！点击"重新开始"再来一局。');
-          statusEl.textContent = '通关';
+          syncStatus();
           startBtn.textContent = '再来一局';
-        } else if (!getCueBall()) {
-          state = 'playing';
-          statusEl.textContent = '准备击球';
+          if (mobileStartBtn) mobileStartBtn.textContent = '再来一局';
         } else {
           state = 'playing';
-          statusEl.textContent = '准备击球';
+          syncStatus();
         }
       }
     }
-
     render();
+  }
+
+  function getAimDirection() {
+    var cue = getCueBall();
+    if (!cue || !aimStart) return null;
+    var dx = cue.x - aimStart.x;
+    var dy = cue.y - aimStart.y;
+    var dist = Math.sqrt(dx * dx + dy * dy);
+    if (dist === 0) return null;
+    return { dx: dx / dist, dy: dy / dist };
   }
 
   function hitCueBall() {
@@ -339,31 +387,48 @@
     var cue = getCueBall();
     if (!cue) return;
 
-    var dx = aimCurrent.x - aimStart.x;
-    var dy = aimCurrent.y - aimStart.y;
-    var dist = Math.sqrt(dx * dx + dy * dy);
-    if (dist < 4) return;
+    var dragDx = aimCurrent.x - aimStart.x;
+    var dragDy = aimCurrent.y - aimStart.y;
+    var dragDist = Math.sqrt(dragDx * dragDx + dragDy * dragDy);
+    if (dragDist < 4) return;
 
-    var power = Math.min(dist, MAX_DRAG) / MAX_DRAG;
+    var dir = getAimDirection();
+    if (!dir) {
+      dir = { dx: -dragDx / dragDist, dy: -dragDy / dragDist };
+    }
+
+    var power = Math.min(dragDist, MAX_DRAG) / MAX_DRAG;
     var speed = power * MAX_SPEED;
-    cue.vx = (-dx / dist) * speed;
-    cue.vy = (-dy / dist) * speed;
+    cue.vx = dir.dx * speed;
+    cue.vy = dir.dy * speed;
 
     state = 'moving';
-    statusEl.textContent = '球在运动中…';
+    syncStatus();
+    updatePowerBar(0);
+  }
+
+  function syncStatus() {
+    var left = coloredLeft();
+    var statusText = state === 'won' ? '通关 🎉' : state === 'moving' ? '球在运动中…' : '准备击球';
+    if (statusEl) statusEl.textContent = statusText;
+    if (scoreEl) scoreEl.textContent = String(score);
+    if (ballsLeftEl) ballsLeftEl.textContent = String(left);
+    if (mobileStatus) mobileStatus.textContent = statusText;
+    if (mobileScore) mobileScore.textContent = String(score);
+    if (mobileBallsLeft) mobileBallsLeft.textContent = String(left);
   }
 
   function startGame() {
     balls = createBalls();
     score = 0;
-    scoreEl.textContent = '0';
-    ballsLeftEl.textContent = '15';
     state = 'playing';
-    statusEl.textContent = '准备击球';
     aimStart = null;
     aimCurrent = null;
+    updatePowerBar(0);
     hideOverlay();
     startBtn.textContent = '重新开始';
+    if (mobileStartBtn) mobileStartBtn.textContent = '重新开始';
+    syncStatus();
   }
 
   function showOverlay(title, sub) {
@@ -388,9 +453,6 @@
     var cue = getCueBall();
     if (!cue) return;
     var pos = getEventPos(e);
-    var dx = pos.x - cue.x;
-    var dy = pos.y - cue.y;
-    if (Math.sqrt(dx * dx + dy * dy) > BALL_R * 3) return;
     aimStart = { x: pos.x, y: pos.y };
     aimCurrent = { x: pos.x, y: pos.y };
     e.preventDefault();
@@ -399,6 +461,10 @@
   function onPointerMove(e) {
     if (!aimStart) return;
     aimCurrent = getEventPos(e);
+    var dx = aimCurrent.x - aimStart.x;
+    var dy = aimCurrent.y - aimStart.y;
+    var dist = Math.sqrt(dx * dx + dy * dy);
+    updatePowerBar(dist / MAX_DRAG);
     e.preventDefault();
   }
 
@@ -441,10 +507,13 @@
     resizeCanvas();
     balls = createBalls();
     render();
-    showOverlay('台球', '点击"开始游戏"后从母球向外拖拽瞄准，松开击球。');
+    showOverlay('台球', '在球桌上任意位置拖拽来瞄准，松手击球。');
     startBtn.textContent = '开始游戏';
+    if (mobileStartBtn) mobileStartBtn.textContent = '开始游戏';
     startBtn.addEventListener('click', startGame);
     resetBtn.addEventListener('click', startGame);
+    if (mobileStartBtn) mobileStartBtn.addEventListener('click', startGame);
+    if (mobileResetBtn) mobileResetBtn.addEventListener('click', startGame);
 
     canvas.addEventListener('mousedown', onPointerDown);
     canvas.addEventListener('mousemove', onPointerMove);
@@ -454,11 +523,16 @@
     canvas.addEventListener('touchend', onPointerUp, { passive: false });
 
     window.addEventListener('resize', function () {
+      var prevW = LOGIC_W;
       resizeCanvas();
+      if (prevW !== LOGIC_W) {
+        balls = createBalls();
+      }
       render();
     });
 
     requestAnimationFrame(loop);
+    syncStatus();
   }
 
   if (document.readyState === 'loading') {

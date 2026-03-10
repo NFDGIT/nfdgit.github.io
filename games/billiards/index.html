@@ -17,7 +17,7 @@
             <div>
                 <p class="billiards-eyebrow">games / billiards</p>
                 <h1>台球</h1>
-                <p class="billiards-subtitle">从母球位置向外拖拽瞄准，松开后击球。将所有彩球打入球袋即可通关。</p>
+                <p class="billiards-subtitle">在球桌上任意位置拖拽来瞄准，松手击球。将所有彩球打入球袋即可通关。</p>
             </div>
             <div class="billiards-nav">
                 <a class="billiards-nav-link" href="../../index.html">返回首页</a>
@@ -27,8 +27,8 @@
         </header>
 
         <section class="billiards-layout">
-            <section class="billiards-panel" aria-label="游戏区域">
-                <div class="billiards-status-bar">
+            <section class="billiards-panel billiards-stage-area" aria-label="游戏区域">
+                <div class="billiards-status-bar billiards-desktop-only">
                     <div class="billiards-stat">
                         <span class="billiards-stat-label">已进袋</span>
                         <strong id="score">0</strong>
@@ -47,12 +47,16 @@
                     <canvas id="billiards-canvas" aria-label="台球桌"></canvas>
                     <div class="billiards-overlay" id="billiards-overlay">
                         <p class="billiards-overlay-title" id="overlay-title">台球</p>
-                        <p class="billiards-overlay-sub" id="overlay-sub">从母球向外拖拽瞄准，松开击球。</p>
+                        <p class="billiards-overlay-sub" id="overlay-sub">在球桌任意位置拖拽瞄准，松手击球。</p>
                     </div>
+                </div>
+
+                <div class="billiards-power-bar" aria-label="击球力度">
+                    <div id="power-fill"></div>
                 </div>
             </section>
 
-            <aside class="billiards-panel billiards-side-panel">
+            <aside class="billiards-panel billiards-side-panel billiards-desktop-only">
                 <div class="billiards-actions">
                     <button type="button" id="start-btn" class="billiards-btn billiards-btn-primary">开始游戏</button>
                     <button type="button" id="reset-btn" class="billiards-btn">重新开始</button>
@@ -61,9 +65,9 @@
                 <div class="billiards-help">
                     <h2>玩法说明</h2>
                     <ul>
-                        <li>在母球上按住鼠标（或触控）并向外拖拽。</li>
+                        <li>在球桌任意位置按住并向任意方向拖拽。</li>
+                        <li>拖拽方向决定母球的瞄准方向。</li>
                         <li>拖拽距离越长，击球力度越大。</li>
-                        <li>松开后母球沿反方向射出。</li>
                         <li>所有球停止后方可击球。</li>
                         <li>母球进袋时会被重置，不计分。</li>
                         <li>15 颗彩球全部进袋即通关。</li>
@@ -72,6 +76,19 @@
             </aside>
         </section>
     </main>
+
+    <!-- 移动端底部固定控制条 -->
+    <div class="billiards-mobile-bar billiards-mobile-only" role="region" aria-label="移动端控制">
+        <div class="billiards-mobile-stats">
+            <span class="billiards-mobile-stat">进袋 <strong id="mobile-score">0</strong></span>
+            <span class="billiards-mobile-stat">剩余 <strong id="mobile-balls-left">15</strong></span>
+            <span class="billiards-mobile-stat" id="mobile-status">准备击球</span>
+        </div>
+        <div class="billiards-mobile-actions">
+            <button type="button" id="mobile-start-btn" class="billiards-btn billiards-btn-primary">开始游戏</button>
+            <button type="button" id="mobile-reset-btn" class="billiards-btn">重置</button>
+        </div>
+    </div>
 
     <script src="../../assets/js/theme.js"></script>
     <script src="./billiards.js"></script>
