@@ -1,73 +1,59 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
-<meta charset="utf-8">
-<meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="HandheldFriendly" content="True">
-<meta name="apple-touch-fullscreen" content="yes" />
-<meta name="viewport" content="initial-scale=1.0,maximum-scale=1.01, minimal-ui" />
-<title>HTML5汽车赛道飙车游戏</title>
-<meta name="keywords" content="HTML5,汽车赛道,飙车游戏" />
-<meta name="description" content="HTML5汽车赛道飙车游戏代码下载。H5精品短跑赛车俱乐部游戏，赛车游戏源代码。游戏介绍：鼠标,键盘左右键，控制赛车方向，让我们开始赛车比赛游戏吧。兼容手机移动端（横屏模式效果更好，左右晃动控制方向），带背景音效。" /> 
-<meta name="author" content="js代码(www.jsdaima.com)" />
-<meta name="copyright" content="js代码(www.jsdaima.com)" />
-<style>
-		body {
-			margin: 0px;
-			padding: 0px;
-			width: 100%;
-			background-color:black;
-		}	
-
-		canvas {	
-			-ms-touch-action: none;
-			touch-action: none;
-			image-rendering: -o-crisp-edges;           
-			image-rendering: optimize-contrast;        
-			-ms-interpolation-mode: nearest-neighbor;  
-			-webkit-tap-highlight-color: rgba(0,0,0,0);
-			-moz-tap-highlight-color: rgba(0,0,0,0);
-			tap-highlight-color: rgba(0,0,0,0);
-			user-select: none;
-			-webkit-touch-callout: none;
-			-webkit-user-select: none;
-			-moz-user-select: none;
-			-ms-user-select: none;
-		} 
-
-		.game-links {
-			position: fixed;
-			top: 16px;
-			left: 16px;
-			z-index: 10;
-			display: flex;
-			gap: 10px;
-			flex-wrap: wrap;
-		}
-
-		.game-links a {
-			display: inline-block;
-			padding: 10px 14px;
-			border-radius: 999px;
-			background: rgba(0, 0, 0, 0.6);
-			color: #fff;
-			text-decoration: none;
-			font: 14px/1.2 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-			backdrop-filter: blur(6px);
-		}
-	</style>
-<script src="viewporter.js"></script>
+    <meta charset="utf-8">
+    <script>
+      (function(){var t=localStorage.getItem('theme')||(window.matchMedia&&matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);})();
+    </script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>小游戏目录</title>
+    <link rel="stylesheet" href="../assets/css/home.css">
+    <link rel="stylesheet" href="./games.css">
 </head>
-<body>
-<div class="game-links">
-<a href="../index.html">返回首页</a>
-<a href="./snake.html">贪吃蛇</a>
-</div>
-<div id="viewporter">
-<canvas id="canvas" moz-opaque></canvas>
-</div>
+<body class="games-page">
+    <main class="games-shell">
+        <header class="home-header games-header">
+            <div>
+                <p class="games-kicker">games directory</p>
+                <h1>小游戏目录</h1>
+                <p class="games-subtitle">先进入游戏目录，再选择你想玩的项目。当前已收录赛车游戏和贪吃蛇，后续还可以继续扩展更多小游戏。</p>
+            </div>
+            <div class="games-actions">
+                <a href="../index.html" class="games-link">返回首页</a>
+                <button type="button" class="theme-toggle" aria-label="切换主题">🌙</button>
+            </div>
+        </header>
+
+        <section class="home-grid games-grid" aria-label="游戏列表">
+            <a href="./racing.html" class="home-card games-card">
+                <span class="home-card-icon">🏎️</span>
+                <span class="games-card-tag">街机赛车</span>
+                <div class="home-card-title">赛车游戏</div>
+                <div class="games-card-desc">经典的 HTML5 赛车游戏，适合键盘和移动设备体验，保留原有背景音效与竞速玩法。</div>
+                <div class="games-card-meta">
+                    <span class="games-chip">方向控制</span>
+                    <span class="games-chip">移动端兼容</span>
+                </div>
+            </a>
+
+            <a href="./snake.html" class="home-card games-card">
+                <span class="home-card-icon">🐍</span>
+                <span class="games-card-tag">经典街机</span>
+                <div class="home-card-title">贪吃蛇</div>
+                <div class="games-card-desc">支持键盘方向键、WASD 和屏幕按钮操作，包含分数、暂停、重开与最高分记录。</div>
+                <div class="games-card-meta">
+                    <span class="games-chip">触控按钮</span>
+                    <span class="games-chip">轻量休闲</span>
+                </div>
+            </a>
+        </section>
+
+        <section class="games-note" aria-label="目录说明">
+            目录页用于集中展示当前可玩的游戏。进入具体游戏后，你仍然可以随时返回本目录继续切换其他游戏。
+        </section>
+    </main>
+
+    <script src="../assets/js/theme.js"></script>
 </body>
-<script src="TweenMax.min.js"></script>
-<script src="howler.js"></script>
-<script src="app.js"></script>
 </html>
