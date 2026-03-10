@@ -2,87 +2,14 @@
 <html lang="zh-CN">
 <head>
     <meta charset="utf-8">
-    <script>
-      (function(){var t=localStorage.getItem('theme')||(window.matchMedia&&matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);})();
-    </script>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="refresh" content="0; url=./snake/index.html">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>贪吃蛇</title>
-    <link rel="stylesheet" href="../assets/css/home.css">
-    <link rel="stylesheet" href="./snake.css">
+    <title>跳转到贪吃蛇</title>
+    <script>
+      window.location.replace('./snake/index.html');
+    </script>
 </head>
-<body class="snake-page">
-    <main class="snake-shell">
-        <header class="snake-header">
-            <div>
-                <p class="snake-eyebrow">games / snake</p>
-                <h1>贪吃蛇</h1>
-                <p class="snake-subtitle">支持键盘方向键和屏幕按钮，吃到食物后会不断变长。</p>
-            </div>
-            <div class="snake-header-actions">
-                <a class="snake-link" href="../index.html">返回首页</a>
-                <a class="snake-link" href="./index.html">返回游戏目录</a>
-                <button type="button" class="theme-toggle" aria-label="切换主题">🌙</button>
-            </div>
-        </header>
-
-        <section class="snake-layout">
-            <section class="snake-panel snake-stage-panel" aria-label="游戏区域">
-                <div class="snake-status-bar">
-                    <div class="snake-stat">
-                        <span class="snake-stat-label">分数</span>
-                        <strong id="score">0</strong>
-                    </div>
-                    <div class="snake-stat">
-                        <span class="snake-stat-label">最高分</span>
-                        <strong id="best-score">0</strong>
-                    </div>
-                    <div class="snake-stat">
-                        <span class="snake-stat-label">状态</span>
-                        <strong id="game-status">未开始</strong>
-                    </div>
-                </div>
-
-                <div class="snake-canvas-wrap">
-                    <canvas id="game-canvas" width="432" height="432" aria-label="贪吃蛇棋盘"></canvas>
-                    <div class="snake-overlay" id="game-overlay">
-                        <p id="overlay-title">准备开始</p>
-                        <p id="overlay-text">点击“开始游戏”或按任意方向键开始。</p>
-                    </div>
-                </div>
-            </section>
-
-            <aside class="snake-panel snake-side-panel">
-                <div class="snake-actions">
-                    <button type="button" id="start-button" class="snake-button snake-button-primary">开始游戏</button>
-                    <button type="button" id="pause-button" class="snake-button">暂停</button>
-                    <button type="button" id="restart-button" class="snake-button">重新开始</button>
-                </div>
-
-                <div class="snake-help">
-                    <h2>玩法说明</h2>
-                    <ul>
-                        <li>方向键或 WASD 控制移动方向。</li>
-                        <li>蛇不能直接掉头。</li>
-                        <li>撞墙或撞到自己会结束本局。</li>
-                        <li>暂停后可继续，也可重新开始。</li>
-                    </ul>
-                </div>
-
-                <div class="snake-touch" aria-label="方向控制">
-                    <button type="button" class="snake-control" data-direction="up">上</button>
-                    <div class="snake-touch-row">
-                        <button type="button" class="snake-control" data-direction="left">左</button>
-                        <button type="button" class="snake-control snake-control-center" data-action="toggle">暂停</button>
-                        <button type="button" class="snake-control" data-direction="right">右</button>
-                    </div>
-                    <button type="button" class="snake-control" data-direction="down">下</button>
-                </div>
-            </aside>
-        </section>
-    </main>
-
-    <script src="../assets/js/theme.js"></script>
-    <script src="./snake.js"></script>
+<body>
+    <p>正在跳转到贪吃蛇页面。如果没有自动跳转，请访问 <a href="./snake/index.html">贪吃蛇</a>。</p>
 </body>
 </html>

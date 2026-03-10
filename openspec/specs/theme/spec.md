@@ -28,7 +28,7 @@ The system SHALL use the operating system's color scheme preference when the use
 - **WHEN** user visits the site for the first time and the system preference is dark
 - **THEN** the page SHALL display in dark mode
 
-#### Scenario: First visit with system light mode
+#### Scenario: Ff d s
 - **WHEN** user visits the site for the first time and the system preference is light
 - **THEN** the page SHALL display in light mode
 
