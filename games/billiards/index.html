@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <script>
+      (function(){var t=localStorage.getItem('theme')||(window.matchMedia&&matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);})();
+    </script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>台球游戏</title>
+    <link rel="stylesheet" href="../../assets/css/home.css">
+    <link rel="stylesheet" href="./billiards.css">
+</head>
+<body class="billiards-page">
+    <main class="billiards-shell">
+        <header class="billiards-header">
+            <div>
+                <p class="billiards-eyebrow">games / billiards</p>
+                <h1>台球</h1>
+                <p class="billiards-subtitle">从母球位置向外拖拽瞄准，松开后击球。将所有彩球打入球袋即可通关。</p>
+            </div>
+            <div class="billiards-nav">
+                <a class="billiards-nav-link" href="../../index.html">返回首页</a>
+                <a class="billiards-nav-link" href="../index.html">返回游戏目录</a>
+                <button type="button" class="theme-toggle" aria-label="切换主题">🌙</button>
+            </div>
+        </header>
+
+        <section class="billiards-layout">
+            <section class="billiards-panel" aria-label="游戏区域">
+                <div class="billiards-status-bar">
+                    <div class="billiards-stat">
+                        <span class="billiards-stat-label">已进袋</span>
+                        <strong id="score">0</strong>
+                    </div>
+                    <div class="billiards-stat">
+                        <span class="billiards-stat-label">剩余球</span>
+                        <strong id="balls-left">15</strong>
+                    </div>
+                    <div class="billiards-stat">
+                        <span class="billiards-stat-label">状态</span>
+                        <strong id="game-status">准备击球</strong>
+                    </div>
+                </div>
+
+                <div class="billiards-canvas-wrap">
+                    <canvas id="billiards-canvas" aria-label="台球桌"></canvas>
+                    <div class="billiards-overlay" id="billiards-overlay">
+                        <p class="billiards-overlay-title" id="overlay-title">台球</p>
+                        <p class="billiards-overlay-sub" id="overlay-sub">从母球向外拖拽瞄准，松开击球。</p>
+                    </div>
+                </div>
+            </section>
+
+            <aside class="billiards-panel billiards-side-panel">
+                <div class="billiards-actions">
+                    <button type="button" id="start-btn" class="billiards-btn billiards-btn-primary">开始游戏</button>
+                    <button type="button" id="reset-btn" class="billiards-btn">重新开始</button>
+                </div>
+
+                <div class="billiards-help">
+                    <h2>玩法说明</h2>
+                    <ul>
+                        <li>在母球上按住鼠标（或触控）并向外拖拽。</li>
+                        <li>拖拽距离越长，击球力度越大。</li>
+                        <li>松开后母球沿反方向射出。</li>
+                        <li>所有球停止后方可击球。</li>
+                        <li>母球进袋时会被重置，不计分。</li>
+                        <li>15 颗彩球全部进袋即通关。</li>
+                    </ul>
+                </div>
+            </aside>
+        </section>
+    </main>
+
+    <script src="../../assets/js/theme.js"></script>
+    <script src="./billiards.js"></script>
+</body>
+</html>
