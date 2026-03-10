@@ -53,6 +53,32 @@ body {
   height: 100%;
 }
 
+/* 左侧目录树容器（桌面端可收起） */
+.note-sidebar-wrap {
+  display: flex;
+  flex-shrink: 0;
+  width: 260px;
+  min-width: 260px;
+  transition: width 0.25s ease, min-width 0.25s ease;
+}
+
+body.note-sidebar-collapsed .note-sidebar-wrap {
+  width: 48px;
+  min-width: 48px;
+}
+
+body.note-sidebar-collapsed .note-sidebar .note-sidebar-header span,
+body.note-sidebar-collapsed .note-sidebar .theme-toggle,
+body.note-sidebar-collapsed .note-sidebar .note-tree,
+body.note-sidebar-collapsed .note-sidebar .note-sidebar-close {
+  display: none;
+}
+
+body.note-sidebar-collapsed .note-sidebar-header {
+  justify-content: center;
+  padding: 0.75rem;
+}
+
 /* 左侧目录树 */
 .note-sidebar {
   width: 260px;
@@ -61,6 +87,12 @@ body {
   border-right: 1px solid var(--note-sidebar-border);
   overflow-y: auto;
   flex-shrink: 0;
+}
+
+body.note-sidebar-collapsed .note-sidebar {
+  width: 48px;
+  min-width: 48px;
+  overflow: hidden;
 }
 
 .note-sidebar-header {
@@ -85,6 +117,25 @@ body {
 }
 
 .theme-toggle:hover {
+  opacity: 1;
+  background: var(--note-sidebar-hover);
+}
+
+/* 桌面端收起按钮 */
+.note-sidebar-collapse {
+  display: none;
+  padding: 0.35rem;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1;
+  opacity: 0.85;
+  color: var(--note-text-muted);
+}
+
+.note-sidebar-collapse:hover {
   opacity: 1;
   background: var(--note-sidebar-hover);
 }
@@ -230,6 +281,19 @@ body {
   color: var(--note-text);
 }
 
+/* 桌面端：显示收起按钮，隐藏移动端按钮 */
+@media (min-width: 769px) {
+  .note-sidebar-collapse {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .note-sidebar-toggle-mobile {
+    display: none;
+  }
+}
+
 /* 移动端目录按钮与关闭按钮（仅小屏显示） */
 .note-sidebar-toggle,
 .note-sidebar-overlay,
@@ -239,6 +303,16 @@ body {
 
 /* 响应式：移动端抽屉式目录 */
 @media (max-width: 768px) {
+  .note-sidebar-wrap {
+    width: 0;
+    min-width: 0;
+    flex-shrink: 0;
+  }
+
+  .note-sidebar-collapse {
+    display: none;
+  }
+
   .note-sidebar-toggle {
     display: flex;
     align-items: center;

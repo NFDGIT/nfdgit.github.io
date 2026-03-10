@@ -6,9 +6,34 @@
   const PREVIEW_EL = document.getElementById('note-preview-content');
   const PLACEHOLDER_EL = document.getElementById('note-preview-placeholder');
   const MOBILE_BREAKPOINT = 768;
+  const STORAGE_KEY = 'note-sidebar-collapsed';
 
   function isMobile() {
     return window.matchMedia('(max-width: ' + MOBILE_BREAKPOINT + 'px)').matches;
+  }
+
+  function isDesktopCollapsed() {
+    return document.body.classList.contains('note-sidebar-collapsed');
+  }
+
+  function setDesktopCollapsed(collapsed) {
+    if (collapsed) {
+      document.body.classList.add('note-sidebar-collapsed');
+    } else {
+      document.body.classList.remove('note-sidebar-collapsed');
+    }
+    try {
+      localStorage.setItem(STORAGE_KEY, collapsed ? '1' : '0');
+    } catch (e) {}
+    updateCollapseButton();
+  }
+
+  function updateCollapseButton() {
+    var btn = document.getElementById('note-sidebar-collapse');
+    if (!btn || isMobile()) return;
+    var collapsed = isDesktopCollapsed();
+    btn.textContent = collapsed ? '≡' : '◀';
+    btn.setAttribute('aria-label', collapsed ? '打开目录' : '收起目录');
   }
 
   function openSidebar() {
@@ -31,11 +56,19 @@
 
   function initSidebarToggle() {
     var toggle = document.getElementById('note-sidebar-toggle');
+    var collapseBtn = document.getElementById('note-sidebar-collapse');
     var closeBtn = document.getElementById('note-sidebar-close');
     var overlay = document.getElementById('note-sidebar-overlay');
     var sidebar = document.getElementById('note-sidebar');
     if (sidebar && isMobile()) {
       sidebar.setAttribute('aria-hidden', 'true');
+    }
+    if (!isMobile()) {
+      try {
+        var stored = localStorage.getItem(STORAGE_KEY);
+        if (stored === '1') setDesktopCollapsed(true);
+      } catch (e) {}
+      updateCollapseButton();
     }
     if (toggle) {
       toggle.addEventListener('click', function () {
@@ -46,6 +79,13 @@
           if (overlay) overlay.setAttribute('aria-hidden', !open);
           var sidebar = document.getElementById('note-sidebar');
           if (sidebar) sidebar.setAttribute('aria-hidden', !open);
+        }
+      });
+    }
+    if (collapseBtn) {
+      collapseBtn.addEventListener('click', function () {
+        if (!isMobile()) {
+          setDesktopCollapsed(!isDesktopCollapsed());
         }
       });
     }

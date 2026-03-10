@@ -14,17 +14,21 @@
 </head>
 
 <body>
-  <button type="button" class="note-sidebar-toggle" id="note-sidebar-toggle" aria-label="打开目录" aria-expanded="false">≡</button>
+  <script>!function(){if(window.matchMedia('(min-width:769px)').matches&&localStorage.getItem('note-sidebar-collapsed')==='1')document.body.classList.add('note-sidebar-collapsed');}();</script>
+  <button type="button" class="note-sidebar-toggle note-sidebar-toggle-mobile" id="note-sidebar-toggle" aria-label="打开目录" aria-expanded="false">≡</button>
   <div class="note-sidebar-overlay" id="note-sidebar-overlay" aria-hidden="true"></div>
   <div class="note-layout">
-    <aside class="note-sidebar" id="note-sidebar">
+    <div class="note-sidebar-wrap" id="note-sidebar-wrap">
+      <aside class="note-sidebar" id="note-sidebar">
       <button type="button" class="note-sidebar-close" id="note-sidebar-close" aria-label="关闭目录">×</button>
       <div class="note-sidebar-header">
+        <button type="button" class="note-sidebar-collapse" id="note-sidebar-collapse" aria-label="收起目录">◀</button>
         <span>目录</span>
         <button type="button" class="theme-toggle" aria-label="切换主题">🌙</button>
       </div>
       <div id="note-tree"></div>
     </aside>
+    </div>
     <main class="note-preview">
       <a href="../index.html" class="note-back">← 返回首页</a>
       <div id="note-preview-placeholder" class="note-preview-placeholder">
