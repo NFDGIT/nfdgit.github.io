@@ -187,6 +187,40 @@
     return hash && hash.indexOf('#') === -1 ? hash : null;
   }
 
+  /** 将相对路径解析为 manifest 中的绝对路径（如 AI/openspec.md） */
+  function resolveNotePath(currentPath, href) {
+    if (!currentPath || !href) return null;
+    if (href.charAt(0) === '#' || href.indexOf('://') !== -1) return null;
+    var dir = currentPath.split('/').slice(0, -1).join('/');
+    var base = dir ? dir + '/' : '';
+    var parts = (base + href).split('/');
+    var result = [];
+    for (var i = 0; i < parts.length; i++) {
+      if (parts[i] === '..') result.pop();
+      else if (parts[i] !== '.' && parts[i] !== '') result.push(parts[i]);
+    }
+    return result.join('/');
+  }
+
+  function initPreviewLinkInterceptor() {
+    if (!PREVIEW_EL) return;
+    PREVIEW_EL.addEventListener('click', function (e) {
+      var a = e.target.closest('a');
+      if (!a || !a.href) return;
+      var href = a.getAttribute('href');
+      if (!href) return;
+      var lower = href.toLowerCase();
+      if (lower.indexOf('://') !== -1 || href.charAt(0) === '#') return;
+      if (!lower.endsWith('.md') && !lower.endsWith('.html')) return;
+      var currentPath = getFileFromHash();
+      if (!currentPath) return;
+      var targetPath = resolveNotePath(currentPath, href);
+      if (!targetPath) return;
+      e.preventDefault();
+      location.hash = targetPath;
+    });
+  }
+
   function findNodeByPath(children, path) {
     if (!children) return null;
     for (var i = 0; i < children.length; i++) {
@@ -320,6 +354,7 @@
       container.innerHTML = '<p style="padding:1rem;color:#999">无法加载目录</p>';
     }
     initSidebarToggle();
+    initPreviewLinkInterceptor();
     var path = getFileFromHash();
     if (path) {
       loadFileByPath(path);
