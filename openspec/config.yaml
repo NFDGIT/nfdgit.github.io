@@ -3,6 +3,7 @@ schema: spec-driven
 # Project context (optional)
 # This is shown to AI when creating artifacts.
 context: |
+  语言：所有 artifact（proposal、design、specs、tasks）必须使用简体中文撰写。
   Tech stack: 纯静态 HTML/CSS/JS，无构建工具、无框架
   目录结构:
     - index.html: 首页入口
@@ -16,11 +17,12 @@ context: |
     - 移动端优先，支持响应式
 
 # Per-artifact rules (optional)
-# Add custom rules for specific artifacts.
-# Example:
-#   rules:
-#     proposal:
-#       - Keep proposals under 500 words
-#       - Always include a "Non-goals" section
-#     tasks:
-#       - Break tasks into chunks of max 2 hours
+rules:
+  proposal:
+    - 使用简体中文撰写
+  design:
+    - 使用简体中文撰写
+  specs:
+    - 使用简体中文撰写，Requirement 和 Scenario 标题可用中文
+  tasks:
+    - 使用简体中文撰写
