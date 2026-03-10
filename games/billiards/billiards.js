@@ -156,6 +156,12 @@
     };
   }
 
+  function isAimCurrentValid() {
+    return aimCurrent &&
+      typeof aimCurrent.x === 'number' && typeof aimCurrent.y === 'number' &&
+      !isNaN(aimCurrent.x) && !isNaN(aimCurrent.y);
+  }
+
   function drawTable() {
     ctx.fillStyle = getCss('--billiards-rail') || '#5c3b1e';
     ctx.beginPath();
@@ -231,18 +237,14 @@
   }
 
   function drawAimLine(cue) {
-    if (!aimStart || !aimCurrent) return;
+    if (!aimStart || !aimCurrent || !isAimCurrentValid()) return;
     var dx = aimCurrent.x - aimStart.x;
     var dy = aimCurrent.y - aimStart.y;
     var dist = Math.sqrt(dx * dx + dy * dy);
     if (dist < 4) return;
 
-    var nx = (cue.x - aimStart.x);
-    var ny = (cue.y - aimStart.y);
-    var nd = Math.sqrt(nx * nx + ny * ny);
-    if (nd === 0) { nx = -dx / dist; ny = -dy / dist; }
-    else { nx /= nd; ny /= nd; }
-
+    var nx = dx / dist;
+    var ny = dy / dist;
     var projLen = Math.min(dist * 2.8, LOGIC_W * 0.55);
     var ex = cue.x + nx * projLen;
     var ey = cue.y + ny * projLen;
@@ -271,7 +273,7 @@
     ctx.clearRect(0, 0, LOGIC_W, LOGIC_H);
     drawTable();
     var cue = getCueBall();
-    if (state !== 'idle' && cue && aimStart) {
+    if (state !== 'idle' && cue && aimStart && isAimCurrentValid()) {
       drawAimLine(cue);
     }
     activeBalls().forEach(function (b) { drawBall(b); });
@@ -373,17 +375,16 @@
   }
 
   function getAimDirection() {
-    var cue = getCueBall();
-    if (!cue || !aimStart) return null;
-    var dx = cue.x - aimStart.x;
-    var dy = cue.y - aimStart.y;
+    if (!aimStart || !aimCurrent) return null;
+    var dx = aimCurrent.x - aimStart.x;
+    var dy = aimCurrent.y - aimStart.y;
     var dist = Math.sqrt(dx * dx + dy * dy);
-    if (dist === 0) return null;
+    if (dist < 1e-6) return null;
     return { dx: dx / dist, dy: dy / dist };
   }
 
   function hitCueBall() {
-    if (!aimStart || !aimCurrent) return;
+    if (!aimStart || !aimCurrent || !isAimCurrentValid()) return;
     var cue = getCueBall();
     if (!cue) return;
 
@@ -393,9 +394,7 @@
     if (dragDist < 4) return;
 
     var dir = getAimDirection();
-    if (!dir) {
-      dir = { dx: -dragDx / dragDist, dy: -dragDy / dragDist };
-    }
+    if (!dir) return;
 
     var power = Math.min(dragDist, MAX_DRAG) / MAX_DRAG;
     var speed = power * MAX_SPEED;
@@ -442,10 +441,18 @@
   }
 
   function getEventPos(e) {
+    var x, y;
     if (e.touches && e.touches.length > 0) {
-      return toLogical(e.touches[0].clientX, e.touches[0].clientY);
+      x = e.touches[0].clientX;
+      y = e.touches[0].clientY;
+    } else if (e.changedTouches && e.changedTouches.length > 0) {
+      x = e.changedTouches[0].clientX;
+      y = e.changedTouches[0].clientY;
+    } else {
+      x = e.clientX;
+      y = e.clientY;
     }
-    return toLogical(e.clientX, e.clientY);
+    return toLogical(x, y);
   }
 
   function onPointerDown(e) {
@@ -525,6 +532,7 @@
     window.addEventListener('resize', function () {
       var prevW = LOGIC_W;
       resizeCanvas();
+      if (aimStart !== null) render();
       if (prevW !== LOGIC_W) {
         balls = createBalls();
       }
