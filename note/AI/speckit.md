@@ -63,17 +63,27 @@ specify init . --ai cursor
 
 Spec Kit 的核心是一套**斜杠命令**，在已配置的 AI 对话中直接输入即可。推荐的四阶段顺序：**Specify → Plan → Tasks → Implement**。
 
-| 命令 | 在 AI 中的调用 | 作用 |
-|------|----------------|------|
-| **constitution** | `/constitution` 或 `/speckit.constitution` | 建立项目原则与开发准则，建议最先运行 |
-| **specify** | `/specify` 或 `/speckit.specify` | 定义要做什么、解决什么问题、成功标准（偏业务，不写技术细节） |
-| **clarify** | `/clarify` 或 `/speckit.clarify` | 通过结构化提问澄清规范中模糊之处，建议在 `/plan` 前执行（除非跳过） |
-| **plan** | `/plan` 或 `/speckit.plan` | 制定技术实现计划：技术栈、架构、框架选型 |
-| **tasks** | `/tasks` 或 `/speckit.tasks` | 把计划拆成可执行、可测试的小任务列表 |
-| **analyze** | `/analyze` 或 `/speckit.analyze` | 做跨 artifact 的一致性、覆盖度分析，建议在 `/tasks` 之后、`/implement` 之前 |
-| **implement** | `/implement` 或 `/speckit.implement` | 按任务顺序执行，生成并修改代码 |
+| 命令 | 在 AI 中的调用 | 作用 | 必做/可选 |
+|------|----------------|------|----------|
+| **constitution** | `/constitution` 或 `/speckit.constitution` | 建立项目原则与开发准则，建议最先运行 | 可选 |
+| **specify** | `/specify` 或 `/speckit.specify` | 定义要做什么、解决什么问题、成功标准（偏业务，不写技术细节） | **必做** |
+| **clarify** | `/clarify` 或 `/speckit.clarify` | 通过结构化提问澄清规范中模糊之处，建议在 `/plan` 前执行（除非跳过） | 可选（可显式跳过） |
+| **plan** | `/plan` 或 `/speckit.plan` | 制定技术实现计划：技术栈、架构、框架选型 | **必做** |
+| **tasks** | `/tasks` 或 `/speckit.tasks` | 把计划拆成可执行、可测试的小任务列表 | **必做** |
+| **analyze** | `/analyze` 或 `/speckit.analyze` | 做跨 artifact 的一致性、覆盖度分析，建议在 `/tasks` 之后、`/implement` 之前 | 可选 |
+| **implement** | `/implement` 或 `/speckit.implement` | 按任务顺序执行，生成并修改代码 | **必做** |
 
 > 以上命令以 [Spec Kit 官方文档](https://speckit.org/) 为准；在 Cursor 等工具中实际名称可能带前缀（如 `speckit.`），请以当前集成说明为准。
+
+### 步骤必做与可选
+
+不必每次都跑满全部 7 步。**必做**的只有四步：**specify → plan → tasks → implement**（最小可行路径）。其余三步为**可选**：
+
+- **constitution**：建议在新项目或需要统一团队原则时跑；单次小需求可省略。
+- **clarify**：官方允许「显式跳过」；若需求已清晰可直接进入 plan。
+- **analyze**：建议在 implement 前跑一遍做一致性检查，但不跑也可以直接 implement。
+
+**关于「通过统一配置执行」**：目前 Spec Kit 公开文档中，未发现项目级配置可指定「某步骤自动运行」或「某步骤默认跳过」；是否支持请以 [Spec Kit 官方文档](https://speckit.org/) 为准。若后续版本提供，可在使用指南中再补充配置方式。
 
 ---
 
