@@ -37,6 +37,36 @@
       ]
     },
     {
+      "name": "Flutter",
+      "type": "dir",
+      "children": [
+        {
+          "name": "README.md",
+          "type": "file",
+          "path": "Flutter/README.md",
+          "content": "# Flutter 笔记\n\nFlutter 专题：底层原理、面试题与高阶用法整理，便于查阅与复习。内容以官方文档与社区优质资料为准，言简意赅。\n\n---\n\n## 导航\n\n| 主题 | 说明 |\n|------|------|\n| [底层原理](底层原理.md) | 框架架构、渲染管线、Widget/Element/RenderObject、Dart 与 Flutter 关系 |\n| [面试](面试.md) | 常见 Flutter/Dart 面试题与要点，按考点分类 |\n| [高阶用法](高阶用法.md) | 状态管理、性能优化、平台通道、混合开发、插件与包 |\n\n- **FVM（Flutter 版本管理）**：见 [IT 笔记 · flutter_fvm](../IT/flutter_fvm.md)。\n"
+        },
+        {
+          "name": "底层原理.md",
+          "type": "file",
+          "path": "Flutter/底层原理.md",
+          "content": "# Flutter 底层原理\n\n> 一句话：**Widget 是配置单，Element 是「挂载点」，RenderObject 才是真正干活的——约束下行、尺寸上行，再布局、绘制、合成。**\n\n---\n\n## 三层树：谁在干什么\n\nFlutter 的 UI 不是一棵树搞定，而是三棵互相关联的树协同工作：\n\n| 树 | 角色 | 一句话 |\n|----|------|--------|\n| **Widget 树** | 声明式配置 | 开发者写的「说明书」，不可变，可随时被替换 |\n| **Element 树** | 中间层 | 把 Widget 挂到渲染体系上，持有 State、管理更新 |\n| **RenderObject 树** | 渲染层 | 算尺寸、算位置、画像素，和 GPU 打交道 |\n\n- **Widget**：轻量、可大量创建；递归组合，最终由 `RenderObjectWidget` 造出 RenderObject。\n- **Element**：Widget 的「实例化」——对应关系稳定，Widget 换了他负责对比、更新子节点。\n- **RenderObject**：存几何信息（大小、位置），负责 layout、paint、compositing；常见 2D 用的是 `RenderBox`（min/max 宽高约束）。\n\n---\n\n## 渲染管线（一帧里发生什么）\n\n每帧大致顺序：\n\n1. **Layout（布局）**：约束从父往下传，子把尺寸往上传；单次遍历，每个 RenderObject 最多被访问两遍（下、上），布局更新可做到亚线性。\n2. **Paint（绘制）**：按几何信息生成绘制指令（Layer/Picture）。\n3. **Compositing（合成）**：合成场景，交给引擎光栅化上屏。\n\n一句话：**约束向下，尺寸向上；布局完再画，画完再合成。**\n\n---\n\n## Dart 与 Flutter 的关系\n\n- Flutter 用 **Dart** 写，Dart 跑在 **Dart VM**（调试）或 **AOT 编译**（发布）里。\n- **Isolate**：Dart 的「线程」模型，每个 isolate 有独立堆和 **Event Loop**（microtask 优先于 event queue）。\n- **热重载**：把改动的 Dart 代码注入 VM，保留应用状态，比整包重启快得多。\n\n---\n\n## 延伸阅读\n\n- [Flutter 官方：架构概览](https://docs.flutter.dev/resources/architectural-overview)、[Inside Flutter](https://docs.flutter.dev/resources/inside-flutter)\n- 以官方文档与最新资料为准。\n"
+        },
+        {
+          "name": "面试.md",
+          "type": "file",
+          "path": "Flutter/面试.md",
+          "content": "# Flutter 面试题速览\n\n按考点分类，要点为主，便于复习。以官方文档与最新实践为准。\n\n---\n\n## 一、基础与概念\n\n**StatelessWidget vs StatefulWidget**\n\n- **StatelessWidget**：无状态、不可变，适合静态或由父组件驱动的 UI。\n- **StatefulWidget**：带 `State`，通过 `setState()` 触发重建，用于会变的 UI。\n\n**BuildContext 是什么？**\n\n- 表示 Widget 在 **Element 树**里的「位置」；用来拿 Theme、Navigator、找父/子、Overlay 等，不是「当前 Widget 的引用」。\n\n**const 构造函数**\n\n- 编译期常量，减少重复创建、利于 Flutter 复用 Element，能加就加。\n\n---\n\n## 二、原理类\n\n**Widget / Element / RenderObject 三者关系？**\n\n- Widget：配置单（轻量、可大量建）。Element：挂载点，对应 Widget 实例、管更新。RenderObject：真正做 layout/paint 的，存几何信息。见 [底层原理](底层原理.md)。\n\n**Event Loop 与 Isolate**\n\n- Dart 单线程 + Event Loop；microtask 先于 event queue。Isolate 之间内存隔离，靠消息通信。\n\n**热重载（Hot Reload）原理**\n\n- 把改动的 Dart 代码注入 VM，保留应用状态，只重建受影响子树，比完整重启快。\n\n---\n\n## 三、状态管理\n\n| 方案 | 特点 | 适用 |\n|------|------|------|\n| **Provider** | 基于 InheritedWidget，简单、样板少 | 中小项目、入门 |\n| **Riverpod** | 不依赖 BuildContext、编译期安全、异步友好 | 中大型、推荐主流 |\n| **Bloc** | 事件→状态、逻辑与 UI 解耦，样板多 | 复杂业务、企业级 |\n\n面试常问：为什么用状态管理？数据流怎么走？选型依据？（可答：项目规模、团队习惯、是否需要强约束与可测试性。）\n\n---\n\n## 四、性能与实践\n\n- **ListView** 用 `ListView.builder`，按需构建，不一次性建全部子项。\n- 大 Widget 树拆成小 Widget，利于复用与局部重建。\n- **Platform Channel**：Dart ↔ 原生（iOS/Android）通信桥，用于调原生 API、插件。\n- **MaterialApp vs WidgetsApp**：MaterialApp 自带 Material 设计、主题、路由等；WidgetsApp 更底层、更少默认行为。\n\n---\n\n## 五、小结\n\n核心考察：**数据流、响应式更新、三棵树、状态管理选型、性能意识**。把「谁驱动谁、何时重建」说清楚，比背题更管用。\n"
+        },
+        {
+          "name": "高阶用法.md",
+          "type": "file",
+          "path": "Flutter/高阶用法.md",
+          "content": "# Flutter 高阶用法\n\n状态管理、性能、平台通道与工程化要点，言简意赅。\n\n---\n\n## 一、状态管理选型\n\n| 方案 | 特点 | 适合场景 |\n|------|------|----------|\n| **Provider** | 基于 InheritedWidget，上手快、样板少 | 小中项目、快速迭代 |\n| **Riverpod** | 不依赖 Context、编译期安全、AsyncValue 友好 | 中大型、新项目首选 |\n| **Bloc** | 事件→状态、逻辑与 UI 彻底分离，样板多 | 复杂流程、企业级 |\n\n- **一句话**：小项目用 Provider 够用；要可扩展、可测试，选 Riverpod；强流程规范选 Bloc。\n- 避免在根用 Provider 塞大对象导致整树重建；Riverpod 的细粒度依赖能减少无效 rebuild。\n\n---\n\n## 二、性能优化\n\n- **列表**：用 `ListView.builder` / `GridView.builder`，懒加载子项。\n- **const**：能标 const 的 Widget 尽量标，利于复用、减重建。\n- **拆 Widget**：大树拆成小 Widget，便于 Flutter 做 diff 与局部更新。\n- **RepaintBoundary**：隔离重绘区域，复杂或动画多的子树可包一层。\n- **避免在 build 里做重计算**：放到 `initState`、Future、或状态管理侧。\n\n---\n\n## 三、平台通道（Platform Channel）\n\n- **用途**：Dart 与原生（iOS/Android）互调——用原生 API、写插件、拿设备能力。\n- **常见类型**：MethodChannel（调用方法）、EventChannel（原生推事件到 Dart）。\n- **注意**：跨通道是异步的，主线程不阻塞；大数据考虑分片或换更高效的通道方式。\n\n---\n\n## 四、混合开发与插件\n\n- **混合开发**：在现有 iOS/Android 工程里嵌 Flutter 模块（Flutter Engine + 业务 Dart），通过路由与通道和原生交互。\n- **插件（Plugin）**：封装平台能力给 Dart 用，一般含 Dart API + 各平台实现；发布到 pub.dev 供他人依赖。\n- **包（Package）**：纯 Dart 可只发 Dart 包；带原生代码的用 Plugin 模板。\n\n---\n\n## 五、小结\n\n- 状态管理：按项目规模与团队习惯选 Provider / Riverpod / Bloc，说清数据流。\n- 性能：builder 懒加载、const、拆 Widget、RepaintBoundary、少在 build 里算。\n- 平台与工程：Channel 做桥接；混合开发与插件搞清楚 Engine、入口与通信方式。\n\n以官方文档与当前最佳实践为准，有疑问查 [flutter.dev](https://flutter.dev/docs)。\n"
+        }
+      ]
+    },
+    {
       "name": "IT",
       "type": "dir",
       "children": [
