@@ -8,8 +8,8 @@ Flutter 专题：底层原理、面试题与高阶用法整理，便于查阅与
 
 | 主题 | 说明 |
 |------|------|
-| [底层原理](底层原理.md) | 框架架构、渲染管线、Widget/Element/RenderObject、Dart 与 Flutter 关系 |
-| [面试](面试.md) | 常见 Flutter/Dart 面试题与要点，按考点分类 |
-| [高阶用法](高阶用法.md) | 状态管理、性能优化、平台通道、混合开发、插件与包 |
+| [底层原理](底层原理.md) | 框架架构、渲染管线、Layer/Key/InheritedWidget、BuildOwner、Skia/Impeller、约束与 RepaintBoundary |
+| [面试](面试.md) | 面试题索引；[面试-原理](面试-原理.md)、[面试-实践](面试-实践.md) 按考点分类 |
+| [高阶用法](高阶用法.md) | 状态管理、性能优化、Platform Channel、混合开发、插件、测试与 CI |
 
 - **FVM（Flutter 版本管理）**：见 [IT 笔记 · flutter_fvm](../IT/flutter_fvm.md)。
