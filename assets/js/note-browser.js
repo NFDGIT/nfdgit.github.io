@@ -184,7 +184,12 @@
 
   function getFileFromHash() {
     var hash = location.hash.slice(1);
-    return hash && hash.indexOf('#') === -1 ? hash : null;
+    if (!hash || hash.indexOf('#') !== -1) return null;
+    try {
+      return decodeURIComponent(hash);
+    } catch (e) {
+      return hash;
+    }
   }
 
   /** 将相对路径解析为 manifest 中的绝对路径（如 AI/openspec.md） */
