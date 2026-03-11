@@ -50,12 +50,28 @@ specify init . --ai cursor
 
 ## 目录结构
 
-执行 `specify init` 后，项目内会多出 Spec Kit 相关配置与制品目录。不同版本可能略有差异，典型结构大致如下（以 [官方文档](https://speckit.org/) 为准）：
+执行 `specify init` 后，项目根目录下会生成 **`.specify/`** 目录，集中存放规范、脚本与 AI 相关制品，与业务代码分离。典型结构如下：
 
-- 项目根目录下会有规范与计划等 artifact 的存放位置（如 `.specify/` 或由 CLI 说明的路径）。
-- 规范、计划、任务列表会以 Markdown 等形式保存在这些路径中，供 AI 按顺序读取并执行。
+```
+.specify/
+├── memory/      # 共享记忆（如 constitution 等）
+├── scripts/     # 自动化脚本（Bash .sh / PowerShell .ps1）
+├── specs/       # 规范与计划文件
+├── templates/   # AI 提示模板
+└── out/         # 输出目录
+```
 
-具体目录名与层级请以你当前 `specify --version` 对应版本的 [Spec Kit 文档](https://speckit.org/) 或 [GitHub 仓库](https://github.com/github/spec-kit) 为准。
+各子目录的典型内容与作用：
+
+| 目录 | 典型内容 | 作用 |
+|------|----------|------|
+| **memory/** | `constitution.md` 等 | 存放项目原则、开发准则等共享记忆，供 `/constitution` 等命令使用 |
+| **scripts/** | `.sh`、`.ps1` 脚本 | 自动化脚本，CLI 按系统选用 Bash 或 PowerShell 版本 |
+| **specs/** | 规范、计划、任务等 Markdown | 存放 `/specify`、`/plan`、`/tasks` 产出的 artifact，AI 按顺序读取并执行；**升级时受保护，不会被覆盖** |
+| **templates/** | 模板文件 | 供 AI 使用的提示模板 |
+| **out/** | 生成物 | 输出目录，存放 CLI 或流程产生的文件 |
+
+不同版本可能略有差异，具体以你当前 `specify --version` 对应的 [Spec Kit 文档](https://speckit.org/) 或 [GitHub 仓库](https://github.com/github/spec-kit) 为准。
 
 ---
 

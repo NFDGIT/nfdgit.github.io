@@ -210,6 +210,17 @@ AI：好的（又改一版，可能引入新问题）
 | 希望规范可版本管理、团队共享 | OpenSpec |
 | 需要更结构化、可复用的流程 | Spec Kit |
 
+### 若二选一：已有项目更选 OpenSpec
+
+若在 OpenSpec 与 Spec Kit 中**必须选一个**用于已有项目，更推荐 **OpenSpec**。主要原因（基于公开对比与社区表述，如 [intent-driven.dev](https://intent-driven.dev/knowledge/spec-kit-vs-openspec/)、[OpenSpec 对比页](https://openspec.pro/comparison/) 等）如下：
+
+- **定位**：OpenSpec 为 brownfield/已有代码库设计；Spec Kit 在公开资料中多被描述为 greenfield/新项目优先。
+- **规范形态**：OpenSpec 采用统一单源真相、变更用 delta 合并，已有项目下「当前系统约定」一目了然；Spec Kit 按 feature 多文件，拼出全局约定成本更高。
+- **流程与迭代**：OpenSpec 三步（Propose → Apply → Archive）、产出更精简；Spec Kit 阶段多、产出更详，已有项目常做小步修改时，轻量流程更匹配。
+- **依赖与上手**：OpenSpec 仅需 Node.js、约 5 分钟上手；Spec Kit 需 Python/uv、约 30 分钟，对纯前端或 Node 栈更友好。
+
+以上依据公开对比与社区表述，具体以各工具官方文档与第三方对比文章为准。
+
 ### 老项目起步建议
 
 1. **小步试点**：选一个小功能（如加一个 API、修一个 Bug），用 OpenSpec 或 Cursor Plan 模式试一次
@@ -224,6 +235,6 @@ AI：好的（又改一版，可能引入新问题）
 | **本质** | 先定规范，再写代码；规范即需求、约束和文档 |
 | **解决的问题** | 需求漂移、文档滞后、AI 随意发挥、重构恐惧 |
 | **Cursor Plan** | 是规范式编程的一种实现，先计划后执行 |
-| **老项目** | 推荐 OpenSpec 或 Cursor Plan，从小功能试点开始 |
+| **老项目** | 推荐 OpenSpec 或 Cursor Plan，从小功能试点开始；已有项目二选一更推荐 OpenSpec（原因见第五节） |
 
 规范式编程不是银弹，但能显著提升可控性和可维护性。在 AI 时代，**把规范写清楚，就是给 AI 一份「施工图」**——图越清晰，实现越靠谱。
