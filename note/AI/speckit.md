@@ -202,5 +202,5 @@ Spec Kit 的核心是一套**斜杠命令**，在已配置的 AI 对话中直接
 ## 小贴士
 
 - **顺序很重要**：建议按 constitution → specify → clarify → plan → tasks → analyze → implement 走一遍，规范清晰再写代码，事半功倍。
-- **与 OpenSpec 对比**：OpenSpec 偏「变更 + 归档 + 主规格库」；Spec Kit 偏「规范 → 计划 → 任务 → 实现」一条龙。两者都是规范式编程，可按团队习惯二选一或搭配使用。
+- **与 OpenSpec 对比**：OpenSpec 偏「变更 + 归档 + 主规格库」；Spec Kit 偏「规范 → 计划 → 任务 → 实现」一条龙。两者都是规范驱动编程，可按团队习惯二选一或搭配使用。
 - **版本与集成**：本文基于 Spec Kit 当前公开文档整理。若命令或输出有变化，请以 [speckit.org](https://speckit.org/) 与 [GitHub spec-kit](https://github.com/github/spec-kit) 为准。
