@@ -5,6 +5,7 @@
     <meta charset="utf-8" />
     <script>
       (function(){var t=localStorage.getItem('theme')||(window.matchMedia&&matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);})();
+      (function(){if(localStorage.getItem('largeText')==='on')document.documentElement.setAttribute('data-large-text','on');})();
     </script>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta http-equiv="Permissions-Policy" content="interest-cohort=()">
@@ -21,6 +22,7 @@
             <h1>个人主页</h1>
             <p>笔记 · 小游戏 · 相册 · 小工具</p>
         </div>
+        <button type="button" class="large-text-toggle" aria-label="开启大字模式">A+</button>
         <button type="button" class="theme-toggle" aria-label="切换主题">🌙</button>
     </header>
 
@@ -52,6 +54,7 @@
         </a>
     </nav>
     <script src="./assets/js/theme.js"></script>
+    <script src="./assets/js/large-text.js"></script>
 </body>
 
 </html>

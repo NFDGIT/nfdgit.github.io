@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <script>
       (function(){var t=localStorage.getItem('theme')||(window.matchMedia&&matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);})();
+      (function(){if(localStorage.getItem('largeText')==='on')document.documentElement.setAttribute('data-large-text','on');})();
     </script>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -21,6 +22,7 @@
             </div>
             <div class="games-actions">
                 <a href="../index.html" class="games-link">返回首页</a>
+                <button type="button" class="large-text-toggle" aria-label="开启大字模式">A+</button>
                 <button type="button" class="theme-toggle" aria-label="切换主题">🌙</button>
             </div>
         </header>
@@ -66,5 +68,6 @@
     </main>
 
     <script src="../assets/js/theme.js"></script>
+    <script src="../assets/js/large-text.js"></script>
 </body>
 </html>

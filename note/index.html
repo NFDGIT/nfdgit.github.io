@@ -4,7 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <script>
-    (function(){var t=localStorage.getItem('theme')||(window.matchMedia&&matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);})();
+    (function () { var t = localStorage.getItem('theme') || (window.matchMedia && matchMedia('(prefers-color-scheme:dark)').matches ? 'dark' : 'light'); document.documentElement.setAttribute('data-theme', t); })();
+    (function () { if (localStorage.getItem('largeText') === 'on') document.documentElement.setAttribute('data-large-text', 'on'); })();
   </script>
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,20 +15,22 @@
 </head>
 
 <body>
-  <script>!function(){if(window.matchMedia('(min-width:769px)').matches&&localStorage.getItem('note-sidebar-collapsed')==='1')document.body.classList.add('note-sidebar-collapsed');}();</script>
-  <button type="button" class="note-sidebar-toggle note-sidebar-toggle-mobile" id="note-sidebar-toggle" aria-label="打开目录" aria-expanded="false">≡</button>
+  <script>!function () { if (window.matchMedia('(min-width:769px)').matches && localStorage.getItem('note-sidebar-collapsed') === '1') document.body.classList.add('note-sidebar-collapsed'); }();</script>
+  <button type="button" class="note-sidebar-toggle note-sidebar-toggle-mobile" id="note-sidebar-toggle"
+    aria-label="打开目录" aria-expanded="false">≡</button>
   <div class="note-sidebar-overlay" id="note-sidebar-overlay" aria-hidden="true"></div>
   <div class="note-layout">
     <div class="note-sidebar-wrap" id="note-sidebar-wrap">
       <aside class="note-sidebar" id="note-sidebar">
-      <button type="button" class="note-sidebar-close" id="note-sidebar-close" aria-label="关闭目录">×</button>
-      <div class="note-sidebar-header">
-        <button type="button" class="note-sidebar-collapse" id="note-sidebar-collapse" aria-label="收起目录">◀</button>
-        <span>目录</span>
-        <button type="button" class="theme-toggle" aria-label="切换主题">🌙</button>
-      </div>
-      <div id="note-tree"></div>
-    </aside>
+        <button type="button" class="note-sidebar-close" id="note-sidebar-close" aria-label="关闭目录">×</button>
+        <div class="note-sidebar-header">
+          <button type="button" class="note-sidebar-collapse" id="note-sidebar-collapse" aria-label="收起目录">◀</button>
+          <span>目录</span>
+          <button type="button" class="large-text-toggle" aria-label="开启大字模式">A+</button>
+          <button type="button" class="theme-toggle" aria-label="切换主题">🌙</button>
+        </div>
+        <div id="note-tree"></div>
+      </aside>
     </div>
     <main class="note-preview">
       <a href="../index.html" class="note-back">← 返回首页</a>
@@ -38,6 +41,7 @@
     </main>
   </div>
   <script src="../assets/js/theme.js"></script>
+  <script src="../assets/js/large-text.js"></script>
   <script src="./manifest.js"></script>
   <script src="../assets/js/note-browser.js"></script>
 </body>

@@ -21,6 +21,11 @@
     --card-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.5);
 }
 
+/* 大字模式：根字体放大约 1.2 倍，rem 自动跟随 */
+html[data-large-text="on"] {
+    font-size: 120%;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -121,6 +126,30 @@ body {
 
 .theme-toggle:hover {
     opacity: 1;
+}
+
+.large-text-toggle {
+    padding: 0.5rem;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    cursor: pointer;
+    font-size: 1.25rem;
+    line-height: 1;
+    opacity: 0.85;
+    transition: opacity 0.2s;
+    margin-right: 0.25rem;
+}
+
+.large-text-toggle:hover {
+    opacity: 1;
+}
+
+/* 大字模式仅移动端：桌面端隐藏开关 */
+@media (min-width: 769px) {
+    .large-text-toggle {
+        display: none;
+    }
 }
 
 /* 响应式：平板 2 列 */

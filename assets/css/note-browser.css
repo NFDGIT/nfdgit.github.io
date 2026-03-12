@@ -33,6 +33,11 @@
   --note-file-html: #adb5bd;
 }
 
+/* 大字模式：笔记页根字体放大约 1.2 倍 */
+html[data-large-text="on"] {
+  font-size: 120%;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -68,6 +73,7 @@ body.note-sidebar-collapsed .note-sidebar-wrap {
 }
 
 body.note-sidebar-collapsed .note-sidebar .note-sidebar-header span,
+body.note-sidebar-collapsed .note-sidebar .large-text-toggle,
 body.note-sidebar-collapsed .note-sidebar .theme-toggle,
 body.note-sidebar-collapsed .note-sidebar .note-tree,
 body.note-sidebar-collapsed .note-sidebar .note-sidebar-close {
@@ -119,6 +125,29 @@ body.note-sidebar-collapsed .note-sidebar {
 .theme-toggle:hover {
   opacity: 1;
   background: var(--note-sidebar-hover);
+}
+
+.large-text-toggle {
+  padding: 0.35rem;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  cursor: pointer;
+  font-size: 1.1rem;
+  line-height: 1;
+  opacity: 0.85;
+  margin-right: 0.2rem;
+}
+.large-text-toggle:hover {
+  opacity: 1;
+  background: var(--note-sidebar-hover);
+}
+
+/* 大字模式仅移动端：桌面端隐藏开关 */
+@media (min-width: 769px) {
+  .large-text-toggle {
+    display: none;
+  }
 }
 
 /* 桌面端收起按钮 */
