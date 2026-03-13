@@ -302,9 +302,7 @@
     if (typeof THREE === 'undefined' || !threeContainer) return;
     try {
       var scene = new THREE.Scene();
-      var camera = new THREE.PerspectiveCamera(50, wrap.clientWidth / wrap.clientHeight, 1, 3000);
-      camera.position.set(LOGIC_W / 2, 320, LOGIC_H / 2 + 100);
-      camera.lookAt(LOGIC_W / 2, 0, LOGIC_H / 2);
+      var camera = new THREE.PerspectiveCamera(46, wrap.clientWidth / wrap.clientHeight, 1, 4000);
       camera.up.set(0, 1, 0);
 
       var renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
@@ -382,9 +380,60 @@
         ensureBallMeshes: ensureBallMeshes,
         aimLine: aimLine
       };
+      sync3DViewport();
     } catch (e) {
       console.warn('3D init failed', e);
       scene3d = null;
+    }
+  }
+
+  function sync3DViewport() {
+    if (!scene3d || !scene3d.renderer || !scene3d.camera || !wrap) return;
+    var viewW = Math.max(wrap.clientWidth || 0, 1);
+    var viewH = Math.max(wrap.clientHeight || 0, 1);
+    scene3d.renderer.setSize(viewW, viewH);
+    scene3d.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    scene3d.camera.aspect = viewW / viewH;
+    fit3DCameraToTable(scene3d.camera);
+    scene3d.camera.updateProjectionMatrix();
+  }
+
+  function fit3DCameraToTable(camera) {
+    // Use a bounding-sphere fit so table + rails + pockets remain visible in all aspect ratios.
+    var centerX = LOGIC_W / 2;
+    var centerZ = LOGIC_H / 2;
+    var safeHalfW = LOGIC_W / 2 + RAIL_W + POCKET_R + BALL_R;
+    var safeHalfH = LOGIC_H / 2 + RAIL_W + POCKET_R + BALL_R;
+    var radius = Math.sqrt(safeHalfW * safeHalfW + safeHalfH * safeHalfH);
+    var vFov = THREE.MathUtils.degToRad(camera.fov);
+    var hFov = 2 * Math.atan(Math.tan(vFov / 2) * camera.aspect);
+    var limitingFov = Math.max(Math.min(vFov, hFov), 0.25);
+    var dist = radius / Math.sin(limitingFov / 2);
+    var dir = new THREE.Vector3(0, 1.05, 1.08).normalize();
+    camera.position.set(
+      centerX + dir.x * dist,
+      BALL_R * 0.8 + dir.y * dist,
+      centerZ + dir.z * dist
+    );
+    camera.near = Math.max(1, dist * 0.05);
+    camera.far = dist * 8;
+    camera.lookAt(centerX, 0, centerZ);
+  }
+
+  function dispose3D() {
+    if (!scene3d) return;
+    if (scene3d.renderer && scene3d.renderer.domElement && scene3d.renderer.domElement.parentNode) {
+      scene3d.renderer.domElement.parentNode.removeChild(scene3d.renderer.domElement);
+    }
+    if (scene3d.renderer && scene3d.renderer.dispose) scene3d.renderer.dispose();
+    scene3d = null;
+  }
+
+  function rebuild3DScene() {
+    dispose3D();
+    if (renderMode === '3d') {
+      init3D();
+      if (scene3d) sync3DViewport();
     }
   }
 
@@ -444,17 +493,8 @@
       canvas.style.pointerEvents = 'none';
       threeContainer.hidden = false;
       if (!scene3d) init3D();
-      if (scene3d && scene3d.renderer && wrap) {
-        scene3d.renderer.setSize(wrap.clientWidth, wrap.clientHeight);
-        scene3d.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-        requestAnimationFrame(function () {
-          if (scene3d && scene3d.renderer && wrap) {
-            scene3d.renderer.setSize(wrap.clientWidth, wrap.clientHeight);
-            scene3d.camera.aspect = wrap.clientWidth / wrap.clientHeight;
-            scene3d.camera.updateProjectionMatrix();
-          }
-        });
-      }
+      sync3DViewport();
+      requestAnimationFrame(sync3DViewport);
     } else {
       canvas.style.visibility = '';
       canvas.style.pointerEvents = '';
@@ -737,19 +777,21 @@
       }
     }
 
-    window.addEventListener('resize', function () {
+    function onViewportChange() {
       var prevW = LOGIC_W;
       resizeCanvas();
-      if (scene3d && scene3d.renderer && wrap) {
-        scene3d.renderer.setSize(wrap.clientWidth, wrap.clientHeight);
-        scene3d.camera.aspect = wrap.clientWidth / wrap.clientHeight;
-        scene3d.camera.updateProjectionMatrix();
-      }
+      if (scene3d) sync3DViewport();
       if (aimStart !== null) render();
       if (prevW !== LOGIC_W) {
         balls = createBalls();
+        if (scene3d) rebuild3DScene();
       }
       if (renderMode === '3d' && scene3d) render3D(); else render();
+    }
+
+    window.addEventListener('resize', onViewportChange);
+    window.addEventListener('orientationchange', function () {
+      requestAnimationFrame(onViewportChange);
     });
 
     requestAnimationFrame(loop);

@@ -175,6 +175,7 @@ body.billiards-page {
     width: 100%;
     max-width: 980px;
     margin: 0 auto;
+    overflow: visible;
 }
 
 .billiards-3d-wrap {
@@ -184,6 +185,7 @@ body.billiards-page {
     height: 100%;
     border-radius: 8px;
     overflow: hidden;
+    z-index: 1;
 }
 
 .billiards-3d-wrap canvas {
@@ -203,6 +205,7 @@ body.billiards-page {
 .billiards-overlay {
     position: absolute;
     inset: 0;
+    z-index: 2;
     display: flex;
     flex-direction: column;
     justify-content: center;
