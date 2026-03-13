@@ -257,8 +257,8 @@
 
   function drawAimLine(cue) {
     if (!aimStart || !aimCurrent || !isAimCurrentValid()) return;
-    var dx = aimCurrent.x - aimStart.x;
-    var dy = aimCurrent.y - aimStart.y;
+    var dx = aimStart.x - aimCurrent.x;
+    var dy = aimStart.y - aimCurrent.y;
     var dist = Math.sqrt(dx * dx + dy * dy);
     if (dist < 4) return;
 
@@ -412,8 +412,8 @@
     if (s.aimLine) s.scene.remove(s.aimLine);
     var cue = getCueBall();
     if (state !== 'idle' && cue && aimStart && isAimCurrentValid()) {
-      var dx = aimCurrent.x - aimStart.x;
-      var dy = aimCurrent.y - aimStart.y;
+      var dx = aimStart.x - aimCurrent.x;
+      var dy = aimStart.y - aimCurrent.y;
       var dist = Math.sqrt(dx * dx + dy * dy);
       if (dist >= 4) {
         var nx = dx / dist;
@@ -570,8 +570,9 @@
 
   function getAimDirection() {
     if (!aimStart || !aimCurrent) return null;
-    var dx = aimCurrent.x - aimStart.x;
-    var dy = aimCurrent.y - aimStart.y;
+    // Reverse-shot rule: cue ball goes opposite to drag direction.
+    var dx = aimStart.x - aimCurrent.x;
+    var dy = aimStart.y - aimCurrent.y;
     var dist = Math.sqrt(dx * dx + dy * dy);
     if (dist < 1e-6) return null;
     return { dx: dx / dist, dy: dy / dist };
