@@ -28,25 +28,32 @@
 
         <section class="billiards-layout">
             <section class="billiards-panel billiards-stage-area" aria-label="游戏区域">
-                <div class="billiards-status-bar billiards-desktop-only">
-                    <div class="billiards-stat">
-                        <span class="billiards-stat-label">已进袋</span>
-                        <strong id="score">0</strong>
+                <div class="billiards-top-controls">
+                    <div class="billiards-status-bar">
+                        <div class="billiards-stat">
+                            <span class="billiards-stat-label">已进袋</span>
+                            <strong id="score">0</strong>
+                        </div>
+                        <div class="billiards-stat">
+                            <span class="billiards-stat-label">剩余球</span>
+                            <strong id="balls-left">15</strong>
+                        </div>
+                        <div class="billiards-stat">
+                            <span class="billiards-stat-label">状态</span>
+                            <strong id="game-status">准备击球</strong>
+                        </div>
                     </div>
-                    <div class="billiards-stat">
-                        <span class="billiards-stat-label">剩余球</span>
-                        <strong id="balls-left">15</strong>
-                    </div>
-                    <div class="billiards-stat">
-                        <span class="billiards-stat-label">状态</span>
-                        <strong id="game-status">准备击球</strong>
+
+                    <div class="billiards-primary-actions">
+                        <div class="billiards-view-toggle" aria-label="视角">
+                            <button type="button" id="view-2d-btn" class="billiards-view-btn is-active" aria-pressed="true">2D</button>
+                            <button type="button" id="view-3d-btn" class="billiards-view-btn" aria-pressed="false">3D</button>
+                        </div>
+                        <button type="button" id="start-btn" class="billiards-btn billiards-btn-primary">开始游戏</button>
+                        <button type="button" id="reset-btn" class="billiards-btn">重新开始</button>
                     </div>
                 </div>
 
-                <div class="billiards-view-toggle" aria-label="视角">
-                    <button type="button" id="view-2d-btn" class="billiards-view-btn is-active" aria-pressed="true">2D</button>
-                    <button type="button" id="view-3d-btn" class="billiards-view-btn" aria-pressed="false">3D</button>
-                </div>
                 <div class="billiards-canvas-wrap">
                     <canvas id="billiards-canvas" aria-label="台球桌"></canvas>
                     <div id="billiards-3d-container" class="billiards-3d-wrap" aria-label="台球桌（3D）" hidden></div>
@@ -59,26 +66,23 @@
                 <div class="billiards-power-bar" aria-label="击球力度">
                     <div id="power-fill"></div>
                 </div>
+                <details class="billiards-options">
+                    <summary>选项</summary>
+                    <div class="billiards-options-content">
+                        <div class="billiards-help">
+                            <h2>玩法说明</h2>
+                            <ul>
+                                <li>在球桌任意位置按住并向任意方向拖拽。</li>
+                                <li>母球将沿拖拽方向的反方向击出。</li>
+                                <li>拖拽距离越长，击球力度越大。</li>
+                                <li>所有球停止后方可击球。</li>
+                                <li>母球进袋时会被重置，不计分。</li>
+                                <li>15 颗彩球全部进袋即通关。</li>
+                            </ul>
+                        </div>
+                    </div>
+                </details>
             </section>
-
-            <aside class="billiards-panel billiards-side-panel billiards-desktop-only">
-                <div class="billiards-actions">
-                    <button type="button" id="start-btn" class="billiards-btn billiards-btn-primary">开始游戏</button>
-                    <button type="button" id="reset-btn" class="billiards-btn">重新开始</button>
-                </div>
-
-                <div class="billiards-help">
-                    <h2>玩法说明</h2>
-                    <ul>
-                        <li>在球桌任意位置按住并向任意方向拖拽。</li>
-                        <li>母球将沿拖拽方向的反方向击出。</li>
-                        <li>拖拽距离越长，击球力度越大。</li>
-                        <li>所有球停止后方可击球。</li>
-                        <li>母球进袋时会被重置，不计分。</li>
-                        <li>15 颗彩球全部进袋即通关。</li>
-                    </ul>
-                </div>
-            </aside>
         </section>
     </main>
 

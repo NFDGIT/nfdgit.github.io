@@ -111,11 +111,16 @@ body.billiards-page {
     padding: 1rem;
 }
 
+.billiards-top-controls {
+    display: grid;
+    gap: 0.65rem;
+    margin-bottom: 0.8rem;
+}
+
 .billiards-status-bar {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 0.75rem;
-    margin-bottom: 1rem;
+    gap: 0.55rem;
 }
 
 .billiards-stat {
@@ -135,7 +140,13 @@ body.billiards-page {
 .billiards-view-toggle {
     display: flex;
     gap: 0.25rem;
-    margin-bottom: 0.5rem;
+}
+
+.billiards-primary-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.55rem;
 }
 
 .billiards-view-btn {
@@ -162,7 +173,7 @@ body.billiards-page {
 .billiards-canvas-wrap {
     position: relative;
     width: 100%;
-    max-width: 760px;
+    max-width: 980px;
     margin: 0 auto;
 }
 
@@ -239,18 +250,6 @@ body.billiards-page {
     transition: width 0.05s linear;
 }
 
-.billiards-side-panel {
-    display: grid;
-    gap: 1rem;
-    align-content: start;
-}
-
-.billiards-actions {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.75rem;
-}
-
 .billiards-btn {
     appearance: none;
     border: 1px solid var(--billiards-btn-border);
@@ -269,15 +268,41 @@ body.billiards-page {
 }
 
 .billiards-btn-primary {
-    grid-column: 1 / -1;
     background: var(--billiards-btn-primary-bg);
     color: var(--billiards-btn-primary-text);
     border-color: transparent;
 }
 
+.billiards-options {
+    margin-top: 0.7rem;
+    border: 1px solid var(--billiards-panel-border);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.billiards-options > summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 0.6rem 0.8rem;
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+.billiards-options > summary::-webkit-details-marker {
+    display: none;
+}
+
+.billiards-options[open] > summary {
+    border-bottom: 1px solid var(--billiards-panel-border);
+}
+
+.billiards-options-content {
+    padding: 0.6rem 0.8rem 0.7rem;
+}
+
 .billiards-help h2 {
     font-size: 1rem;
-    margin-bottom: 0.7rem;
+    margin-bottom: 0.45rem;
 }
 
 .billiards-help ul {
@@ -348,16 +373,19 @@ body.billiards-page {
 
 @media (min-width: 860px) {
     .billiards-layout {
-        grid-template-columns: minmax(0, 1.8fr) minmax(280px, 0.8fr);
-        align-items: start;
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .billiards-shell {
+        max-width: 1280px;
+    }
+
+    .billiards-stage-area {
+        padding: 0.9rem;
     }
 }
 
 @media (max-width: 700px) {
-    .billiards-desktop-only {
-        display: none;
-    }
-
     .billiards-mobile-only {
         display: flex;
     }
@@ -375,10 +403,64 @@ body.billiards-page {
     }
 
     .billiards-panel {
-        padding: 0.75rem;
+        padding: 0.65rem;
     }
 
     .billiards-power-bar {
         height: 10px;
+    }
+
+    .billiards-status-bar {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .billiards-stat {
+        padding: 0.6rem 0.65rem;
+    }
+
+    .billiards-stat-label {
+        font-size: 0.75rem;
+    }
+}
+
+@media (max-width: 950px) and (orientation: landscape) {
+    .billiards-shell {
+        padding: 0.6rem 0.75rem;
+    }
+
+    .billiards-header {
+        margin-bottom: 0.7rem;
+    }
+
+    .billiards-header h1 {
+        font-size: 1.5rem;
+        margin-bottom: 0.2rem;
+    }
+
+    .billiards-subtitle {
+        font-size: 0.9rem;
+        line-height: 1.35;
+    }
+
+    .billiards-status-bar {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.45rem;
+    }
+
+    .billiards-stat {
+        padding: 0.5rem 0.58rem;
+    }
+
+    .billiards-canvas-wrap {
+        max-width: 100%;
+    }
+
+    .billiards-options {
+        max-width: 420px;
+    }
+
+    .billiards-mobile-bar {
+        position: sticky;
+        bottom: 0;
     }
 }
