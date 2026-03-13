@@ -14,6 +14,7 @@
   var threeContainer = document.getElementById('billiards-3d-container');
   var view2dBtn = document.getElementById('view-2d-btn');
   var view3dBtn = document.getElementById('view-3d-btn');
+  var landscapeBtn = document.getElementById('landscape-btn');
 
   var mobileStartBtn = document.getElementById('mobile-start-btn');
   var mobileResetBtn = document.getElementById('mobile-reset-btn');
@@ -30,9 +31,11 @@
 
   var BASE_LOGIC_W = 760;
   var BASE_LOGIC_H = 420;
-  var NARROW_LOGIC_W = 420;
-  var NARROW_LOGIC_H = 280;
-  var NARROW_BREAKPOINT = 500;
+  var MOBILE_BREAKPOINT = 700;
+  var MOBILE_PORTRAIT_MIN_W = 430;
+  var MOBILE_PORTRAIT_MAX_W = 520;
+  var MOBILE_LANDSCAPE_MIN_W = 500;
+  var MOBILE_LANDSCAPE_MAX_W = 620;
 
   var LOGIC_W = BASE_LOGIC_W;
   var LOGIC_H = BASE_LOGIC_H;
@@ -49,6 +52,12 @@
   var MAX_DRAG = 150;
   var MAX_SPEED = 18;
   var POCKETS = [];
+  var layoutSignature = '';
+  var attemptedLandscapeLock = false;
+
+  function clamp(value, min, max) {
+    return Math.max(min, Math.min(max, value));
+  }
 
   var BALL_COLORS = [
     '#f5c800', '#003caa', '#c80000', '#7b0080', '#ff6000',
@@ -63,32 +72,47 @@
   var aimCurrent = null;
   var scale = 1;
 
-  function computeLayout(availW) {
-    if (availW < NARROW_BREAKPOINT) {
-      LOGIC_W = NARROW_LOGIC_W;
-      LOGIC_H = NARROW_LOGIC_H;
-      BALL_R = 14;
-      POCKET_R = 19;
-    } else {
+  function computeLayout(availW, viewportH) {
+    var isMobile = availW <= MOBILE_BREAKPOINT;
+    var isLandscape = isMobile && viewportH > 0 && availW / viewportH > 1.15;
+    if (!isMobile) {
       LOGIC_W = BASE_LOGIC_W;
       LOGIC_H = BASE_LOGIC_H;
-      BALL_R = 11;
-      POCKET_R = 16;
+    } else if (isLandscape) {
+      // Keep mobile landscape in a controlled width range to preserve proportions.
+      LOGIC_W = Math.round(clamp(availW * 1.02, MOBILE_LANDSCAPE_MIN_W, MOBILE_LANDSCAPE_MAX_W));
+      LOGIC_H = Math.round(clamp(LOGIC_W / 1.86, 285, 340));
+    } else {
+      LOGIC_W = Math.round(clamp(availW * 1.08, MOBILE_PORTRAIT_MIN_W, MOBILE_PORTRAIT_MAX_W));
+      LOGIC_H = Math.round(clamp(LOGIC_W / 1.52, 288, 340));
     }
-    RAIL_W = Math.round(LOGIC_W * 0.032);
+
+    RAIL_W = Math.round(clamp(LOGIC_W * 0.0315, 14, 26));
     TABLE_X = RAIL_W;
     TABLE_Y = RAIL_W;
     TABLE_W = LOGIC_W - RAIL_W * 2;
     TABLE_H = LOGIC_H - RAIL_W * 2;
-    POCKET_SNAP = POCKET_R - 2;
+    var tableShortSide = Math.min(TABLE_W, TABLE_H);
+    var ballMin = isMobile ? 11 : 10;
+    var ballMax = isMobile ? (isLandscape ? 13 : 14) : 12;
+    BALL_R = Math.round(clamp(tableShortSide * 0.039, ballMin, ballMax));
+    POCKET_R = Math.round(clamp(BALL_R * 1.45, BALL_R + 4, BALL_R + 8));
+    POCKET_SNAP = Math.round(clamp(POCKET_R - BALL_R * 0.18, BALL_R * 0.95, POCKET_R - 1));
+
+    var cornerInset = Math.round(clamp(POCKET_R * 0.95, BALL_R * 1.2, RAIL_W + POCKET_R));
+    var sideInset = Math.round(clamp(POCKET_R * 0.4, BALL_R * 0.45, POCKET_R * 0.58));
     POCKETS = [
-      { x: TABLE_X + POCKET_R, y: TABLE_Y + POCKET_R },
-      { x: TABLE_X + TABLE_W / 2, y: TABLE_Y },
-      { x: TABLE_X + TABLE_W - POCKET_R, y: TABLE_Y + POCKET_R },
-      { x: TABLE_X + POCKET_R, y: TABLE_Y + TABLE_H - POCKET_R },
-      { x: TABLE_X + TABLE_W / 2, y: TABLE_Y + TABLE_H },
-      { x: TABLE_X + TABLE_W - POCKET_R, y: TABLE_Y + TABLE_H - POCKET_R }
+      { x: TABLE_X + cornerInset, y: TABLE_Y + cornerInset },
+      { x: TABLE_X + TABLE_W / 2, y: TABLE_Y + sideInset },
+      { x: TABLE_X + TABLE_W - cornerInset, y: TABLE_Y + cornerInset },
+      { x: TABLE_X + cornerInset, y: TABLE_Y + TABLE_H - cornerInset },
+      { x: TABLE_X + TABLE_W / 2, y: TABLE_Y + TABLE_H - sideInset },
+      { x: TABLE_X + TABLE_W - cornerInset, y: TABLE_Y + TABLE_H - cornerInset }
     ];
+    layoutSignature = [
+      LOGIC_W, LOGIC_H, RAIL_W, BALL_R, POCKET_R, POCKET_SNAP,
+      POCKETS.map(function (p) { return Math.round(p.x) + ':' + Math.round(p.y); }).join('|')
+    ].join(';');
   }
 
   function createBalls() {
@@ -150,13 +174,116 @@
   function resizeCanvas() {
     var parent = canvas.parentElement;
     var availW = (parent && parent.clientWidth) || BASE_LOGIC_W;
-    computeLayout(availW);
+    var viewportH = Math.max((parent && parent.clientHeight) || 0, window.innerHeight || 0);
+    computeLayout(availW, viewportH);
     scale = availW / LOGIC_W;
     var dpr = Math.max(window.devicePixelRatio || 1, 1);
     canvas.width = Math.round(LOGIC_W * scale * dpr);
     canvas.height = Math.round(LOGIC_H * scale * dpr);
     ctx.setTransform(scale * dpr, 0, 0, scale * dpr, 0, 0);
     ctx.imageSmoothingEnabled = true;
+  }
+
+  function isTouchLikeDevice() {
+    return ('ontouchstart' in window) || ((navigator && navigator.maxTouchPoints) || 0) > 0;
+  }
+
+  function isMobileLandscape() {
+    return isTouchLikeDevice() && window.innerWidth <= 950 && window.innerWidth > window.innerHeight;
+  }
+
+  function updateLandscapeModeClass() {
+    document.body.classList.toggle('is-mobile-landscape', isMobileLandscape());
+  }
+
+  function getFullscreenElement() {
+    return document.fullscreenElement || document.webkitFullscreenElement || null;
+  }
+
+  function isInFullscreen() {
+    return !!getFullscreenElement();
+  }
+
+  function updateLandscapeButtonState() {
+    if (!landscapeBtn) return;
+    var inFullscreen = isInFullscreen();
+    landscapeBtn.textContent = inFullscreen ? '退出全屏' : '横屏全屏';
+    landscapeBtn.setAttribute('aria-pressed', inFullscreen ? 'true' : 'false');
+  }
+
+  function unlockLandscapeOrientation() {
+    if (screen.orientation && screen.orientation.unlock) {
+      try {
+        screen.orientation.unlock();
+      } catch (e) {
+        // Ignore browser-specific unlock failures.
+      }
+    }
+    attemptedLandscapeLock = false;
+  }
+
+  function tryLockLandscapeOrientation() {
+    if (!screen.orientation || !screen.orientation.lock || attemptedLandscapeLock) return;
+    attemptedLandscapeLock = true;
+    try {
+      var maybe = screen.orientation.lock('landscape');
+      if (maybe && maybe.catch) maybe.catch(function () {});
+    } catch (e) {
+      // Ignore unsupported lock errors.
+    }
+  }
+
+  function enterLandscapeFullscreen() {
+    var root = document.documentElement;
+    if (!root) return;
+    var req = root.requestFullscreen || root.webkitRequestFullscreen;
+    if (!req) return;
+    try {
+      var ret = req.call(root);
+      if (ret && ret.then) {
+        ret.then(function () {
+          tryLockLandscapeOrientation();
+          updateLandscapeButtonState();
+          updateLandscapeModeClass();
+        }).catch(function () {});
+      } else {
+        tryLockLandscapeOrientation();
+        updateLandscapeButtonState();
+        updateLandscapeModeClass();
+      }
+    } catch (e) {
+      // Ignore fullscreen request errors.
+    }
+  }
+
+  function exitFullscreenIfNeeded() {
+    if (!isInFullscreen()) return;
+    var exit = document.exitFullscreen || document.webkitExitFullscreen;
+    if (!exit) return;
+    try {
+      var ret = exit.call(document);
+      if (ret && ret.finally) {
+        ret.finally(function () {
+          unlockLandscapeOrientation();
+          updateLandscapeButtonState();
+          updateLandscapeModeClass();
+        });
+      } else {
+        unlockLandscapeOrientation();
+        updateLandscapeButtonState();
+        updateLandscapeModeClass();
+      }
+    } catch (e) {
+      unlockLandscapeOrientation();
+    }
+  }
+
+  function toggleLandscapeFullscreen() {
+    if (isInFullscreen()) {
+      exitFullscreenIfNeeded();
+      return;
+    }
+    enterLandscapeFullscreen();
   }
 
   function toLogical(clientX, clientY) {
@@ -306,11 +433,13 @@
     if (typeof THREE === 'undefined' || !threeContainer) return;
     try {
       var scene = new THREE.Scene();
-      var camera = new THREE.PerspectiveCamera(46, wrap.clientWidth / wrap.clientHeight, 1, 4000);
+      var viewW = (wrap && wrap.clientWidth) || canvas.clientWidth || LOGIC_W;
+      var viewH = (wrap && wrap.clientHeight) || canvas.clientHeight || LOGIC_H;
+      var camera = new THREE.PerspectiveCamera(46, viewW / Math.max(viewH, 1), 1, 4000);
       camera.up.set(0, 1, 0);
 
       var renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
-      renderer.setSize(wrap.clientWidth, wrap.clientHeight);
+      renderer.setSize(viewW, viewH);
       renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
       renderer.setClearColor(getCss('--billiards-rail') || 0x5c3b1e, 1);
       threeContainer.appendChild(renderer.domElement);
@@ -414,16 +543,17 @@
   }
 
   function fit3DCameraToTable(camera) {
-    // Use a bounding-sphere fit so table + rails + pockets remain visible in all aspect ratios.
+    // Fit by projected table bounds (with small padding) to avoid 2D/3D scale jumps on mobile.
     var centerX = LOGIC_W / 2;
     var centerZ = LOGIC_H / 2;
-    var safeHalfW = LOGIC_W / 2 + RAIL_W + POCKET_R + BALL_R;
-    var safeHalfH = LOGIC_H / 2 + RAIL_W + POCKET_R + BALL_R;
-    var radius = Math.sqrt(safeHalfW * safeHalfW + safeHalfH * safeHalfH);
+    var safeHalfW = LOGIC_W / 2 + Math.max(RAIL_W, POCKET_R * 0.55) + BALL_R * 0.4;
+    var safeHalfH = LOGIC_H / 2 + Math.max(RAIL_W, POCKET_R * 0.55) + BALL_R * 0.4;
     var vFov = THREE.MathUtils.degToRad(camera.fov);
     var hFov = 2 * Math.atan(Math.tan(vFov / 2) * camera.aspect);
-    var limitingFov = Math.max(Math.min(vFov, hFov), 0.25);
-    var dist = radius / Math.sin(limitingFov / 2);
+    var distFromV = safeHalfH / Math.max(Math.tan(vFov / 2), 1e-3);
+    var distFromH = safeHalfW / Math.max(Math.tan(hFov / 2), 1e-3);
+    var fitPadding = LOGIC_W <= MOBILE_BREAKPOINT ? 1.04 : 1.1;
+    var dist = Math.max(distFromV, distFromH) * fitPadding;
     var ctl = scene3d && scene3d.control;
     if (!ctl) return;
     ctl.distance = dist;
@@ -892,12 +1022,20 @@
       }
     }
 
+    if (landscapeBtn) {
+      landscapeBtn.addEventListener('click', function () {
+        toggleLandscapeFullscreen();
+      });
+      updateLandscapeButtonState();
+    }
+
     function onViewportChange() {
-      var prevW = LOGIC_W;
+      var prevLayout = layoutSignature;
+      updateLandscapeModeClass();
       resizeCanvas();
       if (scene3d) sync3DViewport();
       if (aimStart !== null) render();
-      if (prevW !== LOGIC_W) {
+      if (prevLayout !== layoutSignature) {
         balls = createBalls();
         if (scene3d) rebuild3DScene();
       }
@@ -908,7 +1046,18 @@
     window.addEventListener('orientationchange', function () {
       requestAnimationFrame(onViewportChange);
     });
+    document.addEventListener('fullscreenchange', function () {
+      updateLandscapeButtonState();
+      if (!isInFullscreen()) unlockLandscapeOrientation();
+      requestAnimationFrame(onViewportChange);
+    });
+    document.addEventListener('webkitfullscreenchange', function () {
+      updateLandscapeButtonState();
+      if (!isInFullscreen()) unlockLandscapeOrientation();
+      requestAnimationFrame(onViewportChange);
+    });
 
+    updateLandscapeModeClass();
     requestAnimationFrame(loop);
     syncStatus();
   }
