@@ -23,6 +23,10 @@
 
   var renderMode = '2d';
   var scene3d = null;
+  var CAMERA_DEFAULT_PITCH = Math.atan2(1.05, 1.08);
+  var CAMERA_MIN_PITCH = 0.22;
+  var CAMERA_MAX_PITCH = 1.15;
+  var CAMERA_ROTATE_SPEED = 0.0055;
 
   var BASE_LOGIC_W = 760;
   var BASE_LOGIC_H = 420;
@@ -378,7 +382,18 @@
         renderer: renderer,
         ballMeshes: ballMeshes,
         ensureBallMeshes: ensureBallMeshes,
-        aimLine: aimLine
+        aimLine: aimLine,
+        control: {
+          yaw: 0,
+          pitch: CAMERA_DEFAULT_PITCH,
+          distance: 0,
+          targetX: LOGIC_W / 2,
+          targetZ: LOGIC_H / 2,
+          isRotating: false,
+          aimAlignedOnce: false,
+          lastClientX: 0,
+          lastClientY: 0
+        }
       };
       sync3DViewport();
     } catch (e) {
@@ -409,15 +424,94 @@
     var hFov = 2 * Math.atan(Math.tan(vFov / 2) * camera.aspect);
     var limitingFov = Math.max(Math.min(vFov, hFov), 0.25);
     var dist = radius / Math.sin(limitingFov / 2);
-    var dir = new THREE.Vector3(0, 1.05, 1.08).normalize();
-    camera.position.set(
-      centerX + dir.x * dist,
-      BALL_R * 0.8 + dir.y * dist,
-      centerZ + dir.z * dist
-    );
+    var ctl = scene3d && scene3d.control;
+    if (!ctl) return;
+    ctl.distance = dist;
+    ctl.targetX = centerX;
+    ctl.targetZ = centerZ;
+    ctl.pitch = Math.min(CAMERA_MAX_PITCH, Math.max(CAMERA_MIN_PITCH, ctl.pitch));
+    var horizontal = ctl.distance * Math.cos(ctl.pitch);
+    var camY = BALL_R * 0.8 + ctl.distance * Math.sin(ctl.pitch);
+    var camX = ctl.targetX + Math.sin(ctl.yaw) * horizontal;
+    var camZ = ctl.targetZ + Math.cos(ctl.yaw) * horizontal;
+    camera.position.set(camX, camY, camZ);
     camera.near = Math.max(1, dist * 0.05);
     camera.far = dist * 8;
-    camera.lookAt(centerX, 0, centerZ);
+    camera.lookAt(ctl.targetX, 0, ctl.targetZ);
+  }
+
+  function setRotateCursor(rotating) {
+    if (!threeContainer) return;
+    threeContainer.classList.toggle('is-rotating', !!rotating);
+  }
+
+  function getRotatePointFromEvent(e) {
+    if (e.touches && e.touches.length >= 2) {
+      return {
+        x: (e.touches[0].clientX + e.touches[1].clientX) / 2,
+        y: (e.touches[0].clientY + e.touches[1].clientY) / 2
+      };
+    }
+    if (e.touches && e.touches.length === 1) {
+      return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    }
+    if (e.changedTouches && e.changedTouches.length > 0) {
+      return { x: e.changedTouches[0].clientX, y: e.changedTouches[0].clientY };
+    }
+    return { x: e.clientX, y: e.clientY };
+  }
+
+  function shouldRotateCamera(e) {
+    if (renderMode !== '3d' || !scene3d || !scene3d.control) return false;
+    if (e.touches) return e.touches.length >= 2;
+    return e.button === 2 || (e.button === 0 && e.shiftKey);
+  }
+
+  function beginCameraRotate(e) {
+    if (!scene3d || !scene3d.control) return;
+    var p = getRotatePointFromEvent(e);
+    scene3d.control.isRotating = true;
+    scene3d.control.lastClientX = p.x;
+    scene3d.control.lastClientY = p.y;
+    aimStart = null;
+    aimCurrent = null;
+    updatePowerBar(0);
+    setRotateCursor(true);
+  }
+
+  function updateCameraRotate(e) {
+    if (!scene3d || !scene3d.control || !scene3d.control.isRotating) return;
+    var p = getRotatePointFromEvent(e);
+    var dx = p.x - scene3d.control.lastClientX;
+    var dy = p.y - scene3d.control.lastClientY;
+    scene3d.control.lastClientX = p.x;
+    scene3d.control.lastClientY = p.y;
+    scene3d.control.yaw -= dx * CAMERA_ROTATE_SPEED;
+    scene3d.control.pitch = Math.min(
+      CAMERA_MAX_PITCH,
+      Math.max(CAMERA_MIN_PITCH, scene3d.control.pitch - dy * CAMERA_ROTATE_SPEED)
+    );
+    fit3DCameraToTable(scene3d.camera);
+    scene3d.camera.updateProjectionMatrix();
+  }
+
+  function endCameraRotateIfNeeded(e) {
+    if (!scene3d || !scene3d.control || !scene3d.control.isRotating) return false;
+    if (e.touches && e.touches.length >= 2) return true;
+    scene3d.control.isRotating = false;
+    setRotateCursor(false);
+    return true;
+  }
+
+  function alignCameraToAimDirection() {
+    if (!scene3d || !scene3d.control || scene3d.control.aimAlignedOnce) return;
+    var dir = getAimDirection();
+    if (!dir) return;
+    // Keep camera facing toward current shot direction in table plane.
+    scene3d.control.yaw = Math.atan2(-dir.dx, -dir.dy);
+    scene3d.control.aimAlignedOnce = true;
+    fit3DCameraToTable(scene3d.camera);
+    scene3d.camera.updateProjectionMatrix();
   }
 
   function dispose3D() {
@@ -493,6 +587,7 @@
       canvas.style.pointerEvents = 'none';
       threeContainer.hidden = false;
       if (!scene3d) init3D();
+      if (scene3d && scene3d.control) scene3d.control.aimAlignedOnce = false;
       sync3DViewport();
       requestAnimationFrame(sync3DViewport);
     } else {
@@ -692,17 +787,30 @@
 
   function onPointerDown(e) {
     if (state !== 'playing') return;
+    if (shouldRotateCamera(e)) {
+      beginCameraRotate(e);
+      e.preventDefault();
+      return;
+    }
     var cue = getCueBall();
     if (!cue) return;
     var pos = getEventPos(e);
     aimStart = { x: pos.x, y: pos.y };
     aimCurrent = { x: pos.x, y: pos.y };
+    if (scene3d && scene3d.control) scene3d.control.aimAlignedOnce = false;
     e.preventDefault();
   }
 
   function onPointerMove(e) {
+    if (scene3d && scene3d.control && scene3d.control.isRotating) {
+      updateCameraRotate(e);
+      if (renderMode === '3d') render3D();
+      e.preventDefault();
+      return;
+    }
     if (!aimStart) return;
     aimCurrent = getEventPos(e);
+    if (renderMode === '3d') alignCameraToAimDirection();
     var dx = aimCurrent.x - aimStart.x;
     var dy = aimCurrent.y - aimStart.y;
     var dist = Math.sqrt(dx * dx + dy * dy);
@@ -711,6 +819,10 @@
   }
 
   function onPointerUp(e) {
+    if (endCameraRotateIfNeeded(e)) {
+      e.preventDefault();
+      return;
+    }
     if (!aimStart) return;
     aimCurrent = getEventPos(e);
     hitCueBall();
@@ -764,6 +876,9 @@
     stage.addEventListener('touchstart', onPointerDown, { passive: false });
     stage.addEventListener('touchmove', onPointerMove, { passive: false });
     stage.addEventListener('touchend', onPointerUp, { passive: false });
+    stage.addEventListener('contextmenu', function (e) {
+      if (renderMode === '3d') e.preventDefault();
+    });
 
     if (view2dBtn) view2dBtn.addEventListener('click', function () { setRenderMode('2d'); });
     if (view3dBtn) {

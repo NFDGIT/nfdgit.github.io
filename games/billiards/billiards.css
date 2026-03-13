@@ -186,6 +186,12 @@ body.billiards-page {
     border-radius: 8px;
     overflow: hidden;
     z-index: 1;
+    cursor: grab;
+    touch-action: none;
+}
+
+.billiards-3d-wrap.is-rotating {
+    cursor: grabbing;
 }
 
 .billiards-3d-wrap canvas {
