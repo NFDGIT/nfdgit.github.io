@@ -43,8 +43,13 @@
                     </div>
                 </div>
 
+                <div class="billiards-view-toggle" aria-label="视角">
+                    <button type="button" id="view-2d-btn" class="billiards-view-btn is-active" aria-pressed="true">2D</button>
+                    <button type="button" id="view-3d-btn" class="billiards-view-btn" aria-pressed="false">3D</button>
+                </div>
                 <div class="billiards-canvas-wrap">
                     <canvas id="billiards-canvas" aria-label="台球桌"></canvas>
+                    <div id="billiards-3d-container" class="billiards-3d-wrap" aria-label="台球桌（3D）" hidden></div>
                     <div class="billiards-overlay" id="billiards-overlay">
                         <p class="billiards-overlay-title" id="overlay-title">台球</p>
                         <p class="billiards-overlay-sub" id="overlay-sub">在球桌任意位置拖拽瞄准，松手击球。</p>
@@ -91,6 +96,7 @@
     </div>
 
     <script src="../../assets/js/theme.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js" crossorigin="anonymous"></script>
     <script src="./billiards.js"></script>
 </body>
 </html>

@@ -132,11 +132,53 @@ body.billiards-page {
     margin-bottom: 0.35rem;
 }
 
+.billiards-view-toggle {
+    display: flex;
+    gap: 0.25rem;
+    margin-bottom: 0.5rem;
+}
+
+.billiards-view-btn {
+    padding: 0.35rem 0.65rem;
+    font-size: 0.85rem;
+    border-radius: 8px;
+    border: 1px solid var(--billiards-btn-border);
+    background: var(--billiards-btn-bg);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+}
+
+.billiards-view-btn.is-active {
+    background: var(--billiards-btn-primary-bg);
+    color: var(--billiards-btn-primary-text);
+    border-color: transparent;
+}
+
+.billiards-view-btn:hover:not(.is-active) {
+    color: var(--text);
+}
+
 .billiards-canvas-wrap {
     position: relative;
     width: 100%;
     max-width: 760px;
     margin: 0 auto;
+}
+
+.billiards-3d-wrap {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.billiards-3d-wrap canvas {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
 }
 
 #billiards-canvas {

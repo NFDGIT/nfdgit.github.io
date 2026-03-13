@@ -1,5 +1,6 @@
 (function () {
   var canvas = document.getElementById('billiards-canvas');
+  var wrap = canvas && canvas.parentElement;
   var ctx = canvas.getContext('2d');
   var scoreEl = document.getElementById('score');
   var ballsLeftEl = document.getElementById('balls-left');
@@ -10,12 +11,18 @@
   var startBtn = document.getElementById('start-btn');
   var resetBtn = document.getElementById('reset-btn');
   var powerFill = document.getElementById('power-fill');
+  var threeContainer = document.getElementById('billiards-3d-container');
+  var view2dBtn = document.getElementById('view-2d-btn');
+  var view3dBtn = document.getElementById('view-3d-btn');
 
   var mobileStartBtn = document.getElementById('mobile-start-btn');
   var mobileResetBtn = document.getElementById('mobile-reset-btn');
   var mobileStatus = document.getElementById('mobile-status');
   var mobileScore = document.getElementById('mobile-score');
   var mobileBallsLeft = document.getElementById('mobile-balls-left');
+
+  var renderMode = '2d';
+  var scene3d = null;
 
   var BASE_LOGIC_W = 760;
   var BASE_LOGIC_H = 420;
@@ -137,8 +144,8 @@
   }
 
   function resizeCanvas() {
-    var wrap = canvas.parentElement;
-    var availW = wrap.clientWidth || BASE_LOGIC_W;
+    var parent = canvas.parentElement;
+    var availW = (parent && parent.clientWidth) || BASE_LOGIC_W;
     computeLayout(availW);
     scale = availW / LOGIC_W;
     var dpr = Math.max(window.devicePixelRatio || 1, 1);
@@ -149,7 +156,19 @@
   }
 
   function toLogical(clientX, clientY) {
-    var rect = canvas.getBoundingClientRect();
+    var rect;
+    var scaleX, scaleY;
+    if (renderMode === '3d' && threeContainer && !threeContainer.hidden) {
+      var el = (scene3d && scene3d.renderer && scene3d.renderer.domElement) ? scene3d.renderer.domElement : threeContainer;
+      rect = el.getBoundingClientRect();
+      scaleX = rect.width / LOGIC_W;
+      scaleY = rect.height / LOGIC_H;
+      return {
+        x: (clientX - rect.left) / scaleX,
+        y: (clientY - rect.top) / scaleY
+      };
+    }
+    rect = (wrap && wrap.getBoundingClientRect) ? wrap.getBoundingClientRect() : canvas.getBoundingClientRect();
     return {
       x: (clientX - rect.left) / scale,
       y: (clientY - rect.top) / scale
@@ -279,6 +298,178 @@
     activeBalls().forEach(function (b) { drawBall(b); });
   }
 
+  function init3D() {
+    if (typeof THREE === 'undefined' || !threeContainer) return;
+    try {
+      var scene = new THREE.Scene();
+      var camera = new THREE.PerspectiveCamera(50, wrap.clientWidth / wrap.clientHeight, 1, 3000);
+      camera.position.set(LOGIC_W / 2, 320, LOGIC_H / 2 + 100);
+      camera.lookAt(LOGIC_W / 2, 0, LOGIC_H / 2);
+      camera.up.set(0, 1, 0);
+
+      var renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+      renderer.setSize(wrap.clientWidth, wrap.clientHeight);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+      renderer.setClearColor(getCss('--billiards-rail') || 0x5c3b1e, 1);
+      threeContainer.appendChild(renderer.domElement);
+
+      var ambient = new THREE.AmbientLight(0xffffff, 0.6);
+      scene.add(ambient);
+      var dir = new THREE.DirectionalLight(0xffffff, 0.8);
+      dir.position.set(LOGIC_W / 2, 400, LOGIC_H / 2);
+      scene.add(dir);
+
+      var feltColor = (getCss('--billiards-felt') || '#1a5c2a').replace('#', '0x');
+      var railColor = (getCss('--billiards-rail') || '#5c3b1e').replace('#', '0x');
+      var pocketColor = (getCss('--billiards-pocket') || '#0a0a0a').replace('#', '0x');
+
+      var tableGroup = new THREE.Group();
+      var feltGeom = new THREE.PlaneGeometry(TABLE_W, TABLE_H);
+      var feltMat = new THREE.MeshLambertMaterial({ color: parseInt(feltColor, 16) });
+      var felt = new THREE.Mesh(feltGeom, feltMat);
+      felt.rotation.x = -Math.PI / 2;
+      felt.position.set(TABLE_X + TABLE_W / 2, 0, TABLE_Y + TABLE_H / 2);
+      tableGroup.add(felt);
+
+      var railH = 8;
+      var railGeom = new THREE.BoxGeometry(LOGIC_W, railH, RAIL_W);
+      var railMat = new THREE.MeshLambertMaterial({ color: parseInt(railColor, 16) });
+      var railTop = new THREE.Mesh(railGeom, railMat);
+      railTop.position.set(LOGIC_W / 2, railH / 2, RAIL_W / 2);
+      tableGroup.add(railTop);
+      var railBottom = new THREE.Mesh(railGeom, railMat);
+      railBottom.position.set(LOGIC_W / 2, railH / 2, LOGIC_H - RAIL_W / 2);
+      tableGroup.add(railBottom);
+      var railSideGeom = new THREE.BoxGeometry(RAIL_W, railH, TABLE_H);
+      var railLeft = new THREE.Mesh(railSideGeom, railMat);
+      railLeft.position.set(RAIL_W / 2, railH / 2, LOGIC_H / 2);
+      tableGroup.add(railLeft);
+      var railRight = new THREE.Mesh(railSideGeom, railMat);
+      railRight.position.set(LOGIC_W - RAIL_W / 2, railH / 2, LOGIC_H / 2);
+      tableGroup.add(railRight);
+      scene.add(tableGroup);
+
+      var pocketGeom = new THREE.SphereGeometry(POCKET_R, 12, 8, 0, Math.PI * 2, 0, Math.PI / 2);
+      var pocketMat = new THREE.MeshLambertMaterial({ color: parseInt(pocketColor, 16) });
+      POCKETS.forEach(function (p) {
+        var pocket = new THREE.Mesh(pocketGeom.clone(), pocketMat.clone());
+        pocket.position.set(p.x, POCKET_R / 2, p.y);
+        pocket.rotation.x = Math.PI / 2;
+        scene.add(pocket);
+      });
+
+      var ballMeshes = [];
+      var ballGeom = new THREE.SphereGeometry(BALL_R, 16, 16);
+      function ensureBallMeshes() {
+        var active = activeBalls();
+        while (ballMeshes.length < active.length) {
+          var mat = new THREE.MeshLambertMaterial({ color: 0xffffff });
+          var mesh = new THREE.Mesh(ballGeom.clone(), mat);
+          scene.add(mesh);
+          ballMeshes.push(mesh);
+        }
+        while (ballMeshes.length > active.length) {
+          var m = ballMeshes.pop();
+          scene.remove(m);
+        }
+      }
+      var aimLine = null;
+      scene3d = {
+        scene: scene,
+        camera: camera,
+        renderer: renderer,
+        ballMeshes: ballMeshes,
+        ensureBallMeshes: ensureBallMeshes,
+        aimLine: aimLine
+      };
+    } catch (e) {
+      console.warn('3D init failed', e);
+      scene3d = null;
+    }
+  }
+
+  function render3D() {
+    if (!scene3d || !scene3d.renderer || !threeContainer || threeContainer.hidden) return;
+    var s = scene3d;
+    s.ensureBallMeshes();
+    var active = activeBalls();
+    var feltColor = (getCss('--billiards-felt') || '#1a5c2a').replace('#', '0x');
+    active.forEach(function (b, i) {
+      var mesh = s.ballMeshes[i];
+      if (!mesh) return;
+      mesh.position.set(b.x, BALL_R, b.y);
+      mesh.visible = true;
+      var col = b.color.replace('#', '0x');
+      if (mesh.material.color.getHexString) {
+        mesh.material.color.setHex(parseInt(col, 16));
+      } else {
+        mesh.material.color.setHex(parseInt(col, 16));
+      }
+    });
+    for (var j = active.length; j < s.ballMeshes.length; j++) {
+      s.ballMeshes[j].visible = false;
+    }
+    if (s.aimLine) s.scene.remove(s.aimLine);
+    var cue = getCueBall();
+    if (state !== 'idle' && cue && aimStart && isAimCurrentValid()) {
+      var dx = aimCurrent.x - aimStart.x;
+      var dy = aimCurrent.y - aimStart.y;
+      var dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist >= 4) {
+        var nx = dx / dist;
+        var ny = dy / dist;
+        var len = Math.min(dist * 2.8, LOGIC_W * 0.55);
+        var geom = new THREE.BufferGeometry().setFromPoints([
+          new THREE.Vector3(cue.x, BALL_R, cue.y),
+          new THREE.Vector3(cue.x + nx * len, BALL_R, cue.y + ny * len)
+        ]);
+        var mat = new THREE.LineBasicMaterial({ color: 0xffffff });
+        s.aimLine = new THREE.Line(geom, mat);
+        s.scene.add(s.aimLine);
+      }
+    }
+    s.renderer.render(s.scene, s.camera);
+  }
+
+  function setRenderMode(mode) {
+    renderMode = mode;
+    if (!wrap || !threeContainer) return;
+    if (mode === '3d') {
+      if (typeof THREE === 'undefined') {
+        if (view3dBtn) view3dBtn.disabled = true;
+        renderMode = '2d';
+        return;
+      }
+      canvas.style.visibility = 'hidden';
+      canvas.style.pointerEvents = 'none';
+      threeContainer.hidden = false;
+      if (!scene3d) init3D();
+      if (scene3d && scene3d.renderer && wrap) {
+        scene3d.renderer.setSize(wrap.clientWidth, wrap.clientHeight);
+        scene3d.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+        requestAnimationFrame(function () {
+          if (scene3d && scene3d.renderer && wrap) {
+            scene3d.renderer.setSize(wrap.clientWidth, wrap.clientHeight);
+            scene3d.camera.aspect = wrap.clientWidth / wrap.clientHeight;
+            scene3d.camera.updateProjectionMatrix();
+          }
+        });
+      }
+    } else {
+      canvas.style.visibility = '';
+      canvas.style.pointerEvents = '';
+      threeContainer.hidden = true;
+    }
+    if (view2dBtn) {
+      view2dBtn.classList.toggle('is-active', mode === '2d');
+      view2dBtn.setAttribute('aria-pressed', mode === '2d');
+    }
+    if (view3dBtn) {
+      view3dBtn.classList.toggle('is-active', mode === '3d');
+      view3dBtn.setAttribute('aria-pressed', mode === '3d');
+    }
+  }
+
   function updatePowerBar(pct) {
     if (!powerFill) return;
     var w = Math.min(Math.max(pct, 0), 1) * 100;
@@ -354,7 +545,10 @@
     requestAnimationFrame(loop);
     var dt = ts - lastTs;
     lastTs = ts;
-    if (dt > 100) { render(); return; }
+    if (dt > 100) {
+      if (renderMode === '3d' && scene3d) render3D(); else render();
+      return;
+    }
 
     if (state === 'playing' || state === 'moving') {
       updatePhysics();
@@ -371,7 +565,7 @@
         }
       }
     }
-    render();
+    if (renderMode === '3d' && scene3d) render3D(); else render();
   }
 
   function getAimDirection() {
@@ -522,21 +716,39 @@
     if (mobileStartBtn) mobileStartBtn.addEventListener('click', startGame);
     if (mobileResetBtn) mobileResetBtn.addEventListener('click', startGame);
 
-    canvas.addEventListener('mousedown', onPointerDown);
-    canvas.addEventListener('mousemove', onPointerMove);
-    canvas.addEventListener('mouseup', onPointerUp);
-    canvas.addEventListener('touchstart', onPointerDown, { passive: false });
-    canvas.addEventListener('touchmove', onPointerMove, { passive: false });
-    canvas.addEventListener('touchend', onPointerUp, { passive: false });
+    var stage = wrap || canvas;
+    stage.addEventListener('mousedown', onPointerDown);
+    stage.addEventListener('mousemove', onPointerMove);
+    stage.addEventListener('mouseup', onPointerUp);
+    stage.addEventListener('touchstart', onPointerDown, { passive: false });
+    stage.addEventListener('touchmove', onPointerMove, { passive: false });
+    stage.addEventListener('touchend', onPointerUp, { passive: false });
+
+    if (view2dBtn) view2dBtn.addEventListener('click', function () { setRenderMode('2d'); });
+    if (view3dBtn) {
+      view3dBtn.addEventListener('click', function () {
+        if (typeof THREE === 'undefined') return;
+        setRenderMode('3d');
+      });
+      if (typeof THREE === 'undefined') {
+        view3dBtn.disabled = true;
+        view3dBtn.title = '3D 不可用（需加载 Three.js）';
+      }
+    }
 
     window.addEventListener('resize', function () {
       var prevW = LOGIC_W;
       resizeCanvas();
+      if (scene3d && scene3d.renderer && wrap) {
+        scene3d.renderer.setSize(wrap.clientWidth, wrap.clientHeight);
+        scene3d.camera.aspect = wrap.clientWidth / wrap.clientHeight;
+        scene3d.camera.updateProjectionMatrix();
+      }
       if (aimStart !== null) render();
       if (prevW !== LOGIC_W) {
         balls = createBalls();
       }
-      render();
+      if (renderMode === '3d' && scene3d) render3D(); else render();
     });
 
     requestAnimationFrame(loop);
