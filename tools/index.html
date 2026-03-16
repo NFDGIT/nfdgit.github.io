@@ -1,77 +1,90 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-
 <head>
     <meta charset="utf-8">
     <script>
       (function(){var t=localStorage.getItem('theme')||(window.matchMedia&&matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);})();
     </script>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>小工具</title>
     <link rel="stylesheet" href="../assets/css/home.css">
     <style>
-        .tools-shell {
-            max-width: 720px;
-            margin: 0 auto;
-            padding: 2rem 1.5rem;
-        }
+        .tools-shell { max-width: 760px; margin: 0 auto; padding: 2rem 1.5rem; }
+        .tools-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem; }
+        .tools-title { font-size: 1.5rem; font-weight: 600; margin-bottom: 0.35rem; }
+        .tools-desc { color: var(--text-muted); font-size: 0.95rem; }
+        .tools-actions { display: flex; align-items: center; gap: 0.5rem; flex-shrink: 0; }
 
-        .tools-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 2rem;
-        }
+        .tool-card { background: var(--card-bg); border-radius: 14px; box-shadow: var(--card-shadow); margin-bottom: 1rem; overflow: hidden; }
+        .tool-card > summary { list-style: none; cursor: pointer; padding: 1rem 1.25rem; font-weight: 600; font-size: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+        .tool-card > summary::-webkit-details-marker { display: none; }
+        .tool-card > summary .tool-icon { font-size: 1.2em; }
+        .tool-card[open] > summary { border-bottom: 1px solid rgba(128,128,128,0.15); }
+        .tool-body { padding: 1rem 1.25rem 1.25rem; }
 
-        .tools-title {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 0.35rem;
-        }
+        .tool-textarea { width: 100%; min-height: 120px; padding: 0.75rem; border-radius: 8px; border: 1px solid rgba(128,128,128,0.2); background: var(--card-bg); color: var(--text); font-family: "SF Mono", "Fira Code", Consolas, monospace; font-size: 0.85rem; resize: vertical; }
+        .tool-input { width: 100%; padding: 0.65rem 0.85rem; border-radius: 8px; border: 1px solid rgba(128,128,128,0.2); background: var(--card-bg); color: var(--text); font-size: 0.9rem; }
+        .tool-btn { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.6rem 1.1rem; border-radius: 10px; border: none; background: #2563eb; color: #fff; font-size: 0.88rem; font-weight: 500; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; margin-top: 0.65rem; }
+        .tool-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(37,99,235,0.3); }
+        .tool-output { margin-top: 0.75rem; padding: 0.75rem; border-radius: 8px; background: rgba(128,128,128,0.06); font-family: "SF Mono", "Fira Code", Consolas, monospace; font-size: 0.84rem; white-space: pre-wrap; word-break: break-all; min-height: 2rem; color: var(--text); }
+        .tool-output.is-error { color: #dc2626; }
+        .tool-label { display: block; font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0.4rem; font-weight: 500; }
+        .tool-row { margin-top: 0.65rem; }
 
-        .tools-desc {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-        }
-
-        .tools-actions {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            flex-shrink: 0;
-        }
-
-        .tools-placeholder {
-            background: var(--card-bg);
-            border-radius: 14px;
-            padding: 2.5rem 2rem;
-            text-align: center;
-            color: var(--text-muted);
-            font-size: 0.95rem;
-            box-shadow: var(--card-shadow);
-        }
+        .color-preview { display: inline-block; width: 36px; height: 36px; border-radius: 8px; border: 1px solid rgba(128,128,128,0.2); vertical-align: middle; margin-left: 0.5rem; }
+        #qr-output { margin-top: 0.75rem; }
+        #qr-output canvas, #qr-output img { border-radius: 8px; }
     </style>
 </head>
-
 <body>
     <div class="tools-shell">
         <header class="tools-header anim-fade-in">
             <div>
                 <h1 class="tools-title">小工具</h1>
-                <p class="tools-desc">实用小工具合集，后续将陆续添加计算器、单位换算等工具。</p>
+                <p class="tools-desc">纯前端实用工具合集，数据不上传服务器。</p>
             </div>
             <div class="tools-actions">
                 <a href="../index.html" class="nav-pill">返回首页</a>
                 <button type="button" class="theme-toggle" aria-label="切换主题">🌙</button>
             </div>
         </header>
-        <div class="tools-placeholder anim-slide-up stagger-1">
-            暂无可用的工具，敬请期待。
-        </div>
+
+        <details class="tool-card anim-slide-up stagger-1" open>
+            <summary><span class="tool-icon">{ }</span> JSON 格式化</summary>
+            <div class="tool-body">
+                <label class="tool-label" for="json-input">粘贴 JSON</label>
+                <textarea id="json-input" class="tool-textarea" placeholder='{"name":"test","value":123}'></textarea>
+                <button type="button" id="json-format-btn" class="tool-btn">格式化</button>
+                <div id="json-output" class="tool-output"></div>
+            </div>
+        </details>
+
+        <details class="tool-card anim-slide-up stagger-2" open>
+            <summary><span class="tool-icon">🎨</span> 颜色转换</summary>
+            <div class="tool-body">
+                <label class="tool-label" for="color-input">输入颜色（HEX / RGB / HSL）</label>
+                <div style="display:flex;align-items:center;gap:0.5rem">
+                    <input type="text" id="color-input" class="tool-input" placeholder="#2563eb 或 rgb(37,99,235)" style="flex:1">
+                    <span id="color-preview" class="color-preview"></span>
+                </div>
+                <button type="button" id="color-convert-btn" class="tool-btn">转换</button>
+                <div id="color-result" class="tool-output"></div>
+            </div>
+        </details>
+
+        <details class="tool-card anim-slide-up stagger-3" open>
+            <summary><span class="tool-icon">📱</span> 二维码生成</summary>
+            <div class="tool-body">
+                <label class="tool-label" for="qr-input">输入文本或网址</label>
+                <input type="text" id="qr-input" class="tool-input" placeholder="https://example.com">
+                <button type="button" id="qr-generate-btn" class="tool-btn">生成二维码</button>
+                <div id="qr-output"></div>
+            </div>
+        </details>
     </div>
 
     <script src="../assets/js/theme.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+    <script src="./tools.js"></script>
 </body>
-
 </html>
