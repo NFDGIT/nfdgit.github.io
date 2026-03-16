@@ -9,27 +9,59 @@
     <title>你的贴心财富管家·贷款·车贷·个人贷</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="../assets/css/home.css">
+    <link rel="stylesheet" href="./insurance.css">
     <link rel="SHORTCUT ICON" href="./logo.jpg">
     <script src="../assets/js/main.js"></script>
 </head>
-<body style="margin:0;padding:0;">
-    <div style="position:fixed;top:0.75rem;right:0.75rem;z-index:50;display:flex;gap:0.5rem">
-      <a href="../index.html" class="nav-pill">返回首页</a>
-      <button type="button" class="theme-toggle nav-pill" aria-label="切换主题">🌙</button>
+<body class="ins-page">
+    <div class="ins-topbar">
+        <a href="../index.html" class="nav-pill">返回首页</a>
+        <button type="button" class="theme-toggle nav-pill" aria-label="切换主题">🌙</button>
     </div>
 
-    <div>
-        <div style="left:30px;text-align:center;position:fixed;background-color:white;top:100px;width:50px;height:100px;">
-            <img src="./resource/phone.png"
-                 style="padding:5px;height:40px;width:40px;"
-                 onclick="window.open('tel:13140099290')">
-            <img src="./resource/qq.png"
-                 style="padding:5px;height:40px;width:40px;"
-                 onclick="window.open('http://wpa.qq.com/msgrd?v=3&uin=958772007&site=qq&menu=yes')">
-        </div>
+    <div class="ins-shell">
+        <section class="ins-hero anim-fade-in">
+            <h1 class="ins-hero-title">你的贴心财富管家</h1>
+            <p class="ins-hero-desc">专业提供个人贷款、车贷等金融服务，助你轻松实现财富目标。一对一专属顾问，快速审批，灵活方案。</p>
+            <div class="ins-hero-actions">
+                <a href="tel:13140099290" class="ins-cta ins-cta-primary">
+                    <span class="ins-cta-icon">📞</span>
+                    电话咨询
+                </a>
+                <a href="http://wpa.qq.com/msgrd?v=3&uin=958772007&site=qq&menu=yes" target="_blank" rel="noopener" class="ins-cta ins-cta-secondary">
+                    <span class="ins-cta-icon">💬</span>
+                    QQ 在线咨询
+                </a>
+            </div>
+        </section>
 
-        <img src="./resource/xinyidai1.jpg" style="width:100%;height:100%;">
-        <img src="./resource/pinganchedai1.jpg" style="width:100%;height:100%;">
+        <section class="ins-products">
+            <div class="ins-product-card anim-slide-up stagger-1">
+                <img src="./resource/xinyidai1.jpg" alt="新一贷产品" class="ins-product-img">
+                <div class="ins-product-body">
+                    <div class="ins-product-name">新一贷 · 个人贷款</div>
+                    <div class="ins-product-desc">无抵押、无担保，纯信用贷款方案。审批快、额度灵活，满足你的资金周转需求。</div>
+                </div>
+            </div>
+            <div class="ins-product-card anim-slide-up stagger-2">
+                <img src="./resource/pinganchedai1.jpg" alt="平安车贷产品" class="ins-product-img">
+                <div class="ins-product-body">
+                    <div class="ins-product-name">平安车贷</div>
+                    <div class="ins-product-desc">低利率购车贷款，流程简便、放款迅速，助你轻松拥有爱车。</div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div class="ins-mobile-contact">
+        <a href="tel:13140099290" class="ins-cta ins-cta-primary">
+            <span class="ins-cta-icon">📞</span>
+            电话咨询
+        </a>
+        <a href="http://wpa.qq.com/msgrd?v=3&uin=958772007&site=qq&menu=yes" target="_blank" rel="noopener" class="ins-cta ins-cta-secondary">
+            <span class="ins-cta-icon">💬</span>
+            QQ 咨询
+        </a>
     </div>
 
     <script src="../assets/js/theme.js"></script>

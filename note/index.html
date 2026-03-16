@@ -11,7 +11,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>笔记</title>
   <link rel="stylesheet" href="../assets/css/note-browser.css">
+  <link rel="stylesheet" id="hljs-theme" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/github.min.css">
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
 </head>
 
 <body>
@@ -33,9 +35,14 @@
       </aside>
     </div>
     <main class="note-preview">
-      <a href="../index.html" class="note-back">← 返回首页</a>
+      <div class="note-preview-topbar">
+        <a href="../index.html" class="note-back">← 返回首页</a>
+        <nav id="note-breadcrumb" class="note-breadcrumb" aria-label="文件路径"></nav>
+      </div>
       <div id="note-preview-placeholder" class="note-preview-placeholder">
-        点击目录中的 Markdown 文件预览内容
+        <div class="note-placeholder-icon">📂</div>
+        <div class="note-placeholder-title">选择一篇笔记开始阅读</div>
+        <div class="note-placeholder-desc">从左侧目录中点击任意 Markdown 或 HTML 文件</div>
       </div>
       <div id="note-preview-content" class="note-preview-content" style="display:none"></div>
     </main>

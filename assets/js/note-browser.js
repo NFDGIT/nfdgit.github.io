@@ -170,6 +170,25 @@
     container.appendChild(ul);
   }
 
+  function highlightCodeBlocks() {
+    if (typeof hljs !== 'undefined' && PREVIEW_EL) {
+      PREVIEW_EL.querySelectorAll('pre code').forEach(function (block) {
+        hljs.highlightElement(block);
+      });
+    }
+  }
+
+  function syncHljsTheme() {
+    var link = document.getElementById('hljs-theme');
+    if (!link) return;
+    var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    var base = 'https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/';
+    link.href = base + (isDark ? 'github-dark.min.css' : 'github.min.css');
+  }
+
+  var _origThemeObserver = new MutationObserver(function () { syncHljsTheme(); });
+  _origThemeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
   function clearPreview() {
     PREVIEW_EL.innerHTML = '';
     PREVIEW_EL.style.display = 'block';
@@ -183,6 +202,19 @@
     nodes.forEach(function (node) {
       node.classList.toggle('active', node.dataset.path === path);
     });
+    updateBreadcrumb(path);
+  }
+
+  function updateBreadcrumb(path) {
+    var bc = document.getElementById('note-breadcrumb');
+    if (!bc) return;
+    if (!path) { bc.innerHTML = ''; return; }
+    var parts = path.split('/');
+    bc.innerHTML = parts.map(function (p, i) {
+      var isLast = i === parts.length - 1;
+      var cls = isLast ? 'note-breadcrumb-item is-current' : 'note-breadcrumb-item';
+      return '<span class="' + cls + '">' + p + '</span>';
+    }).join('<span class="note-breadcrumb-sep">›</span>');
   }
 
   function getFileFromHash() {
@@ -295,6 +327,7 @@
       } else {
         PREVIEW_EL.textContent = content;
       }
+      highlightCodeBlocks();
       return;
     }
 
@@ -312,6 +345,7 @@
         } else {
           PREVIEW_EL.textContent = text;
         }
+        highlightCodeBlocks();
       })
       .catch(() => {
         PREVIEW_EL.innerHTML = '<p style="color:#c00">无法加载文件</p>';
@@ -353,16 +387,46 @@
       });
   }
 
+  function countManifest(children) {
+    var dirs = 0, files = 0;
+    if (!children) return { dirs: dirs, files: files };
+    children.forEach(function (node) {
+      if (node.type === 'dir') {
+        dirs++;
+        var sub = countManifest(node.children);
+        dirs += sub.dirs;
+        files += sub.files;
+      } else {
+        files++;
+      }
+    });
+    return { dirs: dirs, files: files };
+  }
+
+  function renderSidebarStats(children) {
+    var sidebar = document.getElementById('note-sidebar');
+    if (!sidebar) return;
+    var existing = sidebar.querySelector('.note-sidebar-stats');
+    if (existing) existing.remove();
+    var stats = countManifest(children);
+    var el = document.createElement('div');
+    el.className = 'note-sidebar-stats';
+    el.textContent = stats.dirs + ' 个目录 · ' + stats.files + ' 个文件';
+    sidebar.appendChild(el);
+  }
+
   function init() {
     const container = document.getElementById('note-tree');
     const data = window.NOTE_MANIFEST;
     if (container && data && data.children) {
       renderTree(data.children, container);
+      renderSidebarStats(data.children);
     } else if (container) {
       container.innerHTML = '<p style="padding:1rem;color:#999">无法加载目录</p>';
     }
     initSidebarToggle();
     initPreviewLinkInterceptor();
+    syncHljsTheme();
     var path = getFileFromHash();
     if (path) {
       loadFileByPath(path);
