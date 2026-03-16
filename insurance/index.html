@@ -1,33 +1,37 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>你的贴心财富管家•贷款•车贷•个人贷-</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" media="screen" href="../assets/css/home.css" />
-    <link rel="SHORTCUT ICON" href="./logo.jpg">
-    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js">
+    <meta charset="utf-8">
+    <script>
+      (function(){var t=localStorage.getItem('theme')||(window.matchMedia&&matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);})();
     </script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>你的贴心财富管家·贷款·车贷·个人贷</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../assets/css/home.css">
+    <link rel="SHORTCUT ICON" href="./logo.jpg">
     <script src="../assets/js/main.js"></script>
-
 </head>
-<body style="margin: 0px;padding: 0px;">
-    <div >
-        <div style="left: 30px;text-align: center;position: fixed;background-color: white;top: 100px;width: 50px;height: 100px;">
-
-            <img src="./resource/phone.png"
-                 style="padding: 5px;height: 40px;width: 40px;" 
-                 onclick="window.open('tel:13140099290')" >
-
-            <img src="./resource/qq.png"
-                 style="padding: 5px; height: 40px;width: 40px;" 
-                 onclick="window.open('http://wpa.qq.com/msgrd?v=3&uin=958772007&site=qq&menu=yes')">            
-        </div>
- 
-        <img src="./resource/xinyidai1.jpg" style="width: 100%;height: 100%;" >
-        <img src="./resource/pinganchedai1.jpg" style="width: 100%;height: 100%;" >
-
+<body style="margin:0;padding:0;">
+    <div style="position:fixed;top:0.75rem;right:0.75rem;z-index:50">
+      <a href="../index.html" style="color:inherit;text-decoration:none;margin-right:0.75rem">返回首页</a>
+      <button type="button" class="theme-toggle" aria-label="切换主题">🌙</button>
     </div>
+
+    <div>
+        <div style="left:30px;text-align:center;position:fixed;background-color:white;top:100px;width:50px;height:100px;">
+            <img src="./resource/phone.png"
+                 style="padding:5px;height:40px;width:40px;"
+                 onclick="window.open('tel:13140099290')">
+            <img src="./resource/qq.png"
+                 style="padding:5px;height:40px;width:40px;"
+                 onclick="window.open('http://wpa.qq.com/msgrd?v=3&uin=958772007&site=qq&menu=yes')">
+        </div>
+
+        <img src="./resource/xinyidai1.jpg" style="width:100%;height:100%;">
+        <img src="./resource/pinganchedai1.jpg" style="width:100%;height:100%;">
+    </div>
+
+    <script src="../assets/js/theme.js"></script>
 </body>
 </html>
