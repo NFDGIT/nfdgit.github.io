@@ -173,6 +173,9 @@
   function clearPreview() {
     PREVIEW_EL.innerHTML = '';
     PREVIEW_EL.style.display = 'block';
+    PREVIEW_EL.style.animation = 'none';
+    void PREVIEW_EL.offsetWidth;
+    PREVIEW_EL.style.animation = '';
   }
 
   function setActiveFile(path) {

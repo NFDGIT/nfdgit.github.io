@@ -50,6 +50,12 @@ body.games-page {
     border-radius: 10px;
     padding: 0.7rem 1rem;
     box-shadow: var(--card-shadow);
+    transition: transform 0.2s var(--ease-smooth), box-shadow 0.2s var(--ease-smooth);
+}
+
+.games-link:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--card-shadow-hover);
 }
 
 .games-grid {

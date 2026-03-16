@@ -64,7 +64,7 @@ body {
   flex-shrink: 0;
   width: 260px;
   min-width: 260px;
-  transition: width 0.25s ease, min-width 0.25s ease;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), min-width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 body.note-sidebar-collapsed .note-sidebar-wrap {
@@ -185,6 +185,7 @@ body.note-sidebar-collapsed .note-sidebar {
   user-select: none;
   font-size: 0.9rem;
   min-height: 44px;
+  transition: background 0.15s ease;
 }
 
 .note-tree-node:hover {
@@ -439,4 +440,13 @@ body.note-sidebar-collapsed .note-sidebar {
   .note-preview-placeholder {
     padding: 2rem 1rem;
   }
+}
+
+.note-preview-content {
+  animation: note-content-fade 0.35s ease both;
+}
+
+@keyframes note-content-fade {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
 }

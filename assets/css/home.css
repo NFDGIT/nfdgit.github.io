@@ -9,6 +9,9 @@
     --card-bg: #fff;
     --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
     --card-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.12);
+    --card-glow: 0 0 0 2px rgba(37, 99, 235, 0.18), 0 8px 28px rgba(37, 99, 235, 0.10);
+    --focus-ring: 0 0 0 3px rgba(37, 99, 235, 0.45);
+    --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* 主题变量：暗色 */
@@ -19,6 +22,8 @@
     --card-bg: #2d3139;
     --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
     --card-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.5);
+    --card-glow: 0 0 0 2px rgba(96, 165, 250, 0.22), 0 8px 28px rgba(96, 165, 250, 0.12);
+    --focus-ring: 0 0 0 3px rgba(96, 165, 250, 0.5);
 }
 
 /* 大字模式：根字体放大约 1.2 倍，rem 自动跟随 */
@@ -86,18 +91,24 @@ body {
     border-radius: 12px;
     padding: 1.5rem;
     box-shadow: var(--card-shadow);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: transform 0.25s var(--ease-smooth), box-shadow 0.25s var(--ease-smooth);
 }
 
 .home-card:hover {
-    transform: scale(1.02);
-    box-shadow: var(--card-shadow-hover);
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: var(--card-glow);
 }
 
 .home-card-icon {
     font-size: 2rem;
     margin-bottom: 0.75rem;
     line-height: 1;
+    display: inline-block;
+    transition: transform 0.3s var(--ease-smooth);
+}
+
+.home-card:hover .home-card-icon {
+    transform: scale(1.18);
 }
 
 .home-card-title {
@@ -172,5 +183,92 @@ body {
 
     .home-card {
         padding: 1.75rem;
+    }
+}
+
+/* ===== 动画工具类 ===== */
+
+@keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slide-up {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scale-in {
+    from { opacity: 0; transform: scale(0.92); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.anim-fade-in {
+    animation: fade-in 0.5s var(--ease-smooth) both;
+}
+
+.anim-slide-up {
+    animation: slide-up 0.5s var(--ease-smooth) both;
+}
+
+.anim-scale-in {
+    animation: scale-in 0.45s var(--ease-smooth) both;
+}
+
+.stagger-1 { animation-delay: 0.06s; }
+.stagger-2 { animation-delay: 0.12s; }
+.stagger-3 { animation-delay: 0.18s; }
+.stagger-4 { animation-delay: 0.24s; }
+.stagger-5 { animation-delay: 0.30s; }
+.stagger-6 { animation-delay: 0.36s; }
+
+/* ===== 共享导航药丸 ===== */
+
+.nav-pill {
+    display: inline-block;
+    padding: 0.55rem 0.85rem;
+    border-radius: 999px;
+    background: var(--card-bg, rgba(0, 0, 0, 0.55));
+    color: var(--text, #fff);
+    text-decoration: none;
+    font-size: 0.85rem;
+    line-height: 1.2;
+    border: none;
+    cursor: pointer;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    transition: transform 0.2s var(--ease-smooth), box-shadow 0.2s var(--ease-smooth), opacity 0.2s;
+    box-shadow: var(--card-shadow, 0 2px 6px rgba(0, 0, 0, 0.15));
+}
+
+.nav-pill:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--card-shadow-hover, 0 4px 12px rgba(0, 0, 0, 0.2));
+    opacity: 1;
+}
+
+/* ===== 焦点可见性 ===== */
+
+:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+}
+
+/* ===== 动画降级 ===== */
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01s !important;
+        animation-delay: 0s !important;
+        transition-duration: 0.01s !important;
     }
 }
