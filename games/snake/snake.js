@@ -1,7 +1,9 @@
 (function () {
   var GRID_SIZE = 18;
   var STORAGE_KEY = 'snake-best-score';
-  var STEP_MS = 160;
+  var BASE_STEP_MS = 160;
+  var SPEED_INCREMENT = 3;
+  var MIN_STEP_MS = 70;
   var canvas = document.getElementById('game-canvas');
   var ctx = canvas.getContext('2d');
   var scoreEl = document.getElementById('score');
@@ -14,11 +16,18 @@
   var pauseButton = document.getElementById('pause-button');
   var restartButton = document.getElementById('restart-button');
   var touchToggleButton = document.querySelector('[data-action="toggle"]');
+  var canvasWrap = document.querySelector('.snake-canvas-wrap');
   var renderSize = 432;
   var lastFrameTime = 0;
   var accumulator = 0;
   var bestScore = readBestScore();
   var game = createInitialState();
+  var particles = [];
+  var prevSnakePositions = null;
+  var dyingTimer = 0;
+  var dyingBlink = false;
+  var touchStartX = 0;
+  var touchStartY = 0;
   var directionMap = {
     ArrowUp: 'up',
     KeyW: 'up',
@@ -45,7 +54,7 @@
   bestScoreEl.textContent = String(bestScore);
   resizeCanvas();
   syncUi();
-  render();
+  render(performance.now());
   bindEvents();
   requestAnimationFrame(loop);
 
@@ -67,10 +76,14 @@
     return state;
   }
 
+  function getCurrentStepMs() {
+    return Math.max(BASE_STEP_MS - game.score * SPEED_INCREMENT, MIN_STEP_MS);
+  }
+
   function bindEvents() {
     window.addEventListener('resize', function () {
       resizeCanvas();
-      render();
+      render(performance.now());
     });
 
     document.addEventListener('keydown', function (event) {
@@ -118,12 +131,37 @@
         queueDirection(button.getAttribute('data-direction'));
       });
     });
+
+    canvasWrap.addEventListener('touchstart', function (e) {
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+      e.preventDefault();
+    }, { passive: false });
+
+    canvasWrap.addEventListener('touchend', function (e) {
+      var dx = e.changedTouches[0].clientX - touchStartX;
+      var dy = e.changedTouches[0].clientY - touchStartY;
+      var absDx = Math.abs(dx);
+      var absDy = Math.abs(dy);
+
+      if (Math.max(absDx, absDy) < 30) return;
+
+      var direction;
+      if (absDx > absDy) {
+        direction = dx > 0 ? 'right' : 'left';
+      } else {
+        direction = dy > 0 ? 'down' : 'up';
+      }
+
+      queueDirection(direction);
+      e.preventDefault();
+    }, { passive: false });
   }
 
   function queueDirection(direction) {
     if (!direction) return;
 
-    if (game.status === 'idle' || game.status === 'gameover') {
+    if (game.status === 'idle' || game.status === 'gameover' || game.status === 'dying') {
       startFreshGame(direction);
       return;
     }
@@ -146,8 +184,13 @@
     game.status = 'running';
     accumulator = 0;
     lastFrameTime = 0;
+    particles = [];
+    prevSnakePositions = null;
+    dyingTimer = 0;
+    dyingBlink = false;
+    canvasWrap.classList.remove('is-shaking');
     syncUi();
-    render();
+    render(performance.now());
   }
 
   function pauseGame() {
@@ -163,34 +206,64 @@
   }
 
   function endGame() {
-    game.status = 'gameover';
+    game.status = 'dying';
+    dyingTimer = 0;
+    dyingBlink = false;
+    canvasWrap.classList.add('is-shaking');
     if (game.score > bestScore) {
       bestScore = game.score;
       writeBestScore(bestScore);
       bestScoreEl.textContent = String(bestScore);
     }
+  }
+
+  function finishDying() {
+    game.status = 'gameover';
+    dyingTimer = 0;
+    dyingBlink = false;
+    canvasWrap.classList.remove('is-shaking');
     syncUi();
   }
 
   function loop(timestamp) {
+    var stepMs = getCurrentStepMs();
+    var delta = 0;
+
     if (game.status === 'running') {
       if (!lastFrameTime) lastFrameTime = timestamp;
-      accumulator += timestamp - lastFrameTime;
+      delta = timestamp - lastFrameTime;
       lastFrameTime = timestamp;
+      accumulator += delta;
 
-      while (accumulator >= STEP_MS) {
+      while (accumulator >= stepMs) {
+        prevSnakePositions = game.snake.map(function (s) { return { x: s.x, y: s.y }; });
         update();
-        accumulator -= STEP_MS;
+        accumulator -= stepMs;
         if (game.status !== 'running') {
           accumulator = 0;
           break;
         }
       }
+    } else if (game.status === 'dying') {
+      if (!lastFrameTime) lastFrameTime = timestamp;
+      delta = timestamp - lastFrameTime;
+      lastFrameTime = timestamp;
+      dyingTimer += delta;
+      dyingBlink = Math.floor(dyingTimer / 80) % 2 === 0;
+
+      if (dyingTimer >= 480) {
+        finishDying();
+      }
     } else {
+      delta = lastFrameTime ? timestamp - lastFrameTime : 0;
       lastFrameTime = timestamp;
     }
 
-    render();
+    if (particles.length > 0) {
+      updateParticles(delta || 16);
+    }
+
+    render(timestamp);
     requestAnimationFrame(loop);
   }
 
@@ -220,6 +293,7 @@
         bestScore = game.score;
         bestScoreEl.textContent = String(bestScore);
       }
+      spawnParticles(game.food.x, game.food.y);
       game.food = generateFood(game.snake);
     } else {
       game.snake.pop();
@@ -269,17 +343,34 @@
     ctx.imageSmoothingEnabled = false;
   }
 
-  function render() {
+  function render(timestamp) {
     var cellSize = renderSize / GRID_SIZE;
-    var i;
+    var i, pos, drawX, drawY;
+    var stepMs = getCurrentStepMs();
+    var t = (game.status === 'running' && prevSnakePositions)
+      ? Math.min(Math.max(accumulator / stepMs, 0), 1)
+      : 1;
 
     ctx.clearRect(0, 0, renderSize, renderSize);
     drawBackground(cellSize);
-    drawFood(cellSize);
+    drawFood(cellSize, timestamp || performance.now());
 
-    for (i = game.snake.length - 1; i >= 0; i -= 1) {
-      drawSnakeSegment(game.snake[i], cellSize, i === 0);
+    if (game.status !== 'dying' || dyingBlink) {
+      for (i = game.snake.length - 1; i >= 0; i -= 1) {
+        pos = game.snake[i];
+        drawX = pos.x;
+        drawY = pos.y;
+
+        if (prevSnakePositions && prevSnakePositions[i] && t < 1) {
+          drawX = prevSnakePositions[i].x + (pos.x - prevSnakePositions[i].x) * t;
+          drawY = prevSnakePositions[i].y + (pos.y - prevSnakePositions[i].y) * t;
+        }
+
+        drawSnakeSegment(drawX, drawY, cellSize, i === 0);
+      }
     }
+
+    drawParticles(cellSize);
   }
 
   function drawBackground(cellSize) {
@@ -307,25 +398,82 @@
     }
   }
 
-  function drawSnakeSegment(segment, cellSize, isHead) {
+  function drawSnakeSegment(sx, sy, cellSize, isHead) {
     var padding = cellSize * 0.08;
     var size = cellSize - padding * 2;
-    var x = segment.x * cellSize + padding;
-    var y = segment.y * cellSize + padding;
+    var x = sx * cellSize + padding;
+    var y = sy * cellSize + padding;
 
     ctx.fillStyle = getCssVariable(isHead ? '--snake-head' : '--snake-body') || '#22c55e';
     roundRect(x, y, size, size, cellSize * 0.18);
     ctx.fill();
   }
 
-  function drawFood(cellSize) {
+  function drawFood(cellSize, timestamp) {
+    var pulse = 0.85 + 0.15 * (0.5 + 0.5 * Math.sin(timestamp * 0.004));
+    var radius = cellSize * 0.28 * pulse;
     var centerX = game.food.x * cellSize + cellSize / 2;
     var centerY = game.food.y * cellSize + cellSize / 2;
 
     ctx.beginPath();
     ctx.fillStyle = getCssVariable('--snake-food') || '#f97316';
-    ctx.arc(centerX, centerY, cellSize * 0.28, 0, Math.PI * 2);
+    ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
     ctx.fill();
+  }
+
+  function spawnParticles(cellX, cellY) {
+    var cellSize = renderSize / GRID_SIZE;
+    var cx = cellX * cellSize + cellSize / 2;
+    var cy = cellY * cellSize + cellSize / 2;
+    var count = 8 + Math.floor(Math.random() * 5);
+    var i, angle, speed;
+
+    for (i = 0; i < count; i += 1) {
+      angle = Math.random() * Math.PI * 2;
+      speed = 60 + Math.random() * 80;
+      particles.push({
+        x: cx,
+        y: cy,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
+        alpha: 1,
+        life: 400
+      });
+    }
+  }
+
+  function updateParticles(dt) {
+    var dtSec = dt / 1000;
+    var i = particles.length;
+    var p;
+
+    while (i--) {
+      p = particles[i];
+      p.x += p.vx * dtSec;
+      p.y += p.vy * dtSec;
+      p.life -= dt;
+      p.alpha = Math.max(0, p.life / 400);
+
+      if (p.life <= 0) {
+        particles.splice(i, 1);
+      }
+    }
+  }
+
+  function drawParticles(cellSize) {
+    if (particles.length === 0) return;
+    var color = getCssVariable('--snake-food') || '#f97316';
+    var i, p;
+
+    for (i = 0; i < particles.length; i += 1) {
+      p = particles[i];
+      ctx.globalAlpha = p.alpha;
+      ctx.beginPath();
+      ctx.fillStyle = color;
+      ctx.arc(p.x, p.y, cellSize * 0.1, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
   }
 
   function roundRect(x, y, width, height, radius) {
@@ -349,7 +497,7 @@
       pauseButton.textContent = '暂停';
       touchToggleButton.textContent = '开始';
       pauseButton.disabled = true;
-      showOverlay('准备开始', '点击“开始游戏”或按任意方向键开始。');
+      showOverlay('准备开始', '点击"开始游戏"或滑动画布开始。');
       return;
     }
 
@@ -369,7 +517,7 @@
       pauseButton.textContent = '继续';
       touchToggleButton.textContent = '继续';
       pauseButton.disabled = false;
-      showOverlay('游戏暂停', '点击“继续”或再次按方向键即可恢复。');
+      showOverlay('游戏暂停', '点击"继续"或再次按方向键即可恢复。');
       return;
     }
 
@@ -378,7 +526,7 @@
     pauseButton.textContent = '暂停';
     touchToggleButton.textContent = '重开';
     pauseButton.disabled = true;
-    showOverlay('游戏结束', '本局得分 ' + game.score + '，点击“再来一局”重新开始。');
+    showOverlay('游戏结束', '本局得分 ' + game.score + '，点击"再来一局"重新开始。');
   }
 
   function showOverlay(title, text) {
