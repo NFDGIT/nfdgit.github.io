@@ -16,18 +16,26 @@
 
 <body>
   <script>!function () { if (window.matchMedia('(min-width:769px)').matches && localStorage.getItem('note-sidebar-collapsed') === '1') document.body.classList.add('note-sidebar-collapsed'); }();</script>
-  <button type="button" class="note-sidebar-toggle note-sidebar-toggle-mobile" id="note-sidebar-toggle"
-    aria-label="打开目录" aria-expanded="false">≡</button>
+
+  <header class="note-toolbar" id="note-toolbar">
+    <div class="note-toolbar-left">
+      <button type="button" class="glass-btn note-toolbar-toggle" id="note-toolbar-toggle" aria-label="切换目录" aria-expanded="true">≡</button>
+      <a href="../index.html" class="glass-nav-link note-toolbar-home"><span class="note-home-icon">←</span><span class="note-home-text"> 首页</span></a>
+    </div>
+    <nav id="note-breadcrumb" class="note-breadcrumb" aria-label="文件路径"></nav>
+    <div class="note-toolbar-right">
+      <button type="button" class="large-text-toggle" aria-label="开启大字模式">A+</button>
+      <button type="button" class="theme-toggle" aria-label="切换主题">🌙</button>
+    </div>
+  </header>
+
   <div class="note-sidebar-overlay" id="note-sidebar-overlay" aria-hidden="true"></div>
   <div class="note-layout">
     <div class="note-sidebar-wrap" id="note-sidebar-wrap">
       <aside class="note-sidebar" id="note-sidebar">
         <button type="button" class="note-sidebar-close" id="note-sidebar-close" aria-label="关闭目录">×</button>
         <div class="note-sidebar-header">
-          <button type="button" class="note-sidebar-collapse" id="note-sidebar-collapse" aria-label="收起目录">◀</button>
           <span>目录</span>
-          <button type="button" class="large-text-toggle" aria-label="开启大字模式">A+</button>
-          <button type="button" class="theme-toggle" aria-label="切换主题">🌙</button>
         </div>
         <div class="note-search-wrap">
           <input type="text" id="note-search" class="note-search-input" placeholder="搜索文件名…" aria-label="搜索笔记">
@@ -37,10 +45,6 @@
       </aside>
     </div>
     <main class="note-preview">
-      <div class="note-preview-topbar">
-        <a href="../index.html" class="note-back">← 返回首页</a>
-        <nav id="note-breadcrumb" class="note-breadcrumb" aria-label="文件路径"></nav>
-      </div>
       <div id="note-preview-placeholder" class="note-preview-placeholder">
         <div class="note-placeholder-icon">📂</div>
         <div class="note-placeholder-title">选择一篇笔记开始阅读</div>

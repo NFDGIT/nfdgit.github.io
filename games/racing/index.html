@@ -45,12 +45,25 @@
 
 		.game-links {
 			position: fixed;
-			top: 16px;
-			left: 16px;
+			top: 12px;
+			left: 12px;
 			z-index: 10;
 			display: flex;
-			gap: 10px;
+			gap: 8px;
 			flex-wrap: wrap;
+		}
+
+		@media (max-width: 768px) {
+			.game-links {
+				top: 8px;
+				left: 8px;
+				gap: 5px;
+			}
+
+			.racing-nav-link {
+				padding: 0.35rem 0.6rem !important;
+				font-size: 0.75rem !important;
+			}
 		}
 	</style>
 <script src="viewporter.js"></script>

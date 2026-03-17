@@ -147,6 +147,7 @@ body {
 }
 
 .glass-nav {
+    --nav-height: 52px;
     position: fixed;
     top: 0;
     left: 0;
@@ -162,6 +163,23 @@ body {
 
 .glass-nav > * {
     pointer-events: auto;
+}
+
+.has-glass-nav {
+    padding-top: var(--nav-height, 52px);
+}
+
+@media (max-width: 768px) {
+    .glass-nav {
+        --nav-height: 44px;
+        padding: 0.5rem 0.65rem;
+        gap: 0.35rem;
+    }
+
+    .glass-nav-link {
+        padding: 0.4rem 0.7rem;
+        font-size: 0.78rem;
+    }
 }
 
 .glass-nav-link {

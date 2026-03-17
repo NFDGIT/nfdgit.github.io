@@ -35,6 +35,12 @@
         .color-preview { display: inline-block; width: 36px; height: 36px; border-radius: 8px; border: 1px solid rgba(128,128,128,0.2); vertical-align: middle; }
         #qr-output { margin-top: 0.75rem; }
         #qr-output canvas, #qr-output img { border-radius: 8px; }
+
+        @media (max-width: 768px) {
+            .tools-header { flex-wrap: wrap; gap: 0.75rem; }
+            .tools-actions { width: 100%; justify-content: flex-start; }
+            .tools-shell { padding: 1.25rem 1rem; }
+        }
     </style>
 </head>
 <body>

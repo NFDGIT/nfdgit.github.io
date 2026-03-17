@@ -110,7 +110,7 @@ body.games-page {
     line-height: 1.7;
 }
 
-@media (max-width: 700px) {
+@media (max-width: 768px) {
     .games-header {
         flex-direction: column;
     }

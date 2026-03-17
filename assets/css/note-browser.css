@@ -37,50 +37,77 @@ body {
   color: var(--note-text);
 }
 
+/* ===== 顶部固定工具条 ===== */
+
+.note-toolbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 500;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0 0.75rem;
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border-bottom: var(--glass-border);
+  box-shadow: var(--glass-shadow);
+}
+
+.note-toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-shrink: 0;
+}
+
+.note-toolbar-toggle {
+  padding: 0.4rem 0.55rem;
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.note-toolbar-home {
+  font-size: 0.8rem;
+  padding: 0.35rem 0.7rem;
+}
+
+.note-toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-shrink: 0;
+}
+
+/* ===== 主布局 ===== */
+
 .note-layout {
   display: flex;
   height: 100%;
+  padding-top: 48px;
 }
 
-/* 左侧目录树容器（桌面端可收起） */
+/* 左侧目录树容器 */
 .note-sidebar-wrap {
   display: flex;
   flex-shrink: 0;
   width: 260px;
   min-width: 260px;
-  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), min-width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: width 0.3s var(--ease-spring), min-width 0.3s var(--ease-spring);
 }
 
 body.note-sidebar-collapsed .note-sidebar-wrap {
-  width: 48px;
-  min-width: 48px;
-}
-
-body.note-sidebar-collapsed .note-sidebar .note-sidebar-header span,
-body.note-sidebar-collapsed .note-sidebar .large-text-toggle,
-body.note-sidebar-collapsed .note-sidebar .theme-toggle,
-body.note-sidebar-collapsed .note-sidebar .note-tree,
-body.note-sidebar-collapsed .note-sidebar .note-sidebar-close {
-  display: none;
-}
-
-body.note-sidebar-collapsed .note-sidebar-header {
-  justify-content: center;
-  padding: 0.75rem;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-body.note-sidebar-collapsed .note-sidebar-collapse {
-  width: 32px;
-  height: 32px;
-  font-size: 1.15rem;
+  width: 0;
+  min-width: 0;
 }
 
 /* 左侧目录树 */
 .note-sidebar {
   width: 260px;
-  min-width: 200px;
+  min-width: 260px;
   background: var(--note-sidebar-bg);
   backdrop-filter: blur(var(--glass-blur));
   -webkit-backdrop-filter: blur(var(--glass-blur));
@@ -90,39 +117,17 @@ body.note-sidebar-collapsed .note-sidebar-collapse {
 }
 
 body.note-sidebar-collapsed .note-sidebar {
-  width: 48px;
-  min-width: 48px;
+  width: 0;
+  min-width: 0;
   overflow: hidden;
 }
 
 .note-sidebar-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 1rem;
+  padding: 0.85rem 1rem;
   border-bottom: 1px solid var(--note-sidebar-border);
   font-weight: 600;
-}
-
-/* theme-toggle and large-text-toggle defined in base.css */
-
-/* 桌面端收起按钮 */
-.note-sidebar-collapse {
-  display: none;
-  padding: 0.35rem;
-  border: none;
-  border-radius: 6px;
-  background: transparent;
-  cursor: pointer;
-  font-size: 1rem;
-  line-height: 1;
-  opacity: 0.85;
-  color: var(--note-text-muted);
-}
-
-.note-sidebar-collapse:hover {
-  opacity: 1;
-  background: var(--note-sidebar-hover);
 }
 
 .note-search-wrap {
@@ -269,21 +274,16 @@ body.note-sidebar-collapsed .note-sidebar-stats {
   background: var(--note-bg);
 }
 
-.note-preview-topbar {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 1rem;
-  flex-wrap: wrap;
-}
-
 .note-breadcrumb {
+  flex: 1;
+  min-width: 0;
   display: flex;
   align-items: center;
   gap: 0.2rem;
-  font-size: 0.82rem;
+  font-size: 0.78rem;
   color: var(--note-text-muted);
-  flex-wrap: wrap;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .note-breadcrumb-item {
@@ -482,33 +482,7 @@ body.note-sidebar-collapsed .note-sidebar-stats {
   opacity: 0.85;
 }
 
-.note-back {
-  display: inline-block;
-  margin-bottom: 1rem;
-  color: var(--note-text-muted);
-  text-decoration: none;
-  font-size: 0.9rem;
-}
-
-.note-back:hover {
-  color: var(--note-text);
-}
-
-/* 桌面端：显示收起按钮，隐藏移动端按钮 */
-@media (min-width: 769px) {
-  .note-sidebar-collapse {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .note-sidebar-toggle-mobile {
-    display: none;
-  }
-}
-
-/* 移动端目录按钮与关闭按钮（仅小屏显示） */
-.note-sidebar-toggle,
+/* 移动端覆盖层和关闭按钮（默认隐藏） */
 .note-sidebar-overlay,
 .note-sidebar-close {
   display: none;
@@ -522,33 +496,13 @@ body.note-sidebar-collapsed .note-sidebar-stats {
     flex-shrink: 0;
   }
 
-  .note-sidebar-collapse {
+  .note-home-text {
     display: none;
   }
 
-  .note-sidebar-toggle {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: fixed;
-    top: 1rem;
-    left: 1rem;
-    z-index: 100;
-    width: 44px;
-    height: 44px;
-    min-height: 44px;
-    padding: 0;
-    border: none;
-    border-radius: 8px;
-    background: var(--note-sidebar-bg);
-    color: var(--note-text-muted);
-    font-size: 1.2rem;
-    cursor: pointer;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  }
-
-  .note-sidebar-toggle:hover {
-    background: var(--note-sidebar-hover);
+  .note-toolbar-home {
+    padding: 0.35rem 0.55rem;
+    font-size: 1rem;
   }
 
   .note-sidebar-overlay {
@@ -622,7 +576,6 @@ body.note-sidebar-collapsed .note-sidebar-stats {
 
   .note-preview {
     padding: 1rem;
-    padding-top: 4rem;
   }
 
   .note-preview-placeholder {

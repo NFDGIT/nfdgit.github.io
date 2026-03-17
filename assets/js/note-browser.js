@@ -25,38 +25,41 @@
     try {
       localStorage.setItem(STORAGE_KEY, collapsed ? '1' : '0');
     } catch (e) {}
-    updateCollapseButton();
+    updateToolbarToggle();
   }
 
-  function updateCollapseButton() {
-    var btn = document.getElementById('note-sidebar-collapse');
-    if (!btn || isMobile()) return;
-    var collapsed = isDesktopCollapsed();
-    btn.textContent = collapsed ? '≡' : '◀';
-    btn.setAttribute('aria-label', collapsed ? '打开目录' : '收起目录');
+  function updateToolbarToggle() {
+    var btn = document.getElementById('note-toolbar-toggle');
+    if (!btn) return;
+    if (isMobile()) {
+      var open = document.body.classList.contains('note-sidebar-open');
+      btn.setAttribute('aria-expanded', String(open));
+    } else {
+      var collapsed = isDesktopCollapsed();
+      btn.setAttribute('aria-expanded', String(!collapsed));
+    }
   }
 
   function openSidebar() {
     document.body.classList.add('note-sidebar-open');
-    var btn = document.getElementById('note-sidebar-toggle');
-    if (btn) btn.setAttribute('aria-expanded', 'true');
     var overlay = document.getElementById('note-sidebar-overlay');
     if (overlay) overlay.setAttribute('aria-hidden', 'false');
+    var sidebar = document.getElementById('note-sidebar');
+    if (sidebar) sidebar.setAttribute('aria-hidden', 'false');
+    updateToolbarToggle();
   }
 
   function closeSidebar() {
     document.body.classList.remove('note-sidebar-open');
-    var btn = document.getElementById('note-sidebar-toggle');
-    if (btn) btn.setAttribute('aria-expanded', 'false');
     var overlay = document.getElementById('note-sidebar-overlay');
     if (overlay) overlay.setAttribute('aria-hidden', 'true');
     var sidebar = document.getElementById('note-sidebar');
     if (sidebar && isMobile()) sidebar.setAttribute('aria-hidden', 'true');
+    updateToolbarToggle();
   }
 
   function initSidebarToggle() {
-    var toggle = document.getElementById('note-sidebar-toggle');
-    var collapseBtn = document.getElementById('note-sidebar-collapse');
+    var toolbarToggle = document.getElementById('note-toolbar-toggle');
     var closeBtn = document.getElementById('note-sidebar-close');
     var overlay = document.getElementById('note-sidebar-overlay');
     var sidebar = document.getElementById('note-sidebar');
@@ -68,24 +71,17 @@
         var stored = localStorage.getItem(STORAGE_KEY);
         if (stored === '1') setDesktopCollapsed(true);
       } catch (e) {}
-      updateCollapseButton();
     }
-    if (toggle) {
-      toggle.addEventListener('click', function () {
+    updateToolbarToggle();
+    if (toolbarToggle) {
+      toolbarToggle.addEventListener('click', function () {
         if (isMobile()) {
-          document.body.classList.toggle('note-sidebar-open');
-          var open = document.body.classList.contains('note-sidebar-open');
-          toggle.setAttribute('aria-expanded', open);
-          if (overlay) overlay.setAttribute('aria-hidden', !open);
-          var sidebar = document.getElementById('note-sidebar');
-          if (sidebar) sidebar.setAttribute('aria-hidden', !open);
-        }
-      });
-    }
-    if (collapseBtn) {
-      collapseBtn.addEventListener('click', function () {
-        if (!isMobile()) {
+          var isOpen = document.body.classList.contains('note-sidebar-open');
+          if (isOpen) closeSidebar();
+          else openSidebar();
+        } else {
           setDesktopCollapsed(!isDesktopCollapsed());
+          updateToolbarToggle();
         }
       });
     }

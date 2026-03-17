@@ -263,7 +263,7 @@ body.snake-page {
     }
 }
 
-@media (max-width: 700px) {
+@media (max-width: 768px) {
     .snake-header {
         flex-direction: column;
     }
