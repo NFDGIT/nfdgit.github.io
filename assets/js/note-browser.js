@@ -9,7 +9,7 @@
   const STORAGE_KEY = 'note-sidebar-collapsed';
 
   function isMobile() {
-    return window.matchMedia('(max-width: ' + MOBILE_BREAKPOINT + 'px)').matches;
+    return window.innerWidth <= MOBILE_BREAKPOINT;
   }
 
   function isDesktopCollapsed() {

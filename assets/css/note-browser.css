@@ -32,6 +32,7 @@
 
 body {
   height: 100vh;
+  height: -webkit-fill-available;
   overflow: hidden;
   background: var(--note-bg);
   color: var(--note-text);
@@ -508,6 +509,7 @@ body.note-sidebar-collapsed .note-sidebar-stats {
   .note-sidebar-overlay {
     display: block;
     position: fixed;
+    top: 0; right: 0; bottom: 0; left: 0;
     inset: 0;
     z-index: 200;
     background: rgba(0, 0, 0, 0.45);

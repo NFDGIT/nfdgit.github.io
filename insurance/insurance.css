@@ -70,8 +70,8 @@
 
 .ins-cta-secondary {
     background: var(--glass-bg);
-    backdrop-filter: blur(calc(var(--glass-blur) * 0.6));
-    -webkit-backdrop-filter: blur(calc(var(--glass-blur) * 0.6));
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border: var(--glass-border);
     color: var(--text);
     box-shadow: var(--card-shadow);
