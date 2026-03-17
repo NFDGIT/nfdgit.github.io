@@ -95,3 +95,11 @@ The system SHALL use the operating system's color scheme preference when the use
 #### Scenario: 系统偏好减少动画时页面不晃动
 - **WHEN** 用户系统设置了减少动画偏好
 - **THEN** 页面中所有过渡和动画 SHALL 近乎瞬间完成
+
+### Requirement: 主题切换按钮样式应统一定义
+
+系统 SHALL 在共享基础样式文件中统一定义 `.theme-toggle` 样式（液态玻璃风格），所有页面 SHALL 引用同一份定义，不在各自的 CSS 中重复定义。
+
+#### Scenario: 主题切换按钮样式一致
+- **WHEN** 用户在任意页面看到主题切换按钮
+- **THEN** 按钮 SHALL 使用统一的液态玻璃样式（半透明背景、模糊、圆角）

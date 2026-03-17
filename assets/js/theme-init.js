@@ -1,0 +1,1 @@
+(function(){var t=localStorage.getItem('theme')||(window.matchMedia&&matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);if(localStorage.getItem('largeText')==='on')document.documentElement.setAttribute('data-large-text','on');})();

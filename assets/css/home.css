@@ -1,50 +1,4 @@
-/* 个人主页样式 - 现代卡片式布局 */
-
-/* 主题变量：亮色 */
-:root,
-[data-theme="light"] {
-    --bg: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
-    --text: #333;
-    --text-muted: #666;
-    --card-bg: #fff;
-    --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-    --card-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.12);
-    --card-glow: 0 0 0 2px rgba(37, 99, 235, 0.18), 0 8px 28px rgba(37, 99, 235, 0.10);
-    --focus-ring: 0 0 0 3px rgba(37, 99, 235, 0.45);
-    --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* 主题变量：暗色 */
-[data-theme="dark"] {
-    --bg: linear-gradient(135deg, #1a1d21 0%, #252830 100%);
-    --text: #e4e6eb;
-    --text-muted: #b0b3b8;
-    --card-bg: #2d3139;
-    --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-    --card-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.5);
-    --card-glow: 0 0 0 2px rgba(96, 165, 250, 0.22), 0 8px 28px rgba(96, 165, 250, 0.12);
-    --focus-ring: 0 0 0 3px rgba(96, 165, 250, 0.5);
-}
-
-/* 大字模式：根字体放大约 1.2 倍，rem 自动跟随 */
-html[data-large-text="on"] {
-    font-size: 120%;
-}
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-html,
-body {
-    height: 100%;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB",
-        "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    background: var(--bg);
-    color: var(--text);
-}
+/* 首页 & 游戏目录 - 卡片式布局（依赖 base.css） */
 
 /* 顶部个人简介区 */
 .home-header {
@@ -82,21 +36,24 @@ body {
     padding: 0 1.5rem 3rem;
 }
 
-/* 卡片样式 */
+/* 卡片样式 - 继承 glass-card 后的扩展 */
 .home-card {
     display: block;
     text-decoration: none;
     color: inherit;
-    background: var(--card-bg);
-    border-radius: 12px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: var(--glass-border);
+    border-radius: var(--radius-md);
     padding: 1.5rem;
-    box-shadow: var(--card-shadow);
-    transition: transform 0.25s var(--ease-smooth), box-shadow 0.25s var(--ease-smooth);
+    box-shadow: var(--glass-shadow), var(--glass-highlight);
+    transition: transform 0.3s var(--ease-spring), box-shadow 0.3s var(--ease-spring);
 }
 
 .home-card:hover {
-    transform: translateY(-3px) scale(1.02);
-    box-shadow: var(--card-glow);
+    transform: translateY(-4px) scale(1.015);
+    box-shadow: var(--card-glow), var(--glass-highlight);
 }
 
 .home-card-icon {
@@ -122,55 +79,13 @@ body {
     color: var(--text-muted);
 }
 
-/* 主题切换按钮 */
-.theme-toggle {
-    padding: 0.5rem;
-    border: none;
-    border-radius: 8px;
-    background: transparent;
-    cursor: pointer;
-    font-size: 1.25rem;
-    line-height: 1;
-    opacity: 0.85;
-    transition: opacity 0.2s;
-}
-
-.theme-toggle:hover {
-    opacity: 1;
-}
-
-.large-text-toggle {
-    padding: 0.5rem;
-    border: none;
-    border-radius: 8px;
-    background: transparent;
-    cursor: pointer;
-    font-size: 1.25rem;
-    line-height: 1;
-    opacity: 0.85;
-    transition: opacity 0.2s;
-    margin-right: 0.25rem;
-}
-
-.large-text-toggle:hover {
-    opacity: 1;
-}
-
-/* 大字模式仅移动端：桌面端隐藏开关 */
-@media (min-width: 769px) {
-    .large-text-toggle {
-        display: none;
-    }
-}
-
-/* 响应式：平板 2 列 */
+/* 响应式 */
 @media (min-width: 480px) {
     .home-grid {
         grid-template-columns: repeat(2, 1fr);
     }
 }
 
-/* 响应式：桌面 3 列 */
 @media (min-width: 640px) {
     .home-header h1 {
         font-size: 2rem;
@@ -183,92 +98,5 @@ body {
 
     .home-card {
         padding: 1.75rem;
-    }
-}
-
-/* ===== 动画工具类 ===== */
-
-@keyframes fade-in {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-@keyframes slide-up {
-    from { opacity: 0; transform: translateY(18px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes scale-in {
-    from { opacity: 0; transform: scale(0.92); }
-    to { opacity: 1; transform: scale(1); }
-}
-
-.anim-fade-in {
-    animation: fade-in 0.5s var(--ease-smooth) both;
-}
-
-.anim-slide-up {
-    animation: slide-up 0.5s var(--ease-smooth) both;
-}
-
-.anim-scale-in {
-    animation: scale-in 0.45s var(--ease-smooth) both;
-}
-
-.stagger-1 { animation-delay: 0.06s; }
-.stagger-2 { animation-delay: 0.12s; }
-.stagger-3 { animation-delay: 0.18s; }
-.stagger-4 { animation-delay: 0.24s; }
-.stagger-5 { animation-delay: 0.30s; }
-.stagger-6 { animation-delay: 0.36s; }
-
-/* ===== 共享导航药丸 ===== */
-
-.nav-pill {
-    display: inline-block;
-    padding: 0.55rem 0.85rem;
-    border-radius: 999px;
-    background: var(--card-bg, rgba(0, 0, 0, 0.55));
-    color: var(--text, #fff);
-    text-decoration: none;
-    font-size: 0.85rem;
-    line-height: 1.2;
-    border: none;
-    cursor: pointer;
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    transition: transform 0.2s var(--ease-smooth), box-shadow 0.2s var(--ease-smooth), opacity 0.2s;
-    box-shadow: var(--card-shadow, 0 2px 6px rgba(0, 0, 0, 0.15));
-}
-
-.nav-pill:hover {
-    transform: translateY(-1px);
-    box-shadow: var(--card-shadow-hover, 0 4px 12px rgba(0, 0, 0, 0.2));
-    opacity: 1;
-}
-
-/* ===== 焦点可见性 ===== */
-
-:focus-visible {
-    outline: none;
-    box-shadow: var(--focus-ring);
-}
-
-button:focus-visible,
-a:focus-visible,
-input:focus-visible,
-select:focus-visible,
-textarea:focus-visible {
-    outline: none;
-    box-shadow: var(--focus-ring);
-}
-
-/* ===== 动画降级 ===== */
-
-@media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
-        animation-duration: 0.01s !important;
-        animation-delay: 0s !important;
-        transition-duration: 0.01s !important;
     }
 }

@@ -103,11 +103,12 @@ body.billiards-page {
 }
 
 .billiards-panel {
-    background: var(--billiards-panel-bg);
-    border: 1px solid var(--billiards-panel-border);
-    border-radius: 18px;
-    box-shadow: var(--card-shadow);
-    backdrop-filter: blur(12px);
+    background: var(--glass-bg);
+    border: var(--glass-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--glass-shadow), var(--glass-highlight);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
     padding: 1rem;
 }
 
@@ -219,10 +220,12 @@ body.billiards-page {
     gap: 0.6rem;
     text-align: center;
     padding: 2rem;
-    border-radius: 8px;
-    background: rgba(10, 15, 10, 0.75);
+    border-radius: var(--radius-md);
+    background: rgba(10, 10, 12, 0.65);
+    backdrop-filter: blur(24px) saturate(1.5);
+    -webkit-backdrop-filter: blur(24px) saturate(1.5);
     color: #fff;
-    transition: opacity 0.2s ease, visibility 0.2s ease;
+    transition: opacity 0.3s var(--ease-smooth), visibility 0.3s;
 }
 
 .billiards-overlay.is-hidden {
@@ -261,25 +264,34 @@ body.billiards-page {
 
 .billiards-btn {
     appearance: none;
-    border: 1px solid var(--billiards-btn-border);
-    background: var(--billiards-btn-bg);
-    color: var(--billiards-btn-text);
-    border-radius: 12px;
+    border: var(--glass-border);
+    background: var(--glass-bg);
+    backdrop-filter: blur(calc(var(--glass-blur) * 0.6));
+    -webkit-backdrop-filter: blur(calc(var(--glass-blur) * 0.6));
+    color: var(--text);
+    border-radius: var(--radius-sm);
     padding: 0.85rem 1rem;
     font: inherit;
     cursor: pointer;
-    transition: transform 0.15s ease;
+    transition: transform 0.25s var(--ease-smooth), box-shadow 0.25s var(--ease-smooth);
     touch-action: manipulation;
+    box-shadow: var(--glass-shadow);
 }
 
 .billiards-btn:hover {
     transform: translateY(-1px);
+    box-shadow: var(--card-shadow-hover);
 }
 
 .billiards-btn-primary {
-    background: var(--billiards-btn-primary-bg);
-    color: var(--billiards-btn-primary-text);
+    background: var(--accent);
+    color: #fff;
     border-color: transparent;
+    box-shadow: var(--accent-glow);
+}
+
+.billiards-btn-primary:hover {
+    background: var(--accent-hover);
 }
 
 .billiards-btn-landscape {

@@ -58,17 +58,21 @@
 }
 
 .ins-cta-primary {
-    background: #2563eb;
+    background: var(--accent);
     color: #fff;
-    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+    box-shadow: var(--accent-glow);
 }
 
 .ins-cta-primary:hover {
-    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+    background: var(--accent-hover);
+    box-shadow: var(--accent-glow), 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .ins-cta-secondary {
-    background: var(--card-bg);
+    background: var(--glass-bg);
+    backdrop-filter: blur(calc(var(--glass-blur) * 0.6));
+    -webkit-backdrop-filter: blur(calc(var(--glass-blur) * 0.6));
+    border: var(--glass-border);
     color: var(--text);
     box-shadow: var(--card-shadow);
 }

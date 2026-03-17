@@ -1,52 +1,36 @@
-/* 笔记浏览页 - 左右分栏布局 */
+/* 笔记浏览页 - 左右分栏布局（依赖 base.css） */
 
-/* 主题变量：亮色 */
+/* 笔记页专属主题变量 */
 :root,
 [data-theme="light"] {
   --note-bg: #fff;
-  --note-sidebar-bg: #f8f9fa;
-  --note-sidebar-border: #e9ecef;
-  --note-sidebar-hover: #e9ecef;
-  --note-sidebar-active: #e7f1ff;
-  --note-sidebar-active-text: #0d6efd;
-  --note-text: #333;
-  --note-text-muted: #6c757d;
-  --note-code-bg: #f1f3f5;
-  --note-link: #0d6efd;
-  --note-file-md: #495057;
-  --note-file-html: #6c757d;
+  --note-sidebar-bg: rgba(248, 249, 250, 0.85);
+  --note-sidebar-border: rgba(0, 0, 0, 0.06);
+  --note-sidebar-hover: rgba(0, 0, 0, 0.04);
+  --note-sidebar-active: rgba(0, 122, 255, 0.08);
+  --note-sidebar-active-text: var(--accent);
+  --note-text: var(--text);
+  --note-text-muted: var(--text-muted);
+  --note-code-bg: rgba(0, 0, 0, 0.03);
+  --note-link: var(--accent);
+  --note-file-md: var(--text);
+  --note-file-html: var(--text-muted);
 }
 
-/* 主题变量：暗色 */
 [data-theme="dark"] {
-  --note-bg: #1a1d21;
-  --note-sidebar-bg: #252830;
-  --note-sidebar-border: #3d4149;
-  --note-sidebar-hover: #3d4149;
-  --note-sidebar-active: #2d4a6e;
-  --note-sidebar-active-text: #6ea8fe;
-  --note-text: #e4e6eb;
-  --note-text-muted: #adb5bd;
-  --note-code-bg: #2d3139;
-  --note-link: #6ea8fe;
+  --note-bg: var(--bg);
+  --note-sidebar-bg: rgba(30, 30, 32, 0.75);
+  --note-sidebar-border: rgba(255, 255, 255, 0.06);
+  --note-sidebar-hover: rgba(255, 255, 255, 0.05);
+  --note-sidebar-active: rgba(10, 132, 255, 0.15);
+  --note-sidebar-active-text: var(--accent);
+  --note-code-bg: rgba(255, 255, 255, 0.04);
+  --note-link: var(--accent);
   --note-file-md: #ced4da;
-  --note-file-html: #adb5bd;
-}
-
-/* 大字模式：笔记页根字体放大约 1.2 倍 */
-html[data-large-text="on"] {
-  font-size: 120%;
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+  --note-file-html: var(--text-muted);
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB",
-    "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
   height: 100vh;
   overflow: hidden;
   background: var(--note-bg);
@@ -98,6 +82,8 @@ body.note-sidebar-collapsed .note-sidebar-collapse {
   width: 260px;
   min-width: 200px;
   background: var(--note-sidebar-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
   border-right: 1px solid var(--note-sidebar-border);
   overflow-y: auto;
   flex-shrink: 0;
@@ -118,45 +104,7 @@ body.note-sidebar-collapsed .note-sidebar {
   font-weight: 600;
 }
 
-.theme-toggle {
-  padding: 0.35rem;
-  border: none;
-  border-radius: 6px;
-  background: transparent;
-  cursor: pointer;
-  font-size: 1.1rem;
-  line-height: 1;
-  opacity: 0.85;
-  transition: opacity 0.2s;
-}
-
-.theme-toggle:hover {
-  opacity: 1;
-  background: var(--note-sidebar-hover);
-}
-
-.large-text-toggle {
-  padding: 0.35rem;
-  border: none;
-  border-radius: 6px;
-  background: transparent;
-  cursor: pointer;
-  font-size: 1.1rem;
-  line-height: 1;
-  opacity: 0.85;
-  margin-right: 0.2rem;
-}
-.large-text-toggle:hover {
-  opacity: 1;
-  background: var(--note-sidebar-hover);
-}
-
-/* 大字模式仅移动端：桌面端隐藏开关 */
-@media (min-width: 769px) {
-  .large-text-toggle {
-    display: none;
-  }
-}
+/* theme-toggle and large-text-toggle defined in base.css */
 
 /* 桌面端收起按钮 */
 .note-sidebar-collapse {

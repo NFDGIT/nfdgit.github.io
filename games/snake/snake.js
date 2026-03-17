@@ -392,7 +392,7 @@
   }
 
   function getCssVariable(name) {
-    return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    return (typeof SiteUtils !== 'undefined') ? SiteUtils.getCssVar(name) : getComputedStyle(document.documentElement).getPropertyValue(name).trim();
   }
 
   function readBestScore() {

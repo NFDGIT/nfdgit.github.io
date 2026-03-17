@@ -2,13 +2,11 @@
 <html lang="zh-CN">
 <head>
     <meta charset="utf-8">
-    <script>
-      (function(){var t=localStorage.getItem('theme')||(window.matchMedia&&matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);})();
-      (function(){if(localStorage.getItem('largeText')==='on')document.documentElement.setAttribute('data-large-text','on');})();
-    </script>
+    <script src="../assets/js/theme-init.js"></script>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>小游戏目录</title>
+    <link rel="stylesheet" href="../assets/css/base.css">
     <link rel="stylesheet" href="../assets/css/home.css">
     <link rel="stylesheet" href="./assets/games.css">
 </head>
@@ -21,7 +19,7 @@
                 <p class="games-subtitle">先进入游戏目录，再选择你想玩的项目。当前已收录赛车游戏、贪吃蛇和台球，后续还可以继续扩展更多小游戏。</p>
             </div>
             <div class="games-actions">
-                <a href="../index.html" class="games-link">返回首页</a>
+                <a href="../index.html" class="glass-nav-link">返回首页</a>
                 <button type="button" class="large-text-toggle" aria-label="开启大字模式">A+</button>
                 <button type="button" class="theme-toggle" aria-label="切换主题">🌙</button>
             </div>

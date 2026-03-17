@@ -2,10 +2,8 @@
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8">
-<script>
-  (function(){var t=localStorage.getItem('theme')||(window.matchMedia&&matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);})();
-</script>
-<link rel="stylesheet" href="../../assets/css/home.css">
+<script src="../../assets/js/theme-init.js"></script>
+<link rel="stylesheet" href="../../assets/css/base.css">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="HandheldFriendly" content="True">
 <meta name="apple-touch-fullscreen" content="yes">
@@ -23,8 +21,10 @@
 			background-color: black;
 		}
 
-		[data-theme="dark"] .game-links .nav-pill {
-			background: rgba(255, 255, 255, 0.1);
+		.racing-nav-link {
+			background: rgba(0, 0, 0, 0.55) !important;
+			color: #fff !important;
+			border-color: rgba(255, 255, 255, 0.1) !important;
 		}
 
 		canvas {
@@ -57,9 +57,9 @@
 </head>
 <body>
 <div class="game-links">
-<a href="../../index.html" class="nav-pill" style="background:rgba(0,0,0,0.6);color:#fff">返回首页</a>
-<a href="../index.html" class="nav-pill" style="background:rgba(0,0,0,0.6);color:#fff">返回游戏目录</a>
-<button type="button" class="theme-toggle nav-pill" aria-label="切换主题" style="background:rgba(0,0,0,0.6);color:#fff">🌙</button>
+<a href="../../index.html" class="glass-nav-link racing-nav-link">返回首页</a>
+<a href="../index.html" class="glass-nav-link racing-nav-link">返回游戏目录</a>
+<button type="button" class="theme-toggle racing-nav-link" aria-label="切换主题">🌙</button>
 </div>
 <div id="viewporter">
 <canvas id="canvas" moz-opaque></canvas>

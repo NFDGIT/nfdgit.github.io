@@ -195,3 +195,11 @@
 #### Scenario: 3D 不可用时的降级
 - **WHEN** WebGL 不可用或 3D 库加载失败
 - **THEN** 系统 SHALL 保持或回退到 2D 模式，并可选择向用户提示 3D 不可用
+
+### Requirement: 台球游戏 UI 面板应使用统一设计系统
+
+系统 SHALL 让台球游戏的信息面板、按钮、overlay 使用基础样式文件中定义的液态玻璃组件类，而非在 `billiards.css` 中单独定义面板和 overlay 样式。
+
+#### Scenario: 台球面板使用液态玻璃
+- **WHEN** 用户查看台球游戏的信息面板
+- **THEN** 面板 SHALL 使用液态玻璃效果，与站点其他页面的面板风格一致

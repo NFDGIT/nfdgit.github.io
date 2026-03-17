@@ -2,28 +2,27 @@
 <html lang="zh-CN">
 
 <head>
-    <meta charset="utf-8" />
-    <script>
-      (function(){var t=localStorage.getItem('theme')||(window.matchMedia&&matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);})();
-      (function(){if(localStorage.getItem('largeText')==='on')document.documentElement.setAttribute('data-large-text','on');})();
-    </script>
+    <meta charset="utf-8">
+    <script src="./assets/js/theme-init.js"></script>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta http-equiv="Permissions-Policy" content="interest-cohort=()">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>个人主页</title>
+    <link rel="stylesheet" href="./assets/css/base.css">
     <link rel="stylesheet" href="./assets/css/home.css">
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9650960674621514"
-        crossorigin="anonymous"></script>
 </head>
 
 <body>
+    <nav class="glass-nav">
+        <button type="button" class="large-text-toggle" aria-label="开启大字模式">A+</button>
+        <button type="button" class="theme-toggle" aria-label="切换主题">🌙</button>
+    </nav>
+
     <header class="home-header anim-fade-in">
         <div>
             <h1>个人主页</h1>
             <p>笔记 · 小游戏 · 相册 · 小工具</p>
         </div>
-        <button type="button" class="large-text-toggle" aria-label="开启大字模式">A+</button>
-        <button type="button" class="theme-toggle" aria-label="切换主题">🌙</button>
     </header>
 
     <nav class="home-grid">
