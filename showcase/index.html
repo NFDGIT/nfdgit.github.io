@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <script src="../assets/js/theme-init.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>液态玻璃组件库</title>
+    <link rel="stylesheet" href="../assets/css/base.css">
+    <link rel="stylesheet" href="./showcase.css">
+</head>
+<body class="showcase-page">
+
+<nav class="glass-nav">
+    <a href="../index.html" class="glass-nav-link">返回首页</a>
+    <button type="button" class="theme-toggle" aria-label="切换主题">🌙</button>
+</nav>
+
+<div class="showcase-shell">
+
+    <!-- Hero -->
+    <section class="showcase-hero anim-fade-in">
+        <h1 class="showcase-hero-title">Liquid Glass</h1>
+        <p class="showcase-hero-desc">苹果风格的液态玻璃设计系统组件库。半透明、大模糊、微光泽、细边框——所有组件均来自 base.css。</p>
+    </section>
+
+    <!-- 面板 Panel -->
+    <section class="showcase-section anim-slide-up stagger-1">
+        <h2 class="showcase-section-title">Glass Panel</h2>
+        <div class="showcase-grid">
+            <div class="glass-panel demo-panel" style="border-radius:var(--radius-sm)">
+                radius-sm (10px)
+            </div>
+            <div class="glass-panel demo-panel" style="border-radius:var(--radius-md)">
+                radius-md (16px)
+            </div>
+            <div class="glass-panel demo-panel" style="border-radius:var(--radius-lg)">
+                radius-lg (24px)
+                <div class="glass-panel demo-panel-nested">嵌套面板</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 卡片 Card -->
+    <section class="showcase-section anim-slide-up stagger-2">
+        <h2 class="showcase-section-title">Glass Card</h2>
+        <div class="showcase-grid">
+            <div class="glass-card">
+                <div class="demo-card-icon">📱</div>
+                <div class="demo-card-title">图标卡片</div>
+                <div class="demo-card-desc">悬停查看发光效果和抬升动画。</div>
+            </div>
+            <div class="glass-card">
+                <div class="demo-card-img"></div>
+                <div class="demo-card-title">图片卡片</div>
+                <div class="demo-card-desc">支持顶部图片区 + 文字内容区。</div>
+            </div>
+            <div class="glass-card">
+                <div class="demo-card-title">基础卡片</div>
+                <div class="demo-card-desc">最简形态，纯文字内容。背景半透明，边框细腻，阴影柔和。</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 按钮 Button -->
+    <section class="showcase-section anim-slide-up stagger-3">
+        <h2 class="showcase-section-title">Glass Button</h2>
+        <div class="showcase-row" style="margin-bottom:1rem">
+            <button class="glass-btn">默认按钮</button>
+            <button class="glass-btn glass-btn-primary">主色按钮</button>
+            <button class="glass-btn" style="border-radius:var(--radius-pill)">药丸按钮</button>
+            <button class="glass-btn">🔔 图标按钮</button>
+            <button class="glass-btn" disabled style="opacity:0.45;cursor:not-allowed">禁用态</button>
+        </div>
+        <p class="showcase-label">按钮组</p>
+        <div class="showcase-row">
+            <div style="display:flex;gap:0">
+                <button class="glass-btn" style="border-radius:var(--radius-sm) 0 0 var(--radius-sm);border-right:none">左</button>
+                <button class="glass-btn" style="border-radius:0;border-right:none">中</button>
+                <button class="glass-btn" style="border-radius:0 var(--radius-sm) var(--radius-sm) 0">右</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 输入框 Input -->
+    <section class="showcase-section anim-slide-up stagger-4">
+        <h2 class="showcase-section-title">Glass Input</h2>
+        <div class="input-demo-grid">
+            <div>
+                <p class="showcase-label">文本输入</p>
+                <input type="text" class="glass-input" placeholder="输入内容…">
+            </div>
+            <div>
+                <p class="showcase-label">搜索框</p>
+                <input type="search" class="glass-input" placeholder="🔍 搜索…">
+            </div>
+            <div>
+                <p class="showcase-label">文本区域</p>
+                <textarea class="glass-textarea" placeholder="多行输入内容…"></textarea>
+            </div>
+        </div>
+    </section>
+
+    <!-- Overlay -->
+    <section class="showcase-section anim-slide-up stagger-5">
+        <h2 class="showcase-section-title">Glass Overlay</h2>
+        <div class="overlay-demo-wrap">
+            <div style="padding:2rem;text-align:center">
+                <p style="margin-bottom:1rem;color:var(--text-muted)">点击下方按钮触发 overlay</p>
+                <button id="show-overlay-btn" class="glass-btn glass-btn-primary">显示 Overlay</button>
+            </div>
+            <div id="demo-overlay" class="glass-overlay is-hidden">
+                <p style="font-size:1.5rem;font-weight:700">液态玻璃遮罩</p>
+                <p style="color:rgba(255,255,255,0.8);max-width:320px;line-height:1.6">深度模糊 + 饱和度增强，内容悬浮于半透明层之上。</p>
+                <button id="close-overlay-btn" class="glass-btn" style="margin-top:0.75rem;background:rgba(255,255,255,0.15);color:#fff;border-color:rgba(255,255,255,0.2)">关闭</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 设计令牌 -->
+    <section class="showcase-section anim-slide-up stagger-6">
+        <h2 class="showcase-section-title">设计令牌</h2>
+
+        <p class="showcase-label">颜色</p>
+        <div class="swatch-grid" style="margin-bottom:1.5rem">
+            <div class="swatch" style="background:var(--accent);color:#fff">
+                accent<div class="swatch-label">--accent</div>
+            </div>
+            <div class="swatch" style="background:var(--text);color:var(--card-bg)">
+                text<div class="swatch-label">--text</div>
+            </div>
+            <div class="swatch" style="background:var(--text-muted);color:var(--card-bg)">
+                muted<div class="swatch-label">--text-muted</div>
+            </div>
+            <div class="swatch" style="background:var(--glass-bg)">
+                glass-bg<div class="swatch-label">--glass-bg</div>
+            </div>
+            <div class="swatch" style="background:var(--card-bg)">
+                card-bg<div class="swatch-label">--card-bg</div>
+            </div>
+        </div>
+
+        <p class="showcase-label">圆角</p>
+        <div class="showcase-row" style="margin-bottom:1.5rem">
+            <div class="demo-box" style="border-radius:var(--radius-sm)">sm</div>
+            <div class="demo-box" style="border-radius:var(--radius-md)">md</div>
+            <div class="demo-box" style="border-radius:var(--radius-lg)">lg</div>
+            <div class="demo-box" style="border-radius:var(--radius-pill)">pill</div>
+        </div>
+
+        <p class="showcase-label">模糊对比</p>
+        <div class="showcase-row">
+            <div class="demo-box" style="backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)">4px</div>
+            <div class="demo-box" style="backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)">12px</div>
+            <div class="demo-box" style="backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)">20px</div>
+            <div class="demo-box" style="backdrop-filter:blur(32px);-webkit-backdrop-filter:blur(32px)">32px</div>
+        </div>
+    </section>
+
+    <!-- 动画 -->
+    <section class="showcase-section">
+        <h2 class="showcase-section-title">动画效果</h2>
+        <div class="anim-demo-grid">
+            <div class="glass-panel anim-demo-item anim-replay-target anim-fade-in stagger-1">fade-in</div>
+            <div class="glass-panel anim-demo-item anim-replay-target anim-slide-up stagger-2">slide-up</div>
+            <div class="glass-panel anim-demo-item anim-replay-target anim-scale-in stagger-3">scale-in</div>
+            <div class="glass-panel anim-demo-item anim-replay-target anim-slide-up stagger-4">stagger-4</div>
+            <div class="glass-panel anim-demo-item anim-replay-target anim-slide-up stagger-5">stagger-5</div>
+            <div class="glass-panel anim-demo-item anim-replay-target anim-slide-up stagger-6">stagger-6</div>
+        </div>
+        <div style="text-align:center;margin-top:1rem">
+            <button id="replay-anim-btn" class="glass-btn glass-btn-primary">🔄 重播动画</button>
+        </div>
+    </section>
+
+    <!-- 主题对比 -->
+    <section class="showcase-section">
+        <h2 class="showcase-section-title">亮 / 暗主题对比</h2>
+        <div class="theme-compare">
+            <div class="theme-compare-col" data-theme="light">
+                <p class="theme-compare-label">Light</p>
+                <div class="glass-panel" style="padding:1rem;margin-bottom:0.75rem">
+                    <div style="font-weight:600;margin-bottom:0.25rem">面板</div>
+                    <div style="font-size:0.82rem;color:var(--text-muted)">半透明白色背景</div>
+                </div>
+                <div style="display:flex;gap:0.5rem">
+                    <button class="glass-btn">按钮</button>
+                    <button class="glass-btn glass-btn-primary">主色</button>
+                </div>
+            </div>
+            <div class="theme-compare-col" data-theme="dark">
+                <p class="theme-compare-label" style="color:#a1a1a6">Dark</p>
+                <div class="glass-panel" style="padding:1rem;margin-bottom:0.75rem">
+                    <div style="font-weight:600;margin-bottom:0.25rem;color:#f5f5f7">面板</div>
+                    <div style="font-size:0.82rem;color:#a1a1a6">半透明暗色背景</div>
+                </div>
+                <div style="display:flex;gap:0.5rem">
+                    <button class="glass-btn" style="background:rgba(30,30,32,0.65);color:#f5f5f7;border-color:rgba(255,255,255,0.08)">按钮</button>
+                    <button class="glass-btn glass-btn-primary">主色</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<script src="../assets/js/theme.js"></script>
+<script src="./showcase.js"></script>
+</body>
+</html>

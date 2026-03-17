@@ -1,0 +1,243 @@
+/* 液态玻璃演示库专属样式 */
+
+body.showcase-page {
+    min-height: 100vh;
+    background:
+        radial-gradient(ellipse at 20% 50%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 20%, rgba(255, 119, 115, 0.25) 0%, transparent 50%),
+        radial-gradient(ellipse at 40% 80%, rgba(79, 172, 254, 0.25) 0%, transparent 50%),
+        radial-gradient(ellipse at 90% 80%, rgba(67, 233, 123, 0.15) 0%, transparent 50%),
+        var(--bg);
+    background-attachment: fixed;
+}
+
+.showcase-shell {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 1.5rem;
+    padding-top: 4.5rem;
+}
+
+.showcase-hero {
+    text-align: center;
+    padding: 3rem 1rem 2.5rem;
+}
+
+.showcase-hero-title {
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.6rem;
+    background: linear-gradient(135deg, var(--accent) 0%, #a855f7 50%, #ec4899 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.showcase-hero-desc {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    max-width: 480px;
+    margin: 0 auto;
+    line-height: 1.7;
+}
+
+/* 区段 */
+.showcase-section {
+    margin-bottom: 3rem;
+}
+
+.showcase-section-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.15);
+}
+
+.showcase-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.25rem;
+}
+
+.showcase-grid-sm {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+}
+
+.showcase-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.showcase-label {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+/* 面板演示 */
+.demo-panel {
+    padding: 1.25rem;
+    min-height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.88rem;
+    color: var(--text-muted);
+}
+
+.demo-panel-nested {
+    margin-top: 0.75rem;
+    padding: 0.85rem;
+    border-radius: var(--radius-md) !important;
+    font-size: 0.82rem;
+}
+
+/* 卡片演示 */
+.demo-card-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.demo-card-title {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.demo-card-desc {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+}
+
+.demo-card-img {
+    width: 100%;
+    height: 120px;
+    border-radius: var(--radius-sm);
+    margin-bottom: 0.75rem;
+    background: linear-gradient(135deg, rgba(120, 119, 198, 0.4), rgba(79, 172, 254, 0.4));
+}
+
+/* 色板 */
+.swatch-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 0.75rem;
+}
+
+.swatch {
+    border-radius: var(--radius-sm);
+    padding: 1.25rem 0.75rem 0.65rem;
+    text-align: center;
+    font-size: 0.72rem;
+    font-weight: 500;
+    border: var(--glass-border);
+}
+
+.swatch-label {
+    margin-top: 0.4rem;
+    opacity: 0.7;
+}
+
+/* 圆角/阴影/模糊对比 */
+.demo-box {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: var(--glass-border);
+    box-shadow: var(--glass-shadow);
+}
+
+/* 主题对比双栏 */
+.theme-compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+}
+
+.theme-compare-col {
+    padding: 1.5rem;
+    border-radius: var(--radius-md);
+}
+
+.theme-compare-col[data-theme="light"] {
+    background: linear-gradient(135deg, #f0f2f5, #e2e6eb);
+}
+
+.theme-compare-col[data-theme="dark"] {
+    background: linear-gradient(135deg, #0d0d0f, #1a1a1e);
+}
+
+.theme-compare-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.75rem;
+    opacity: 0.6;
+}
+
+/* 动画演示 */
+.anim-demo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 0.75rem;
+}
+
+.anim-demo-item {
+    text-align: center;
+    padding: 1.5rem 0.75rem;
+    font-size: 0.82rem;
+    color: var(--text-muted);
+}
+
+/* Overlay 容器 */
+.overlay-demo-wrap {
+    position: relative;
+    min-height: 200px;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background:
+        radial-gradient(ellipse at 30% 50%, rgba(168, 85, 247, 0.3), transparent 60%),
+        radial-gradient(ellipse at 70% 50%, rgba(79, 172, 254, 0.3), transparent 60%),
+        var(--glass-bg);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: var(--glass-border);
+}
+
+/* 输入框演示 */
+.input-demo-grid {
+    display: grid;
+    gap: 1rem;
+    max-width: 400px;
+}
+
+/* 响应式 */
+@media (max-width: 640px) {
+    .showcase-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .theme-compare {
+        grid-template-columns: 1fr;
+    }
+
+    .showcase-hero-title {
+        font-size: 1.8rem;
+    }
+}

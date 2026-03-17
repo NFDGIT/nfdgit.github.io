@@ -242,6 +242,42 @@ body {
     .large-text-toggle { display: none; }
 }
 
+/* ===== 液态玻璃输入框 ===== */
+
+.glass-input,
+.glass-textarea {
+    width: 100%;
+    padding: 0.6rem 0.85rem;
+    border-radius: var(--radius-sm);
+    border: var(--glass-border);
+    background: var(--glass-bg);
+    backdrop-filter: blur(calc(var(--glass-blur) * 0.5));
+    -webkit-backdrop-filter: blur(calc(var(--glass-blur) * 0.5));
+    color: var(--text);
+    font: inherit;
+    font-size: 0.9rem;
+    outline: none;
+    box-shadow: var(--glass-shadow);
+    transition: border-color 0.2s var(--ease-smooth), box-shadow 0.2s var(--ease-smooth);
+}
+
+.glass-input:focus,
+.glass-textarea:focus {
+    border-color: var(--accent);
+    box-shadow: var(--focus-ring);
+}
+
+.glass-input::placeholder,
+.glass-textarea::placeholder {
+    color: var(--text-muted);
+    opacity: 0.6;
+}
+
+.glass-textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
 /* ===== 动画工具类 ===== */
 
 @keyframes fade-in {
@@ -303,6 +339,8 @@ textarea:focus-visible {
     .glass-card { background: var(--card-bg); }
     .glass-btn { background: var(--card-bg); }
     .glass-nav-link { background: var(--card-bg); }
+    .glass-input,
+    .glass-textarea { background: var(--card-bg); }
     .glass-overlay { background: rgba(10, 10, 12, 0.88); }
     .theme-toggle,
     .large-text-toggle { background: var(--card-bg); }
