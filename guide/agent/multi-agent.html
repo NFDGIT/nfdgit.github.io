@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <script src="../../assets/js/theme-init.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>多 Agent 协作 - AI Agent 教程</title>
+    <link rel="stylesheet" href="../../assets/css/base.css">
+    <link rel="stylesheet" href="./agent-guide.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css">
+</head>
+<body class="has-glass-nav agent-page">
+
+    <nav class="glass-nav">
+        <a class="glass-nav-link" href="./index.html">返回教程</a>
+        <a class="glass-nav-link" href="../../index.html">首页</a>
+        <button type="button" class="theme-toggle" aria-label="切换主题">🌙</button>
+    </nav>
+
+    <main class="agent-shell">
+
+        <header class="agent-hero anim-slide-up">
+            <p class="agent-eyebrow">guide / agent / multi-agent</p>
+            <h1>多 Agent 协作</h1>
+            <p class="agent-subtitle">让多个 Agent 各司其职，协同完成复杂任务。</p>
+        </header>
+
+        <div class="agent-layout">
+
+            <nav class="agent-progress glass-panel" aria-label="步骤导航">
+                <ol class="agent-progress-list">
+                    <li><a href="#step-1" class="agent-progress-link is-active" data-step="1"><span class="agent-step-dot"></span>为什么多 Agent</a></li>
+                    <li><a href="#step-2" class="agent-progress-link" data-step="2"><span class="agent-step-dot"></span>定义专职 Agent</a></li>
+                    <li><a href="#step-3" class="agent-progress-link" data-step="3"><span class="agent-step-dot"></span>编排者串联</a></li>
+                    <li><a href="#step-4" class="agent-progress-link" data-step="4"><span class="agent-step-dot"></span>完整示例</a></li>
+                </ol>
+            </nav>
+
+            <div class="agent-content">
+
+            <!-- Step 1 -->
+            <section id="step-1" class="agent-step glass-panel anim-slide-up">
+                <div class="agent-step-header">
+                    <span class="agent-step-badge">1</span>
+                    <div>
+                        <h2>为什么需要多 Agent？</h2>
+                        <div class="agent-tags">
+                            <span class="agent-tag">分工</span>
+                            <span class="agent-tag">架构模式</span>
+                        </div>
+                    </div>
+                </div>
+
+                <p>单个 Agent 什么都做，prompt 会越来越长、越来越混乱。多 Agent 的思路是：<strong>拆分职责</strong>，每个 Agent 专注一件事。</p>
+
+                <div class="agent-diagram">
+                    <div class="agent-diagram-node">
+                        <div class="agent-diagram-icon">🎯</div>
+                        <div class="agent-diagram-label">Orchestrator</div>
+                        <div class="agent-diagram-desc">分析任务、分发</div>
+                    </div>
+                    <div class="agent-diagram-arrow">→</div>
+                    <div class="agent-diagram-node">
+                        <div class="agent-diagram-icon">🔍</div>
+                        <div class="agent-diagram-label">Research Agent</div>
+                        <div class="agent-diagram-desc">搜索、收集信息</div>
+                    </div>
+                    <div class="agent-diagram-arrow">→</div>
+                    <div class="agent-diagram-node">
+                        <div class="agent-diagram-icon">✍️</div>
+                        <div class="agent-diagram-label">Writer Agent</div>
+                        <div class="agent-diagram-desc">撰写最终输出</div>
+                    </div>
+                </div>
+
+                <button type="button" class="agent-knowledge-toggle glass-btn">
+                    <span class="agent-toggle-icon">▶</span> 知识点详解
+                </button>
+                <div class="agent-knowledge-body">
+                    <h3>常见多 Agent 模式</h3>
+                    <ul>
+                        <li><strong>编排者模式</strong>：一个"老板" Agent 分析任务，把子任务分给不同"员工" Agent。</li>
+                        <li><strong>流水线模式</strong>：A 的输出喂给 B，B 的输出喂给 C，依次传递。</li>
+                        <li><strong>辩论模式</strong>：两个 Agent 对同一问题各自回答，第三个 Agent 综合判断。</li>
+                        <li><strong>检查者模式</strong>：一个 Agent 执行，另一个 Agent 审核输出质量。</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Step 2 -->
+            <section id="step-2" class="agent-step glass-panel anim-slide-up">
+                <div class="agent-step-header">
+                    <span class="agent-step-badge">2</span>
+                    <div>
+                        <h2>定义专职 Agent</h2>
+                        <div class="agent-tags">
+                            <span class="agent-tag">System Prompt</span>
+                            <span class="agent-tag">职责隔离</span>
+                        </div>
+                    </div>
+                </div>
+
+                <p>每个 Agent 就是一个独立函数，有自己的 system prompt 和工具集。</p>
+
+                <div class="agent-code-block">
+                    <div class="agent-code-header">
+                        <span class="agent-code-lang">python</span>
+                        <button type="button" class="agent-copy-btn glass-btn" aria-label="复制代码">复制</button>
+                    </div>
+                    <pre><code class="language-python">from openai import OpenAI
+import json
+
+client = OpenAI()
+
+def call_agent(system_prompt, user_message, tools=None):
+    """通用 Agent 调用函数"""
+    messages = [
+        {"role": "system", "content": system_prompt},
+        {"role": "user", "content": user_message}
+    ]
+
+    kwargs = {"model": "gpt-4o-mini", "messages": messages}
+    if tools:
+        kwargs["tools"] = tools
+
+    for _ in range(10):
+        resp = client.chat.completions.create(**kwargs)
+        msg = resp.choices[0].message
+
+        if not msg.tool_calls:
+            return msg.content
+
+        messages.append(msg)
+        for call in msg.tool_calls:
+            fn = tool_functions.get(call.function.name)
+            result = fn(**json.loads(call.function.arguments)) if fn else '{"error":"未知工具"}'
+            messages.append({"role": "tool", "tool_call_id": call.id, "content": result})
+
+    return "达到最大循环次数"</code></pre>
+                </div>
+            </section>
+
+            <!-- Step 3 -->
+            <section id="step-3" class="agent-step glass-panel anim-slide-up">
+                <div class="agent-step-header">
+                    <span class="agent-step-badge">3</span>
+                    <div>
+                        <h2>编排者：串联多个 Agent</h2>
+                        <div class="agent-tags">
+                            <span class="agent-tag">Orchestrator</span>
+                            <span class="agent-tag">Hand-off</span>
+                        </div>
+                    </div>
+                </div>
+
+                <p>编排者 Agent 分析任务后，调用专职 Agent 执行，再汇总结果。</p>
+
+                <div class="agent-code-block">
+                    <div class="agent-code-header">
+                        <span class="agent-code-lang">python</span>
+                        <button type="button" class="agent-copy-btn glass-btn" aria-label="复制代码">复制</button>
+                    </div>
+                    <pre><code class="language-python"># 专职 Agent 定义
+RESEARCHER_PROMPT = """你是研究助手。
+收到问题后，给出详细的事实性信息和数据。
+只输出研究结果，不要寒暄。"""
+
+WRITER_PROMPT = """你是写作专家。
+根据提供的研究资料，撰写清晰、有条理的回答。
+语言风格：专业但易懂。"""
+
+def run_pipeline(user_question):
+    """流水线：用户问题 → 研究 → 写作 → 最终回答"""
+
+    # 第 1 步：研究 Agent 收集信息
+    print("🔍 研究 Agent 工作中...")
+    research = call_agent(
+        RESEARCHER_PROMPT,
+        f"请研究以下问题：{user_question}"
+    )
+
+    # 第 2 步：写作 Agent 基于研究结果撰写回答
+    print("✍️ 写作 Agent 工作中...")
+    answer = call_agent(
+        WRITER_PROMPT,
+        f"用户问题：{user_question}\n\n研究资料：\n{research}\n\n请基于以上资料撰写回答。"
+    )
+
+    return answer
+
+# 运行
+result = run_pipeline("量子计算目前的发展现状如何？")
+print(result)</code></pre>
+                </div>
+
+                <button type="button" class="agent-knowledge-toggle glass-btn">
+                    <span class="agent-toggle-icon">▶</span> 知识点详解
+                </button>
+                <div class="agent-knowledge-body">
+                    <h3>Hand-off（交接）</h3>
+                    <ul>
+                        <li>Agent A 完成后把输出作为 Agent B 的输入——这就是 hand-off。</li>
+                        <li>交接的关键是<strong>清晰的输出格式</strong>：上游 Agent 的输出格式要让下游能直接使用。</li>
+                    </ul>
+                    <h3>什么时候用多 Agent</h3>
+                    <ul>
+                        <li>任务有明确的阶段划分（研究 → 写作 → 审核）。</li>
+                        <li>不同阶段需要不同的工具集或 prompt 策略。</li>
+                        <li>需要对某个子任务做特殊处理（如代码审查需要严格规则）。</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Step 4 -->
+            <section id="step-4" class="agent-step glass-panel anim-slide-up">
+                <div class="agent-step-header">
+                    <span class="agent-step-badge">4</span>
+                    <div>
+                        <h2>完整示例：带审核的写作管线</h2>
+                        <div class="agent-tags">
+                            <span class="agent-tag">完整代码</span>
+                            <span class="agent-tag">审核循环</span>
+                        </div>
+                    </div>
+                </div>
+
+                <p>加入审核 Agent，如果输出质量不合格就让写作 Agent 修改——形成反馈循环。</p>
+
+                <div class="agent-code-block">
+                    <div class="agent-code-header">
+                        <span class="agent-code-lang">python</span>
+                        <button type="button" class="agent-copy-btn glass-btn" aria-label="复制代码">复制</button>
+                    </div>
+                    <pre><code class="language-python">REVIEWER_PROMPT = """你是质量审核员。
+评估以下回答的质量，检查：准确性、完整性、可读性。
+如果质量合格，只回复：APPROVED
+如果需要改进，回复具体的修改建议。"""
+
+def run_with_review(user_question, max_revisions=2):
+    # 1. 研究
+    research = call_agent(RESEARCHER_PROMPT, f"请研究：{user_question}")
+
+    # 2. 初稿
+    draft = call_agent(
+        WRITER_PROMPT,
+        f"问题：{user_question}\n资料：\n{research}\n\n请撰写回答。"
+    )
+
+    # 3. 审核循环
+    for i in range(max_revisions):
+        review = call_agent(
+            REVIEWER_PROMPT,
+            f"用户问题：{user_question}\n\n回答：\n{draft}"
+        )
+
+        if "APPROVED" in review.upper():
+            print(f"✅ 第 {i+1} 轮审核通过")
+            return draft
+
+        print(f"📝 第 {i+1} 轮审核：需要修改")
+        draft = call_agent(
+            WRITER_PROMPT,
+            f"问题：{user_question}\n资料：\n{research}\n"
+            f"当前草稿：\n{draft}\n审核意见：\n{review}\n\n请修改。"
+        )
+
+    return draft  # 达到最大修改次数，返回最后版本
+
+print(run_with_review("用 Python 实现快速排序"))</code></pre>
+                </div>
+
+                <div class="agent-callout">
+                    <strong>核心收获</strong>：多 Agent 的本质就是多次 LLM 调用 + 数据传递。不需要任何框架，普通函数调用就能实现。当系统变复杂时，再考虑 LangGraph、CrewAI 等框架。
+                </div>
+            </section>
+
+            </div>
+        </div>
+    </main>
+
+    <script src="../../assets/js/theme.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-python.min.js"></script>
+    <script src="./agent-guide.js"></script>
+</body>
+</html>

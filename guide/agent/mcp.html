@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <script src="../../assets/js/theme-init.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>试试 MCP - AI Agent 教程</title>
+    <link rel="stylesheet" href="../../assets/css/base.css">
+    <link rel="stylesheet" href="./agent-guide.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css">
+</head>
+<body class="has-glass-nav agent-page">
+
+    <nav class="glass-nav">
+        <a class="glass-nav-link" href="./index.html">返回教程</a>
+        <a class="glass-nav-link" href="../../index.html">首页</a>
+        <button type="button" class="theme-toggle" aria-label="切换主题">🌙</button>
+    </nav>
+
+    <main class="agent-shell">
+
+        <header class="agent-hero anim-slide-up">
+            <p class="agent-eyebrow">guide / agent / mcp</p>
+            <h1>试试 MCP：标准化的工具协议</h1>
+            <p class="agent-subtitle">Model Context Protocol 让 Agent 用统一协议连接任意外部工具和数据源。</p>
+        </header>
+
+        <div class="agent-layout">
+
+            <nav class="agent-progress glass-panel" aria-label="步骤导航">
+                <ol class="agent-progress-list">
+                    <li><a href="#step-1" class="agent-progress-link is-active" data-step="1"><span class="agent-step-dot"></span>MCP 是什么</a></li>
+                    <li><a href="#step-2" class="agent-progress-link" data-step="2"><span class="agent-step-dot"></span>安装 Server</a></li>
+                    <li><a href="#step-3" class="agent-progress-link" data-step="3"><span class="agent-step-dot"></span>连接 MCP</a></li>
+                    <li><a href="#step-4" class="agent-progress-link" data-step="4"><span class="agent-step-dot"></span>调用工具</a></li>
+                </ol>
+            </nav>
+
+            <div class="agent-content">
+
+            <!-- Step 1 -->
+            <section id="step-1" class="agent-step glass-panel anim-slide-up">
+                <div class="agent-step-header">
+                    <span class="agent-step-badge">1</span>
+                    <div>
+                        <h2>MCP 是什么？</h2>
+                        <div class="agent-tags">
+                            <span class="agent-tag">MCP</span>
+                            <span class="agent-tag">协议</span>
+                            <span class="agent-tag">标准化</span>
+                        </div>
+                    </div>
+                </div>
+
+                <p>MCP（Model Context Protocol）是一套开放协议，定义了 AI 应用与外部工具/数据源之间的通信标准。</p>
+
+                <div class="agent-diagram">
+                    <div class="agent-diagram-node">
+                        <div class="agent-diagram-icon">🤖</div>
+                        <div class="agent-diagram-label">Agent</div>
+                        <div class="agent-diagram-desc">MCP Client</div>
+                    </div>
+                    <div class="agent-diagram-arrow">⇄</div>
+                    <div class="agent-diagram-node">
+                        <div class="agent-diagram-icon">🔌</div>
+                        <div class="agent-diagram-label">MCP Server</div>
+                        <div class="agent-diagram-desc">暴露工具和资源</div>
+                    </div>
+                    <div class="agent-diagram-arrow">⇄</div>
+                    <div class="agent-diagram-node">
+                        <div class="agent-diagram-icon">🗄️</div>
+                        <div class="agent-diagram-label">外部服务</div>
+                        <div class="agent-diagram-desc">数据库、API 等</div>
+                    </div>
+                </div>
+
+                <p>类比：USB 是硬件的标准接口，MCP 是 AI 工具的标准接口。一个 MCP Server 可以被任何支持 MCP 的 Agent 使用。</p>
+
+                <button type="button" class="agent-knowledge-toggle glass-btn">
+                    <span class="agent-toggle-icon">▶</span> 知识点详解
+                </button>
+                <div class="agent-knowledge-body">
+                    <h3>MCP 的核心概念</h3>
+                    <ul>
+                        <li><strong>MCP Server</strong>：一个进程，暴露 tools（工具）和 resources（资源）供 Agent 调用。</li>
+                        <li><strong>MCP Client</strong>：Agent 端的连接器，负责发现和调用 Server 的工具。</li>
+                        <li><strong>Transport</strong>：通信方式，常用 stdio（子进程）或 SSE（HTTP）。</li>
+                        <li><strong>Tools</strong>：Server 提供的可调用函数，类似 Function Calling 的工具定义。</li>
+                        <li><strong>Resources</strong>：Server 提供的只读数据（文件、数据库记录等）。</li>
+                    </ul>
+                    <h3>为什么用 MCP？</h3>
+                    <ul>
+                        <li>不用为每个 Agent 重复写工具——一个 MCP Server 所有 Agent 共享。</li>
+                        <li>社区已有大量现成 Server：GitHub、Slack、PostgreSQL、文件系统等。</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Step 2 -->
+            <section id="step-2" class="agent-step glass-panel anim-slide-up">
+                <div class="agent-step-header">
+                    <span class="agent-step-badge">2</span>
+                    <div>
+                        <h2>安装一个 MCP Server</h2>
+                        <div class="agent-tags">
+                            <span class="agent-tag">安装</span>
+                            <span class="agent-tag">filesystem</span>
+                        </div>
+                    </div>
+                </div>
+
+                <p>以官方的 <strong>filesystem</strong> MCP Server 为例——它让 Agent 能读写本地文件。</p>
+
+                <div class="agent-code-block">
+                    <div class="agent-code-header">
+                        <span class="agent-code-lang">bash</span>
+                        <button type="button" class="agent-copy-btn glass-btn" aria-label="复制代码">复制</button>
+                    </div>
+                    <pre><code class="language-bash"># 安装 MCP Python SDK
+pip install mcp
+
+# 用 npx 启动 filesystem server（需要 Node.js）
+npx -y @modelcontextprotocol/server-filesystem /path/to/allowed/dir</code></pre>
+                </div>
+
+                <p>启动后 Server 通过 stdio 通信，等待 Client 连接。</p>
+
+                <button type="button" class="agent-knowledge-toggle glass-btn">
+                    <span class="agent-toggle-icon">▶</span> 知识点详解
+                </button>
+                <div class="agent-knowledge-body">
+                    <h3>其他常用 MCP Server</h3>
+                    <ul>
+                        <li><code>@modelcontextprotocol/server-github</code> — 操作 GitHub 仓库、issues、PR</li>
+                        <li><code>@modelcontextprotocol/server-postgres</code> — 查询 PostgreSQL 数据库</li>
+                        <li><code>@modelcontextprotocol/server-slack</code> — 发送/读取 Slack 消息</li>
+                        <li>完整列表见 <a href="https://github.com/modelcontextprotocol/servers" target="_blank" rel="noopener">MCP Servers 仓库</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Step 3 -->
+            <section id="step-3" class="agent-step glass-panel anim-slide-up">
+                <div class="agent-step-header">
+                    <span class="agent-step-badge">3</span>
+                    <div>
+                        <h2>在 Agent 中连接 MCP</h2>
+                        <div class="agent-tags">
+                            <span class="agent-tag">MCP Client</span>
+                            <span class="agent-tag">Python SDK</span>
+                        </div>
+                    </div>
+                </div>
+
+                <p>用 MCP Python SDK 连接 Server，获取工具列表后转换为 OpenAI 格式传给模型。</p>
+
+                <div class="agent-code-block">
+                    <div class="agent-code-header">
+                        <span class="agent-code-lang">python</span>
+                        <button type="button" class="agent-copy-btn glass-btn" aria-label="复制代码">复制</button>
+                    </div>
+                    <pre><code class="language-python">import asyncio
+from mcp import ClientSession, StdioServerParameters
+from mcp.client.stdio import stdio_client
+
+async def get_mcp_tools():
+    """连接 MCP Server 并获取工具列表"""
+    server_params = StdioServerParameters(
+        command="npx",
+        args=["-y", "@modelcontextprotocol/server-filesystem", "/tmp"]
+    )
+
+    async with stdio_client(server_params) as (read, write):
+        async with ClientSession(read, write) as session:
+            await session.initialize()
+
+            # 列出所有可用工具
+            tools_result = await session.list_tools()
+
+            # 转换为 OpenAI tools 格式
+            openai_tools = []
+            for tool in tools_result.tools:
+                openai_tools.append({
+                    "type": "function",
+                    "function": {
+                        "name": tool.name,
+                        "description": tool.description,
+                        "parameters": tool.inputSchema
+                    }
+                })
+
+            return openai_tools
+
+# 获取工具后传给 Agent
+tools = asyncio.run(get_mcp_tools())
+print(f"从 MCP Server 获取到 {len(tools)} 个工具")</code></pre>
+                </div>
+
+                <div class="agent-callout">
+                    <strong>核心思路</strong>：MCP 自动提供工具的 schema，你不用手写 JSON Schema——Server 已经定义好了。只需把 MCP 工具转成 OpenAI 格式，Agent 循环不用改。
+                </div>
+            </section>
+
+            <!-- Step 4 -->
+            <section id="step-4" class="agent-step glass-panel anim-slide-up">
+                <div class="agent-step-header">
+                    <span class="agent-step-badge">4</span>
+                    <div>
+                        <h2>调用 MCP 工具</h2>
+                        <div class="agent-tags">
+                            <span class="agent-tag">call_tool</span>
+                            <span class="agent-tag">完整流程</span>
+                        </div>
+                    </div>
+                </div>
+
+                <p>当模型决定调用工具时，通过 MCP Session 执行：</p>
+
+                <div class="agent-code-block">
+                    <div class="agent-code-header">
+                        <span class="agent-code-lang">python</span>
+                        <button type="button" class="agent-copy-btn glass-btn" aria-label="复制代码">复制</button>
+                    </div>
+                    <pre><code class="language-python">async def call_mcp_tool(session, name, arguments):
+    """通过 MCP Session 调用工具"""
+    result = await session.call_tool(name, arguments=arguments)
+    return result.content[0].text
+
+# 在 Agent 循环中替换原来的本地函数调用：
+# 原来：result = tool_functions[name](**args)
+# 现在：result = await call_mcp_tool(session, name, args)
+
+# 完整的 MCP Agent 循环核心：
+async def mcp_agent_loop(session, user_input, tools):
+    messages = [
+        {"role": "system", "content": "你是智能助手，可以操作文件系统。"},
+        {"role": "user", "content": user_input}
+    ]
+
+    for _ in range(10):
+        resp = client.chat.completions.create(
+            model="gpt-4o-mini", messages=messages, tools=tools
+        )
+        msg = resp.choices[0].message
+        if not msg.tool_calls:
+            return msg.content
+
+        messages.append(msg)
+        for call in msg.tool_calls:
+            args = json.loads(call.function.arguments)
+            result = await call_mcp_tool(session, call.function.name, args)
+            messages.append({
+                "role": "tool",
+                "tool_call_id": call.id,
+                "content": result
+            })</code></pre>
+                </div>
+
+                <button type="button" class="agent-knowledge-toggle glass-btn">
+                    <span class="agent-toggle-icon">▶</span> 知识点详解
+                </button>
+                <div class="agent-knowledge-body">
+                    <h3>MCP vs 手写工具</h3>
+                    <ul>
+                        <li><strong>手写</strong>：你自己定义 schema + 实现函数。灵活但需要维护。</li>
+                        <li><strong>MCP</strong>：Server 提供 schema + 实现。即插即用，社区共享。</li>
+                        <li><strong>可以混用</strong>：一些工具用 MCP，一些自己实现，合并到同一个 <code>tools</code> 数组。</li>
+                    </ul>
+                    <h3>下一步</h3>
+                    <ul>
+                        <li>Cursor、Claude Desktop 等工具已原生支持 MCP 配置。</li>
+                        <li>你也可以自己写 MCP Server，把你的业务 API 暴露给任何 Agent。</li>
+                    </ul>
+                </div>
+            </section>
+
+            </div>
+        </div>
+    </main>
+
+    <script src="../../assets/js/theme.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-bash.min.js"></script>
+    <script src="./agent-guide.js"></script>
+</body>
+</html>
