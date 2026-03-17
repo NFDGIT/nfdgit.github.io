@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <script src="../../assets/js/theme-init.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>从零搭建你的第一个 AI Agent</title>
+    <link rel="stylesheet" href="../../assets/css/base.css">
+    <link rel="stylesheet" href="./agent-guide.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css">
+</head>
+<body class="has-glass-nav agent-page">
+
+    <nav class="glass-nav">
+        <a class="glass-nav-link" href="../../index.html">返回首页</a>
+        <button type="button" class="theme-toggle" aria-label="切换主题">🌙</button>
+    </nav>
+
+    <main class="agent-shell">
+
+        <header class="agent-hero anim-slide-up">
+            <p class="agent-eyebrow">guide / agent</p>
+            <h1>从零搭建你的第一个 AI Agent</h1>
+            <p class="agent-subtitle">6 步理解核心原理，写出可运行的 Agent。无需框架，只用 Python + OpenAI SDK。</p>
+        </header>
+
+        <div class="agent-layout">
+
+            <nav class="agent-progress glass-panel" aria-label="步骤导航">
+                <ol class="agent-progress-list">
+                    <li><a href="#step-1" class="agent-progress-link is-active" data-step="1"><span class="agent-step-dot"></span>理解 Agent</a></li>
+                    <li><a href="#step-2" class="agent-progress-link" data-step="2"><span class="agent-step-dot"></span>环境准备</a></li>
+                    <li><a href="#step-3" class="agent-progress-link" data-step="3"><span class="agent-step-dot"></span>调用 LLM</a></li>
+                    <li><a href="#step-4" class="agent-progress-link" data-step="4"><span class="agent-step-dot"></span>定义工具</a></li>
+                    <li><a href="#step-5" class="agent-progress-link" data-step="5"><span class="agent-step-dot"></span>Agent 循环</a></li>
+                    <li><a href="#step-6" class="agent-progress-link" data-step="6"><span class="agent-step-dot"></span>运行 & 扩展</a></li>
+                </ol>
+            </nav>
+
+            <div class="agent-content">
+
+                <!-- Step 1 -->
+                <section id="step-1" class="agent-step glass-panel anim-slide-up">
+                    <div class="agent-step-header">
+                        <span class="agent-step-badge">1</span>
+                        <div>
+                            <h2>理解 Agent：它到底是什么？</h2>
+                            <div class="agent-tags">
+                                <span class="agent-tag">概念</span>
+                                <span class="agent-tag">LLM</span>
+                                <span class="agent-tag">Tool Use</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p>一个 AI Agent 的本质非常简单——它就是一个<strong>循环</strong>：</p>
+
+                    <div class="agent-diagram">
+                        <div class="agent-diagram-node">
+                            <div class="agent-diagram-icon">🧠</div>
+                            <div class="agent-diagram-label">LLM</div>
+                            <div class="agent-diagram-desc">大语言模型思考</div>
+                        </div>
+                        <div class="agent-diagram-arrow">→</div>
+                        <div class="agent-diagram-node">
+                            <div class="agent-diagram-icon">🔧</div>
+                            <div class="agent-diagram-label">Tools</div>
+                            <div class="agent-diagram-desc">执行工具/函数</div>
+                        </div>
+                        <div class="agent-diagram-arrow">→</div>
+                        <div class="agent-diagram-node">
+                            <div class="agent-diagram-icon">🔄</div>
+                            <div class="agent-diagram-label">Loop</div>
+                            <div class="agent-diagram-desc">把结果喂回 LLM</div>
+                        </div>
+                    </div>
+
+                    <p>普通 API 调用：你问一句，模型答一句，结束。<br>
+                    Agent 模式：模型自主决定调用哪些工具，拿到结果后继续思考，直到任务完成。</p>
+
+                    <button type="button" class="agent-knowledge-toggle glass-btn">
+                        <span class="agent-toggle-icon">▶</span> 知识点详解
+                    </button>
+                    <div class="agent-knowledge-body">
+                        <h3>核心概念</h3>
+                        <ul>
+                            <li><strong>LLM（大语言模型）</strong>：Agent 的"大脑"，负责理解任务、推理决策。如 GPT-4o、Claude 等。</li>
+                            <li><strong>Tool / Function Calling</strong>：模型不直接执行操作，而是输出"我想调用某个工具"的结构化指令，由你的代码执行后把结果返回。</li>
+                            <li><strong>Agent Loop</strong>：核心循环——发消息给 LLM → 检查是否要调用工具 → 执行工具 → 把结果追加到对话 → 重复，直到 LLM 给出最终回答。</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Step 2 -->
+                <section id="step-2" class="agent-step glass-panel anim-slide-up">
+                    <div class="agent-step-header">
+                        <span class="agent-step-badge">2</span>
+                        <div>
+                            <h2>环境准备</h2>
+                            <div class="agent-tags">
+                                <span class="agent-tag">Python</span>
+                                <span class="agent-tag">API Key</span>
+                                <span class="agent-tag">环境变量</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p>只需要两样东西：Python 环境和一个 API Key。</p>
+
+                    <div class="agent-code-block">
+                        <div class="agent-code-header">
+                            <span class="agent-code-lang">bash</span>
+                            <button type="button" class="agent-copy-btn glass-btn" aria-label="复制代码">复制</button>
+                        </div>
+                        <pre><code class="language-bash"># 1. 安装 OpenAI SDK
+pip install openai
+
+# 2. 设置 API Key（替换为你的 key）
+export OPENAI_API_KEY="sk-..."</code></pre>
+                    </div>
+
+                    <p>如果用国内平台（如 DeepSeek、智谱），只需改 <code>base_url</code> 和 key，代码完全一样。</p>
+
+                    <button type="button" class="agent-knowledge-toggle glass-btn">
+                        <span class="agent-toggle-icon">▶</span> 知识点详解
+                    </button>
+                    <div class="agent-knowledge-body">
+                        <h3>API Key 是什么？</h3>
+                        <ul>
+                            <li>API Key 是你访问模型服务的"密钥"，按调用量计费。</li>
+                            <li>去 <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener">platform.openai.com</a> 注册并创建 key。</li>
+                            <li><strong>安全原则</strong>：永远不要把 key 硬编码到代码里，用环境变量或 <code>.env</code> 文件管理。</li>
+                        </ul>
+                        <h3>兼容其他模型</h3>
+                        <ul>
+                            <li>OpenAI SDK 支持任何兼容 OpenAI API 格式的服务。</li>
+                            <li>只需在初始化时传入 <code>base_url</code> 参数即可切换到 DeepSeek、Ollama 本地模型等。</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Step 3 -->
+                <section id="step-3" class="agent-step glass-panel anim-slide-up">
+                    <div class="agent-step-header">
+                        <span class="agent-step-badge">3</span>
+                        <div>
+                            <h2>第一次调用 LLM</h2>
+                            <div class="agent-tags">
+                                <span class="agent-tag">Chat Completion</span>
+                                <span class="agent-tag">Messages</span>
+                                <span class="agent-tag">System Prompt</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p>最基础的调用：发一组消息，拿到模型回复。</p>
+
+                    <div class="agent-code-block">
+                        <div class="agent-code-header">
+                            <span class="agent-code-lang">python</span>
+                            <button type="button" class="agent-copy-btn glass-btn" aria-label="复制代码">复制</button>
+                        </div>
+                        <pre><code class="language-python">from openai import OpenAI
+
+client = OpenAI()  # 自动读取 OPENAI_API_KEY 环境变量
+
+response = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=[
+        {"role": "system", "content": "你是一个有帮助的助手。"},
+        {"role": "user", "content": "Python 的 list 和 tuple 有什么区别？"}
+    ]
+)
+
+print(response.choices[0].message.content)</code></pre>
+                    </div>
+
+                    <button type="button" class="agent-knowledge-toggle glass-btn">
+                        <span class="agent-toggle-icon">▶</span> 知识点详解
+                    </button>
+                    <div class="agent-knowledge-body">
+                        <h3>消息角色（Roles）</h3>
+                        <ul>
+                            <li><strong>system</strong>：设定 AI 的行为和人格，模型会始终遵循。</li>
+                            <li><strong>user</strong>：用户的输入。</li>
+                            <li><strong>assistant</strong>：模型的回复。多轮对话时需要把历史回复也放进来。</li>
+                            <li><strong>tool</strong>：工具的返回结果（下一步会用到）。</li>
+                        </ul>
+                        <h3>关键参数</h3>
+                        <ul>
+                            <li><strong>model</strong>：选择模型，<code>gpt-4o-mini</code> 便宜快速适合入门，<code>gpt-4o</code> 更强。</li>
+                            <li><strong>temperature</strong>：0 = 确定性输出，1 = 更有创意。默认 1。</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Step 4 -->
+                <section id="step-4" class="agent-step glass-panel anim-slide-up">
+                    <div class="agent-step-header">
+                        <span class="agent-step-badge">4</span>
+                        <div>
+                            <h2>定义工具（Function Calling）</h2>
+                            <div class="agent-tags">
+                                <span class="agent-tag">Function Calling</span>
+                                <span class="agent-tag">JSON Schema</span>
+                                <span class="agent-tag">Tools</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p>告诉模型"你有哪些工具可以用"。模型会自主决定何时调用。</p>
+
+                    <div class="agent-code-block">
+                        <div class="agent-code-header">
+                            <span class="agent-code-lang">python</span>
+                            <button type="button" class="agent-copy-btn glass-btn" aria-label="复制代码">复制</button>
+                        </div>
+                        <pre><code class="language-python">import json
+
+# 1. 定义工具的 schema（告诉模型工具长什么样）
+tools = [
+    {
+        "type": "function",
+        "function": {
+            "name": "get_weather",
+            "description": "获取指定城市的当前天气",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "city": {
+                        "type": "string",
+                        "description": "城市名称，如 北京、上海"
+                    }
+                },
+                "required": ["city"]
+            }
+        }
+    }
+]
+
+# 2. 实现工具函数（实际的执行逻辑）
+def get_weather(city):
+    # 实际项目中这里调用天气 API
+    return json.dumps({"city": city, "temp": "22°C", "condition": "晴"})</code></pre>
+                    </div>
+
+                    <button type="button" class="agent-knowledge-toggle glass-btn">
+                        <span class="agent-toggle-icon">▶</span> 知识点详解
+                    </button>
+                    <div class="agent-knowledge-body">
+                        <h3>Function Calling 工作流</h3>
+                        <ol>
+                            <li>你在请求中传入 <code>tools</code> 数组，描述每个工具的名称、用途、参数格式。</li>
+                            <li>模型分析用户意图，如果需要调用工具，会返回 <code>tool_calls</code> 而非文本回复。</li>
+                            <li>你的代码根据 <code>tool_calls</code> 执行对应函数，把结果作为 <code>tool</code> 消息追加到对话。</li>
+                            <li>再次请求模型，模型拿到工具结果后给出最终回答。</li>
+                        </ol>
+                        <h3>JSON Schema</h3>
+                        <ul>
+                            <li>工具参数用 JSON Schema 格式描述，模型据此生成正确的参数 JSON。</li>
+                            <li><code>required</code> 数组指定哪些参数是必填的。</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Step 5 -->
+                <section id="step-5" class="agent-step glass-panel anim-slide-up">
+                    <div class="agent-step-header">
+                        <span class="agent-step-badge">5</span>
+                        <div>
+                            <h2>构建 Agent 循环（核心）</h2>
+                            <div class="agent-tags">
+                                <span class="agent-tag">Agent Loop</span>
+                                <span class="agent-tag">tool_calls</span>
+                                <span class="agent-tag">多轮对话</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p>这是 Agent 的核心——一个 <code>while</code> 循环，让模型自主调用工具直到完成任务。</p>
+
+                    <div class="agent-code-block">
+                        <div class="agent-code-header">
+                            <span class="agent-code-lang">python</span>
+                            <button type="button" class="agent-copy-btn glass-btn" aria-label="复制代码">复制</button>
+                        </div>
+                        <pre><code class="language-python"># 工具函数映射表
+tool_functions = {
+    "get_weather": get_weather,
+}
+
+def run_agent(user_input):
+    messages = [
+        {"role": "system", "content": "你是一个智能助手，可以查询天气。"},
+        {"role": "user", "content": user_input}
+    ]
+
+    while True:
+        # 1. 调用 LLM
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=messages,
+            tools=tools
+        )
+        msg = response.choices[0].message
+
+        # 2. 没有 tool_calls → 模型给出了最终回答，退出循环
+        if not msg.tool_calls:
+            return msg.content
+
+        # 3. 有 tool_calls → 逐个执行工具
+        messages.append(msg)  # 把 assistant 的 tool_calls 消息加入对话
+
+        for call in msg.tool_calls:
+            fn = tool_functions[call.function.name]
+            args = json.loads(call.function.arguments)
+            result = fn(**args)
+
+            # 4. 把工具结果追加到对话
+            messages.append({
+                "role": "tool",
+                "tool_call_id": call.id,
+                "content": result
+            })
+
+        # 循环继续 → 模型拿到工具结果后再次思考</code></pre>
+                    </div>
+
+                    <div class="agent-callout">
+                        <strong>这就是全部了。</strong> 整个 Agent 的核心就是这 30 行代码。模型决定调不调工具、调哪个、调几次——你只需要执行并把结果喂回去。
+                    </div>
+
+                    <button type="button" class="agent-knowledge-toggle glass-btn">
+                        <span class="agent-toggle-icon">▶</span> 知识点详解
+                    </button>
+                    <div class="agent-knowledge-body">
+                        <h3>循环的关键点</h3>
+                        <ul>
+                            <li><strong>退出条件</strong>：当模型不再返回 <code>tool_calls</code> 时，说明它已经有了最终答案。</li>
+                            <li><strong>多次调用</strong>：模型可能在一次循环中调用多个工具，也可能循环多轮调用不同工具。</li>
+                            <li><strong>对话历史</strong>：每次工具结果都追加到 <code>messages</code>，模型能看到完整上下文。</li>
+                        </ul>
+                        <h3>安全建议</h3>
+                        <ul>
+                            <li>加一个最大循环次数（如 10 次），防止模型无限循环。</li>
+                            <li>验证模型返回的工具名称是否在白名单内。</li>
+                            <li>对工具参数做校验，不要盲目执行。</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Step 6 -->
+                <section id="step-6" class="agent-step glass-panel anim-slide-up">
+                    <div class="agent-step-header">
+                        <span class="agent-step-badge">6</span>
+                        <div>
+                            <h2>运行 & 扩展</h2>
+                            <div class="agent-tags">
+                                <span class="agent-tag">完整代码</span>
+                                <span class="agent-tag">扩展方向</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p>把前面的代码合在一起，加两行就能运行：</p>
+
+                    <div class="agent-code-block">
+                        <div class="agent-code-header">
+                            <span class="agent-code-lang">python</span>
+                            <button type="button" class="agent-copy-btn glass-btn" aria-label="复制代码">复制</button>
+                        </div>
+                        <pre><code class="language-python">from openai import OpenAI
+import json
+
+client = OpenAI()
+
+tools = [
+    {
+        "type": "function",
+        "function": {
+            "name": "get_weather",
+            "description": "获取指定城市的当前天气",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "city": {"type": "string", "description": "城市名称"}
+                },
+                "required": ["city"]
+            }
+        }
+    }
+]
+
+def get_weather(city):
+    return json.dumps({"city": city, "temp": "22°C", "condition": "晴"})
+
+tool_functions = {"get_weather": get_weather}
+
+def run_agent(user_input):
+    messages = [
+        {"role": "system", "content": "你是一个智能助手，可以查询天气。"},
+        {"role": "user", "content": user_input}
+    ]
+    for _ in range(10):  # 最多循环 10 次
+        response = client.chat.completions.create(
+            model="gpt-4o-mini", messages=messages, tools=tools
+        )
+        msg = response.choices[0].message
+        if not msg.tool_calls:
+            return msg.content
+        messages.append(msg)
+        for call in msg.tool_calls:
+            fn = tool_functions[call.function.name]
+            result = fn(**json.loads(call.function.arguments))
+            messages.append({
+                "role": "tool",
+                "tool_call_id": call.id,
+                "content": result
+            })
+    return "达到最大循环次数"
+
+# 运行！
+print(run_agent("北京和上海今天天气怎么样？"))</code></pre>
+                    </div>
+
+                    <div class="agent-next-steps">
+                        <h3>下一步可以做什么？</h3>
+                        <div class="agent-next-grid">
+                            <div class="agent-next-card glass-card">
+                                <strong>添加更多工具</strong>
+                                <p>搜索网页、执行代码、读写文件、查数据库……每个工具就是一个函数 + schema。</p>
+                            </div>
+                            <div class="agent-next-card glass-card">
+                                <strong>加入记忆</strong>
+                                <p>把对话历史存到文件或数据库，让 Agent 记住之前的交互。</p>
+                            </div>
+                            <div class="agent-next-card glass-card">
+                                <strong>试试 MCP</strong>
+                                <p>Model Context Protocol 让 Agent 连接外部数据源和工具，标准化的工具协议。</p>
+                            </div>
+                            <div class="agent-next-card glass-card">
+                                <strong>多 Agent 协作</strong>
+                                <p>让多个 Agent 各司其职——一个规划、一个执行、一个检查。</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </div>
+    </main>
+
+    <script src="../../assets/js/theme.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-bash.min.js"></script>
+    <script src="./agent-guide.js"></script>
+</body>
+</html>
