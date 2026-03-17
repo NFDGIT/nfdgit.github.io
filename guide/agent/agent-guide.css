@@ -475,3 +475,122 @@
         grid-template-columns: 1fr;
     }
 }
+
+/* ===== Tutorial Cross-Navigation ===== */
+
+.agent-guide-nav {
+    margin-top: 1.5rem;
+    padding: 1.5rem;
+}
+
+.agent-guide-nav-arrows {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+.agent-guide-nav-arrows a {
+    text-decoration: none;
+}
+
+.agent-nav-prev,
+.agent-nav-next {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+
+.agent-nav-next {
+    text-align: right;
+    margin-left: auto;
+}
+
+.agent-nav-label {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.agent-nav-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--accent);
+}
+
+.agent-nav-title:hover {
+    text-decoration: underline;
+}
+
+.agent-guide-nav-list {
+    border-top: 1px solid rgba(128, 128, 128, 0.12);
+    padding-top: 1rem;
+}
+
+.agent-guide-nav-list h4 {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.6rem;
+}
+
+.agent-guide-nav-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+}
+
+.agent-guide-nav-link {
+    display: inline-block;
+    padding: 0.3rem 0.7rem;
+    border-radius: var(--radius-pill);
+    font-size: 0.8rem;
+    font-weight: 500;
+    text-decoration: none;
+    color: var(--text-muted);
+    background: rgba(128, 128, 128, 0.06);
+    border: 1px solid rgba(128, 128, 128, 0.1);
+    transition: color 0.2s, background 0.2s, border-color 0.2s;
+}
+
+.agent-guide-nav-link:hover {
+    color: var(--accent);
+    background: rgba(0, 122, 255, 0.06);
+    border-color: rgba(0, 122, 255, 0.15);
+}
+
+.agent-guide-nav-link.is-current {
+    color: var(--accent);
+    background: rgba(0, 122, 255, 0.1);
+    border-color: rgba(0, 122, 255, 0.2);
+    font-weight: 600;
+    pointer-events: none;
+}
+
+[data-theme="dark"] .agent-guide-nav-link.is-current {
+    background: rgba(10, 132, 255, 0.12);
+    border-color: rgba(10, 132, 255, 0.25);
+}
+
+.agent-reading-order {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+    line-height: 1.6;
+}
+
+@media (max-width: 600px) {
+    .agent-guide-nav {
+        padding: 1.1rem;
+    }
+
+    .agent-guide-nav-links {
+        flex-direction: column;
+    }
+
+    .agent-guide-nav-link {
+        text-align: center;
+    }
+}
