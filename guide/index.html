@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <script src="../assets/js/theme-init.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>教程目录</title>
+    <link rel="stylesheet" href="../assets/css/base.css">
+    <link rel="stylesheet" href="../assets/css/home.css">
+    <link rel="stylesheet" href="./guide.css">
+</head>
+<body class="guide-page">
+    <main class="guide-shell">
+        <header class="home-header guide-header anim-fade-in">
+            <div>
+                <p class="guide-kicker">guide directory</p>
+                <h1>教程目录</h1>
+                <p class="guide-subtitle">所有教程系列汇总。推荐从主教程开始，按顺序阅读进阶篇。</p>
+            </div>
+            <div class="guide-actions">
+                <a href="../index.html" class="glass-nav-link">返回首页</a>
+                <button type="button" class="theme-toggle" aria-label="切换主题">🌙</button>
+            </div>
+        </header>
+
+        <p class="guide-section-label">AI Agent 系列</p>
+
+        <section class="home-grid guide-grid" aria-label="教程列表">
+            <a href="./agent/index.html" class="home-card guide-card anim-slide-up stagger-1">
+                <span class="home-card-icon">🤖</span>
+                <span class="guide-card-tag is-primary">推荐起点</span>
+                <div class="home-card-title">从零搭建 AI Agent</div>
+                <div class="guide-card-desc">6 步理解核心原理：LLM 调用、工具定义、Agent 循环。无需框架，纯 Python 实现。</div>
+                <div class="guide-card-meta">
+                    <span class="guide-chip">Python</span>
+                    <span class="guide-chip">OpenAI SDK</span>
+                    <span class="guide-chip">入门</span>
+                </div>
+            </a>
+
+            <a href="./agent/tools.html" class="home-card guide-card anim-slide-up stagger-2">
+                <span class="home-card-icon">🔧</span>
+                <span class="guide-card-tag">进阶</span>
+                <div class="home-card-title">添加更多工具</div>
+                <div class="guide-card-desc">定义多个工具、实现搜索和代码执行、处理并行调用与安全校验。</div>
+                <div class="guide-card-meta">
+                    <span class="guide-chip">多工具</span>
+                    <span class="guide-chip">并行调用</span>
+                </div>
+            </a>
+
+            <a href="./agent/memory.html" class="home-card guide-card anim-slide-up stagger-3">
+                <span class="home-card-icon">🧠</span>
+                <span class="guide-card-tag">进阶</span>
+                <div class="home-card-title">加入记忆</div>
+                <div class="guide-card-desc">文件持久化、滑动窗口裁剪、摘要压缩，让 Agent 跨会话记住上下文。</div>
+                <div class="guide-card-meta">
+                    <span class="guide-chip">持久化</span>
+                    <span class="guide-chip">Token 管理</span>
+                </div>
+            </a>
+
+            <a href="./agent/mcp.html" class="home-card guide-card anim-slide-up stagger-4">
+                <span class="home-card-icon">🔌</span>
+                <span class="guide-card-tag">进阶</span>
+                <div class="home-card-title">试试 MCP</div>
+                <div class="guide-card-desc">Model Context Protocol 标准化工具协议，安装 MCP Server 并连接到 Agent。</div>
+                <div class="guide-card-meta">
+                    <span class="guide-chip">MCP</span>
+                    <span class="guide-chip">标准协议</span>
+                </div>
+            </a>
+
+            <a href="./agent/multi-agent.html" class="home-card guide-card anim-slide-up stagger-5">
+                <span class="home-card-icon">👥</span>
+                <span class="guide-card-tag">进阶</span>
+                <div class="home-card-title">多 Agent 协作</div>
+                <div class="guide-card-desc">编排者模式、Agent 间数据传递、带审核循环的写作管线实战。</div>
+                <div class="guide-card-meta">
+                    <span class="guide-chip">多 Agent</span>
+                    <span class="guide-chip">Orchestrator</span>
+                </div>
+            </a>
+
+            <a href="./agent/openclaw.html" class="home-card guide-card anim-slide-up stagger-6">
+                <span class="home-card-icon">🐾</span>
+                <span class="guide-card-tag">进阶</span>
+                <div class="home-card-title">OpenClaw 框架</div>
+                <div class="guide-card-desc">开源自主 Agent 框架，50+ 集成、Skill 市场、本地部署，从手写到生产级。</div>
+                <div class="guide-card-meta">
+                    <span class="guide-chip">框架</span>
+                    <span class="guide-chip">Skill 系统</span>
+                </div>
+            </a>
+        </section>
+
+        <section class="guide-note" aria-label="说明">
+            推荐阅读顺序：主教程 → 添加更多工具 → 加入记忆 → 试试 MCP → 多 Agent 协作 → OpenClaw 框架。每篇教程末尾有导航链接，可按顺序跳转。
+        </section>
+    </main>
+
+    <script src="../assets/js/theme.js"></script>
+</body>
+</html>
