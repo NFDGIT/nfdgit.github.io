@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <script src="../../assets/js/theme-init.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>RAG 检索增强 - AI Agent 教程</title>
+    <link rel="stylesheet" href="../../assets/css/base.css">
+    <link rel="stylesheet" href="./agent-guide.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css">
+</head>
+<body class="has-glass-nav agent-page">
+    <nav class="glass-nav">
+        <a class="glass-nav-link" href="./index.html">教程主页</a>
+        <a class="glass-nav-link" href="../index.html">教程目录</a>
+        <button type="button" class="theme-toggle" aria-label="切换主题">🌙</button>
+    </nav>
+    <main class="agent-shell">
+        <header class="agent-hero anim-slide-up">
+            <p class="agent-eyebrow">guide / agent / rag</p>
+            <h1>RAG：让 Agent 基于你的资料回答</h1>
+            <p class="agent-subtitle">检索增强生成——像开卷考试一样，让 Agent 先翻资料再回答，不再胡编乱造。</p>
+        </header>
+        <div class="agent-layout">
+            <nav class="agent-progress glass-panel" aria-label="步骤导航">
+                <ol class="agent-progress-list">
+                    <li><a href="#step-1" class="agent-progress-link is-active" data-step="1"><span class="agent-step-dot"></span>RAG 是什么</a></li>
+                    <li><a href="#step-2" class="agent-progress-link" data-step="2"><span class="agent-step-dot"></span>准备资料</a></li>
+                    <li><a href="#step-3" class="agent-progress-link" data-step="3"><span class="agent-step-dot"></span>检索注入</a></li>
+                    <li><a href="#step-4" class="agent-progress-link" data-step="4"><span class="agent-step-dot"></span>完整 RAG Agent</a></li>
+                </ol>
+            </nav>
+            <div class="agent-content">
+
+            <section id="step-1" class="agent-step glass-panel anim-slide-up">
+                <div class="agent-step-header">
+                    <span class="agent-step-badge">1</span>
+                    <div>
+                        <h2>RAG 是什么？</h2>
+                        <div class="agent-tags"><span class="agent-tag">概念</span><span class="agent-tag">开卷考试</span></div>
+                    </div>
+                </div>
+                <p>AI 模型的知识来自训练数据——但它不知道<strong>你公司的产品文档</strong>、<strong>你的个人笔记</strong>、<strong>最新的新闻</strong>。直接问它，它可能会编造答案。</p>
+                <p>RAG（检索增强生成）的思路很简单：<strong>让 Agent 先翻参考资料，再回答问题</strong>。</p>
+                <div class="agent-diagram">
+                    <div class="agent-diagram-node"><div class="agent-diagram-icon">❓</div><div class="agent-diagram-label">用户提问</div><div class="agent-diagram-desc">"退货流程是什么？"</div></div>
+                    <div class="agent-diagram-arrow">→</div>
+                    <div class="agent-diagram-node"><div class="agent-diagram-icon">🔍</div><div class="agent-diagram-label">检索资料</div><div class="agent-diagram-desc">从文档中找到相关段落</div></div>
+                    <div class="agent-diagram-arrow">→</div>
+                    <div class="agent-diagram-node"><div class="agent-diagram-icon">🤖</div><div class="agent-diagram-label">生成回答</div><div class="agent-diagram-desc">基于资料回答，不编造</div></div>
+                </div>
+                <p>就像<strong>开卷考试</strong>：学生可以翻书找答案，而不是全靠记忆。翻了书的答案通常更准确。</p>
+            </section>
+
+            <section id="step-2" class="agent-step glass-panel anim-slide-up">
+                <div class="agent-step-header">
+                    <span class="agent-step-badge">2</span>
+                    <div>
+                        <h2>准备参考资料</h2>
+                        <div class="agent-tags"><span class="agent-tag">切分</span><span class="agent-tag">向量化</span></div>
+                    </div>
+                </div>
+                <p>要让 Agent 能"翻书"，你得先把书准备好。过程是：</p>
+                <p><strong>第一步：把文档切成小段</strong>。一整本书太长了，模型读不下。把它切成一段段（比如每段 500 字），这样检索时只拿最相关的几段。</p>
+                <p><strong>第二步：给每段做"指纹"</strong>。计算机不能直接理解文字的含义，需要把文字变成一串数字（叫"向量"），语义相近的段落数字也相近。这样搜索时就能找到意思最接近的段落。</p>
+                <button type="button" class="agent-knowledge-toggle glass-btn"><span class="agent-toggle-icon">▶</span> 技术细节：文档切分和向量化代码</button>
+                <div class="agent-knowledge-body">
+                    <div class="agent-code-block"><div class="agent-code-header"><span class="agent-code-lang">python</span><button type="button" class="agent-copy-btn glass-btn" aria-label="复制代码">复制</button></div>
+                        <pre><code class="language-python">from openai import OpenAI
+
+client = OpenAI()
+
+def split_text(text, chunk_size=500, overlap=50):
+    """把长文本切成带重叠的小段"""
+    chunks = []
+    start = 0
+    while start < len(text):
+        end = start + chunk_size
+        chunks.append(text[start:end])
+        start = end - overlap
+    return chunks
+
+def get_embedding(text):
+    """把文字变成向量（一串数字）"""
+    response = client.embeddings.create(
+        model="text-embedding-3-small",
+        input=text
+    )
+    return response.data[0].embedding
+
+# 准备文档
+doc = open("product_manual.txt", encoding="utf-8").read()
+chunks = split_text(doc)
+chunk_vectors = [(chunk, get_embedding(chunk)) for chunk in chunks]
+print(f"文档切成了 {len(chunks)} 段")</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <section id="step-3" class="agent-step glass-panel anim-slide-up">
+                <div class="agent-step-header">
+                    <span class="agent-step-badge">3</span>
+                    <div>
+                        <h2>检索并注入上下文</h2>
+                        <div class="agent-tags"><span class="agent-tag">相似度</span><span class="agent-tag">上下文注入</span></div>
+                    </div>
+                </div>
+                <p>用户提问时，先把问题也做成"指纹"，找出最相似的几段资料，塞给 Agent 一起读。</p>
+                <p>就像考前老师画重点——不给整本书，只给最相关的几页。Agent 读了这几页后回答，准确率大幅提升。</p>
+                <button type="button" class="agent-knowledge-toggle glass-btn"><span class="agent-toggle-icon">▶</span> 技术细节：检索和注入代码</button>
+                <div class="agent-knowledge-body">
+                    <div class="agent-code-block"><div class="agent-code-header"><span class="agent-code-lang">python</span><button type="button" class="agent-copy-btn glass-btn" aria-label="复制代码">复制</button></div>
+                        <pre><code class="language-python">import numpy as np
+
+def cosine_similarity(a, b):
+    """计算两个向量的相似度（越接近1越相似）"""
+    return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
+
+def search(query, chunk_vectors, top_k=3):
+    """找出与问题最相关的 top_k 段文档"""
+    query_vec = get_embedding(query)
+    scored = []
+    for chunk, vec in chunk_vectors:
+        score = cosine_similarity(query_vec, vec)
+        scored.append((score, chunk))
+    scored.sort(reverse=True)
+    return [chunk for _, chunk in scored[:top_k]]
+
+def ask_with_context(question, chunk_vectors):
+    """检索相关资料 → 注入上下文 → 让 Agent 回答"""
+    relevant = search(question, chunk_vectors)
+    context = "\n\n---\n\n".join(relevant)
+
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[
+            {"role": "system", "content": (
+                "根据以下参考资料回答用户问题。"
+                "如果资料中没有相关信息，请明确说明。\n\n"
+                f"参考资料：\n{context}"
+            )},
+            {"role": "user", "content": question}
+        ]
+    )
+    return response.choices[0].message.content</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <section id="step-4" class="agent-step glass-panel anim-slide-up">
+                <div class="agent-step-header">
+                    <span class="agent-step-badge">4</span>
+                    <div>
+                        <h2>完整 RAG Agent</h2>
+                        <div class="agent-tags"><span class="agent-tag">完整流程</span></div>
+                    </div>
+                </div>
+                <p>把前面的步骤串起来：加载文档 → 切分 → 向量化 → 用户提问时检索 → 注入上下文 → 回答。</p>
+                <p>这就是市面上大多数"知识库问答""智能客服""文档助手"产品的核心原理。</p>
+                <div class="agent-callout"><strong>核心收获</strong>：RAG 不需要重新训练模型，只需要把你的文档"喂"给检索系统。Agent 回答前先翻资料，自然就不会胡编乱造了。</div>
+                <button type="button" class="agent-knowledge-toggle glass-btn"><span class="agent-toggle-icon">▶</span> 知识点：生产环境建议</button>
+                <div class="agent-knowledge-body">
+                    <ul>
+                        <li><strong>向量数据库</strong>：示例用内存存储，生产环境用 Chroma、Pinecone、Weaviate 等专业向量数据库</li>
+                        <li><strong>切分策略</strong>：按段落、按标题、按语义切分各有优劣，需要根据文档类型调整</li>
+                        <li><strong>混合检索</strong>：向量检索 + 关键词检索结合，效果更好</li>
+                        <li><strong>引用来源</strong>：让 Agent 在回答中注明"根据文档第X章"，增加可信度</li>
+                    </ul>
+                </div>
+            </section>
+
+            <nav class="agent-guide-nav glass-panel" aria-label="教程导航">
+                <div class="agent-guide-nav-arrows">
+                    <a href="./streaming.html" class="agent-nav-prev"><span class="agent-nav-label">上一篇</span><span class="agent-nav-title">流式输出</span></a>
+                    <a href="./deploy.html" class="agent-nav-next"><span class="agent-nav-label">下一篇</span><span class="agent-nav-title">部署上线</span></a>
+                </div>
+                <div class="agent-guide-nav-list">
+                    <h4>完整教程路径</h4>
+                    <div class="agent-guide-nav-links">
+                        <a href="./index.html" class="agent-guide-nav-link">主教程</a><a href="./tools.html" class="agent-guide-nav-link">Tools</a><a href="./memory.html" class="agent-guide-nav-link">Memory</a><a href="./mcp.html" class="agent-guide-nav-link">MCP</a><a href="./multi-agent.html" class="agent-guide-nav-link">Multi-Agent</a><a href="./skills.html" class="agent-guide-nav-link">Skills</a><a href="./openclaw.html" class="agent-guide-nav-link">OpenClaw</a><a href="./prompt.html" class="agent-guide-nav-link">Prompt</a><a href="./streaming.html" class="agent-guide-nav-link">Streaming</a><a href="./rag.html" class="agent-guide-nav-link is-current">RAG</a><a href="./deploy.html" class="agent-guide-nav-link">Deploy</a><a href="./security.html" class="agent-guide-nav-link">Security</a>
+                    </div>
+                </div>
+            </nav>
+            </div>
+        </div>
+    </main>
+    <script src="../../assets/js/theme.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-python.min.js"></script>
+    <script src="./agent-guide.js"></script>
+</body>
+</html>

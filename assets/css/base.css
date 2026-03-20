@@ -325,6 +325,11 @@ body {
 .stagger-5 { animation-delay: 0.30s; }
 .stagger-6 { animation-delay: 0.36s; }
 .stagger-7 { animation-delay: 0.42s; }
+.stagger-8 { animation-delay: 0.48s; }
+.stagger-9 { animation-delay: 0.54s; }
+.stagger-10 { animation-delay: 0.60s; }
+.stagger-11 { animation-delay: 0.66s; }
+.stagger-12 { animation-delay: 0.72s; }
 
 /* ===== 焦点可见性 ===== */
 

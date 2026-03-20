@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <script src="../../assets/js/theme-init.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>部署上线 - AI Agent 教程</title>
+    <link rel="stylesheet" href="../../assets/css/base.css">
+    <link rel="stylesheet" href="./agent-guide.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css">
+</head>
+<body class="has-glass-nav agent-page">
+    <nav class="glass-nav">
+        <a class="glass-nav-link" href="./index.html">教程主页</a>
+        <a class="glass-nav-link" href="../index.html">教程目录</a>
+        <button type="button" class="theme-toggle" aria-label="切换主题">🌙</button>
+    </nav>
+    <main class="agent-shell">
+        <header class="agent-hero anim-slide-up">
+            <p class="agent-eyebrow">guide / agent / deploy</p>
+            <h1>部署上线：让别人也能用你的 Agent</h1>
+            <p class="agent-subtitle">从"自己电脑上跑"到"变成一个服务"，让 Agent 真正落地。</p>
+        </header>
+        <div class="agent-layout">
+            <nav class="agent-progress glass-panel" aria-label="步骤导航">
+                <ol class="agent-progress-list">
+                    <li><a href="#step-1" class="agent-progress-link is-active" data-step="1"><span class="agent-step-dot"></span>部署方式</a></li>
+                    <li><a href="#step-2" class="agent-progress-link" data-step="2"><span class="agent-step-dot"></span>包装成 API</a></li>
+                    <li><a href="#step-3" class="agent-progress-link" data-step="3"><span class="agent-step-dot"></span>接入聊天平台</a></li>
+                </ol>
+            </nav>
+            <div class="agent-content">
+
+            <section id="step-1" class="agent-step glass-panel anim-slide-up">
+                <div class="agent-step-header">
+                    <span class="agent-step-badge">1</span>
+                    <div>
+                        <h2>Agent 可以怎么部署？</h2>
+                        <div class="agent-tags"><span class="agent-tag">概览</span><span class="agent-tag">选型</span></div>
+                    </div>
+                </div>
+                <p>你的 Agent 目前只能在自己电脑上通过命令行运行。要让别人也能用，你有三个选择：</p>
+                <div class="agent-diagram">
+                    <div class="agent-diagram-node"><div class="agent-diagram-icon">🔌</div><div class="agent-diagram-label">API 服务</div><div class="agent-diagram-desc">给开发者调用</div></div>
+                    <div class="agent-diagram-arrow">/</div>
+                    <div class="agent-diagram-node"><div class="agent-diagram-icon">💬</div><div class="agent-diagram-label">聊天机器人</div><div class="agent-diagram-desc">接入微信/钉钉/飞书</div></div>
+                    <div class="agent-diagram-arrow">/</div>
+                    <div class="agent-diagram-node"><div class="agent-diagram-icon">🌐</div><div class="agent-diagram-label">Web 应用</div><div class="agent-diagram-desc">做一个网页让用户聊</div></div>
+                </div>
+                <p><strong>API 服务</strong>适合其他程序调用（比如你的 App 后端）。<strong>聊天机器人</strong>适合让普通用户在微信/钉钉里直接使用。<strong>Web 应用</strong>适合做一个独立的产品页面。</p>
+                <p>最基础也最通用的方式是先做成 API——有了 API，就能接到任何地方。</p>
+            </section>
+
+            <section id="step-2" class="agent-step glass-panel anim-slide-up">
+                <div class="agent-step-header">
+                    <span class="agent-step-badge">2</span>
+                    <div>
+                        <h2>用 FastAPI 包装成 API</h2>
+                        <div class="agent-tags"><span class="agent-tag">FastAPI</span><span class="agent-tag">HTTP</span></div>
+                    </div>
+                </div>
+                <p>FastAPI 是 Python 最流行的 Web 框架之一。用它把你的 Agent 包装成一个 HTTP 接口，别人就能通过网络调用。</p>
+                <p>原来：你在命令行输入问题 → Agent 在终端回答。<br>
+                现在：任何程序发一个 HTTP 请求 → Agent 通过网络回答。</p>
+                <button type="button" class="agent-knowledge-toggle glass-btn"><span class="agent-toggle-icon">▶</span> 技术细节：FastAPI 代码</button>
+                <div class="agent-knowledge-body">
+                    <div class="agent-code-block"><div class="agent-code-header"><span class="agent-code-lang">bash</span><button type="button" class="agent-copy-btn glass-btn" aria-label="复制代码">复制</button></div>
+                        <pre><code class="language-bash"># 安装依赖
+pip install fastapi uvicorn</code></pre>
+                    </div>
+                    <div class="agent-code-block"><div class="agent-code-header"><span class="agent-code-lang">python</span><button type="button" class="agent-copy-btn glass-btn" aria-label="复制代码">复制</button></div>
+                        <pre><code class="language-python">from fastapi import FastAPI
+from pydantic import BaseModel
+
+app = FastAPI()
+
+class ChatRequest(BaseModel):
+    message: str
+
+class ChatResponse(BaseModel):
+    reply: str
+
+@app.post("/chat")
+async def chat(req: ChatRequest):
+    reply = run_agent(req.message)  # 你之前写的 Agent 函数
+    return ChatResponse(reply=reply)
+
+# 启动：uvicorn main:app --host 0.0.0.0 --port 8000</code></pre>
+                    </div>
+                    <h3>调用示例</h3>
+                    <div class="agent-code-block"><div class="agent-code-header"><span class="agent-code-lang">bash</span><button type="button" class="agent-copy-btn glass-btn" aria-label="复制代码">复制</button></div>
+                        <pre><code class="language-bash">curl -X POST http://localhost:8000/chat \
+  -H "Content-Type: application/json" \
+  -d '{"message": "北京天气怎么样？"}'</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <section id="step-3" class="agent-step glass-panel anim-slide-up">
+                <div class="agent-step-header">
+                    <span class="agent-step-badge">3</span>
+                    <div>
+                        <h2>接入聊天平台</h2>
+                        <div class="agent-tags"><span class="agent-tag">企业微信</span><span class="agent-tag">钉钉</span><span class="agent-tag">飞书</span></div>
+                    </div>
+                </div>
+                <p>有了 API 之后，接入聊天平台就是"收到消息 → 调 Agent → 回复消息"的流程。</p>
+                <p>各平台的差别在于<strong>怎么收消息和怎么发消息</strong>——它们都提供了 Webhook（一个回调网址），用户发消息时平台会把消息发到你的网址。</p>
+                <div class="agent-callout"><strong>最快落地方式</strong>：如果不想自己对接平台 API，可以用 OpenClaw（教程前面学过）——它已经帮你封装好了 WhatsApp、Telegram、Discord、钉钉等平台的接入。</div>
+                <button type="button" class="agent-knowledge-toggle glass-btn"><span class="agent-toggle-icon">▶</span> 技术细节：企业微信机器人示例</button>
+                <div class="agent-knowledge-body">
+                    <div class="agent-code-block"><div class="agent-code-header"><span class="agent-code-lang">python</span><button type="button" class="agent-copy-btn glass-btn" aria-label="复制代码">复制</button></div>
+                        <pre><code class="language-python">import requests
+
+WEBHOOK_URL = "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=YOUR_KEY"
+
+def send_to_wechat(message):
+    """通过 Webhook 发送消息到企业微信群"""
+    requests.post(WEBHOOK_URL, json={
+        "msgtype": "text",
+        "text": {"content": message}
+    })
+
+# 收到用户消息后
+user_msg = "帮我查一下今天的会议安排"
+reply = run_agent(user_msg)
+send_to_wechat(reply)</code></pre>
+                    </div>
+                    <h3>部署清单</h3>
+                    <ul>
+                        <li>服务器：云服务器（阿里云/腾讯云）或 Railway/Render 等平台</li>
+                        <li>域名（可选）：让 API 地址更好看</li>
+                        <li>HTTPS：平台 Webhook 通常要求 HTTPS</li>
+                        <li>环境变量：API Key 不要写在代码里，用环境变量</li>
+                        <li>日志：记录每次对话，方便排查问题</li>
+                    </ul>
+                </div>
+            </section>
+
+            <nav class="agent-guide-nav glass-panel" aria-label="教程导航">
+                <div class="agent-guide-nav-arrows">
+                    <a href="./rag.html" class="agent-nav-prev"><span class="agent-nav-label">上一篇</span><span class="agent-nav-title">RAG 检索增强</span></a>
+                    <a href="./security.html" class="agent-nav-next"><span class="agent-nav-label">下一篇</span><span class="agent-nav-title">安全与防护</span></a>
+                </div>
+                <div class="agent-guide-nav-list">
+                    <h4>完整教程路径</h4>
+                    <div class="agent-guide-nav-links">
+                        <a href="./index.html" class="agent-guide-nav-link">主教程</a><a href="./tools.html" class="agent-guide-nav-link">Tools</a><a href="./memory.html" class="agent-guide-nav-link">Memory</a><a href="./mcp.html" class="agent-guide-nav-link">MCP</a><a href="./multi-agent.html" class="agent-guide-nav-link">Multi-Agent</a><a href="./skills.html" class="agent-guide-nav-link">Skills</a><a href="./openclaw.html" class="agent-guide-nav-link">OpenClaw</a><a href="./prompt.html" class="agent-guide-nav-link">Prompt</a><a href="./streaming.html" class="agent-guide-nav-link">Streaming</a><a href="./rag.html" class="agent-guide-nav-link">RAG</a><a href="./deploy.html" class="agent-guide-nav-link is-current">Deploy</a><a href="./security.html" class="agent-guide-nav-link">Security</a>
+                    </div>
+                </div>
+            </nav>
+            </div>
+        </div>
+    </main>
+    <script src="../../assets/js/theme.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-bash.min.js"></script>
+    <script src="./agent-guide.js"></script>
+</body>
+</html>

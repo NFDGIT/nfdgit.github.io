@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <script src="../../assets/js/theme-init.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Prompt Engineering - AI Agent 教程</title>
+    <link rel="stylesheet" href="../../assets/css/base.css">
+    <link rel="stylesheet" href="./agent-guide.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css">
+</head>
+<body class="has-glass-nav agent-page">
+    <nav class="glass-nav">
+        <a class="glass-nav-link" href="./index.html">教程主页</a>
+        <a class="glass-nav-link" href="../index.html">教程目录</a>
+        <button type="button" class="theme-toggle" aria-label="切换主题">🌙</button>
+    </nav>
+    <main class="agent-shell">
+        <header class="agent-hero anim-slide-up">
+            <p class="agent-eyebrow">guide / agent / prompt</p>
+            <h1>Prompt Engineering：让 Agent 更听话</h1>
+            <p class="agent-subtitle">系统提示词是 Agent 的"工作手册"。写好它，Agent 就能按你的标准做事。</p>
+        </header>
+        <div class="agent-layout">
+            <nav class="agent-progress glass-panel" aria-label="步骤导航">
+                <ol class="agent-progress-list">
+                    <li><a href="#step-1" class="agent-progress-link is-active" data-step="1"><span class="agent-step-dot"></span>好提示词长啥样</a></li>
+                    <li><a href="#step-2" class="agent-progress-link" data-step="2"><span class="agent-step-dot"></span>常用技巧</a></li>
+                    <li><a href="#step-3" class="agent-progress-link" data-step="3"><span class="agent-step-dot"></span>实战示例</a></li>
+                </ol>
+            </nav>
+            <div class="agent-content">
+
+            <section id="step-1" class="agent-step glass-panel anim-slide-up">
+                <div class="agent-step-header">
+                    <span class="agent-step-badge">1</span>
+                    <div>
+                        <h2>什么是好的系统提示词？</h2>
+                        <div class="agent-tags"><span class="agent-tag">System Prompt</span><span class="agent-tag">类比</span></div>
+                    </div>
+                </div>
+                <p>想象你招了一个新员工。第一天上班，你会给他一份<strong>工作手册</strong>：你的职位是什么、负责什么、什么能做什么不能做、做事的标准是什么。</p>
+                <p>System Prompt 就是这份工作手册。写得越清楚，Agent 工作越靠谱。</p>
+                <p><strong>好的提示词 = 角色 + 规则 + 格式</strong></p>
+                <div class="agent-diagram">
+                    <div class="agent-diagram-node"><div class="agent-diagram-icon">👤</div><div class="agent-diagram-label">角色</div><div class="agent-diagram-desc">你是谁、擅长什么</div></div>
+                    <div class="agent-diagram-arrow">+</div>
+                    <div class="agent-diagram-node"><div class="agent-diagram-icon">📏</div><div class="agent-diagram-label">规则</div><div class="agent-diagram-desc">什么该做、什么不该做</div></div>
+                    <div class="agent-diagram-arrow">+</div>
+                    <div class="agent-diagram-node"><div class="agent-diagram-icon">📋</div><div class="agent-diagram-label">格式</div><div class="agent-diagram-desc">结果怎么呈现</div></div>
+                </div>
+                <button type="button" class="agent-knowledge-toggle glass-btn"><span class="agent-toggle-icon">▶</span> 技术细节</button>
+                <div class="agent-knowledge-body">
+                    <h3>差的 vs 好的提示词对比</h3>
+                    <div class="agent-code-block"><div class="agent-code-header"><span class="agent-code-lang">text</span><button type="button" class="agent-copy-btn glass-btn" aria-label="复制代码">复制</button></div>
+                        <pre><code class="language-text">❌ 差：你是一个助手。
+
+✅ 好：你是一个专业的技术文档编辑。
+规则：
+- 使用简体中文
+- 保持段落简短（每段不超过3句）
+- 专业术语首次出现时给出中文解释
+- 不要添加原文没有的信息
+格式：输出修改后的全文，用 **粗体** 标注修改处。</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <section id="step-2" class="agent-step glass-panel anim-slide-up">
+                <div class="agent-step-header">
+                    <span class="agent-step-badge">2</span>
+                    <div>
+                        <h2>常用技巧</h2>
+                        <div class="agent-tags"><span class="agent-tag">角色设定</span><span class="agent-tag">约束</span><span class="agent-tag">示例</span></div>
+                    </div>
+                </div>
+                <p><strong>技巧一：给 Agent 一个身份</strong><br>
+                    "你是资深前端工程师"比"你是助手"有用得多。身份越具体，回答越专业。</p>
+                <p><strong>技巧二：划定边界</strong><br>
+                    明确告诉 Agent 什么不该做："不要编造数据""不确定时说'我不确定'""不要回答与工作无关的问题"。</p>
+                <p><strong>技巧三：给个例子（Few-shot）</strong><br>
+                    在提示词里放一个"输入→输出"的示例，Agent 就会模仿这个格式。就像教新员工——与其讲半天规则，不如给他看一个做好的样本。</p>
+                <p><strong>技巧四：分步骤思考</strong><br>
+                    让 Agent "先分析问题，再给解决方案"，比直接要答案质量高很多。</p>
+                <button type="button" class="agent-knowledge-toggle glass-btn"><span class="agent-toggle-icon">▶</span> 技术细节：代码示例</button>
+                <div class="agent-knowledge-body">
+                    <div class="agent-code-block"><div class="agent-code-header"><span class="agent-code-lang">python</span><button type="button" class="agent-copy-btn glass-btn" aria-label="复制代码">复制</button></div>
+                        <pre><code class="language-python">system_prompt = """你是一个数据分析师。
+
+## 身份
+- 擅长用通俗语言解释数据趋势
+- 回答基于数据，不编造
+
+## 规则
+- 先说结论，再给分析过程
+- 数字保留两位小数
+- 不确定的地方标注"需要更多数据验证"
+
+## 示例
+用户：上个月销售额怎么样？
+回答：上月销售额 ¥128.50 万，环比增长 12.3%。
+主要增长来自华东区（+18%），华北区持平。
+建议关注华南区下降趋势（-5%），需要更多数据验证原因。
+"""</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <section id="step-3" class="agent-step glass-panel anim-slide-up">
+                <div class="agent-step-header">
+                    <span class="agent-step-badge">3</span>
+                    <div>
+                        <h2>实战：客服 Agent 提示词</h2>
+                        <div class="agent-tags"><span class="agent-tag">完整示例</span><span class="agent-tag">客服</span></div>
+                    </div>
+                </div>
+                <p>把前面的技巧组合起来，写一个真实的客服 Agent 提示词。</p>
+                <p>这个客服 Agent 需要：友好有耐心、只回答产品相关问题、遇到解决不了的转人工、回复简洁不啰嗦。</p>
+                <div class="agent-callout"><strong>核心原则</strong>：提示词不是一次写好的——先写一版，测试几轮，根据 Agent 的"失误"不断调整。每次 Agent 犯错，就在提示词里加一条规则防止再犯。</div>
+                <button type="button" class="agent-knowledge-toggle glass-btn"><span class="agent-toggle-icon">▶</span> 技术细节：完整客服提示词</button>
+                <div class="agent-knowledge-body">
+                    <div class="agent-code-block"><div class="agent-code-header"><span class="agent-code-lang">python</span><button type="button" class="agent-copy-btn glass-btn" aria-label="复制代码">复制</button></div>
+                        <pre><code class="language-python">CUSTOMER_SERVICE_PROMPT = """你是「XX 科技」的在线客服小助手。
+
+## 身份与语气
+- 友好、耐心、专业
+- 称呼用户为"您"
+- 每次回复不超过 3 句话
+
+## 能做的事
+- 回答产品功能、价格、使用方法的问题
+- 帮用户排查常见故障（按已知方案）
+- 记录用户反馈
+
+## 不能做的事
+- 不讨论竞品
+- 不承诺不存在的功能
+- 不回答与产品无关的话题（礼貌拒绝）
+
+## 转人工条件
+如果遇到以下情况，回复"我帮您转接人工客服"：
+- 用户连续 3 次表示问题未解决
+- 涉及退款、投诉
+- 你不确定答案
+
+## 回复格式
+1. 先确认理解用户的问题
+2. 给出解答或操作步骤
+3. 问一句"还有其他问题吗？"
+"""</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <nav class="agent-guide-nav glass-panel" aria-label="教程导航">
+                <div class="agent-guide-nav-arrows">
+                    <a href="./openclaw.html" class="agent-nav-prev"><span class="agent-nav-label">上一篇</span><span class="agent-nav-title">OpenClaw 框架</span></a>
+                    <a href="./streaming.html" class="agent-nav-next"><span class="agent-nav-label">下一篇</span><span class="agent-nav-title">流式输出</span></a>
+                </div>
+                <div class="agent-guide-nav-list">
+                    <h4>完整教程路径</h4>
+                    <div class="agent-guide-nav-links">
+                        <a href="./index.html" class="agent-guide-nav-link">主教程</a>
+                        <a href="./tools.html" class="agent-guide-nav-link">Tools</a>
+                        <a href="./memory.html" class="agent-guide-nav-link">Memory</a>
+                        <a href="./mcp.html" class="agent-guide-nav-link">MCP</a>
+                        <a href="./multi-agent.html" class="agent-guide-nav-link">Multi-Agent</a>
+                        <a href="./skills.html" class="agent-guide-nav-link">Skills</a>
+                        <a href="./openclaw.html" class="agent-guide-nav-link">OpenClaw</a>
+                        <a href="./prompt.html" class="agent-guide-nav-link is-current">Prompt</a>
+                        <a href="./streaming.html" class="agent-guide-nav-link">Streaming</a>
+                        <a href="./rag.html" class="agent-guide-nav-link">RAG</a>
+                        <a href="./deploy.html" class="agent-guide-nav-link">Deploy</a>
+                        <a href="./security.html" class="agent-guide-nav-link">Security</a>
+                    </div>
+                </div>
+            </nav>
+            </div>
+        </div>
+    </main>
+    <script src="../../assets/js/theme.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-python.min.js"></script>
+    <script src="./agent-guide.js"></script>
+</body>
+</html>

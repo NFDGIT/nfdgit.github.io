@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <script src="../../assets/js/theme-init.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>流式输出 - AI Agent 教程</title>
+    <link rel="stylesheet" href="../../assets/css/base.css">
+    <link rel="stylesheet" href="./agent-guide.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css">
+</head>
+<body class="has-glass-nav agent-page">
+    <nav class="glass-nav">
+        <a class="glass-nav-link" href="./index.html">教程主页</a>
+        <a class="glass-nav-link" href="../index.html">教程目录</a>
+        <button type="button" class="theme-toggle" aria-label="切换主题">🌙</button>
+    </nav>
+    <main class="agent-shell">
+        <header class="agent-hero anim-slide-up">
+            <p class="agent-eyebrow">guide / agent / streaming</p>
+            <h1>流式输出：实时打字效果</h1>
+            <p class="agent-subtitle">让 Agent 像人一样逐字"打"出回答，而不是等半天一次性蹦出来。</p>
+        </header>
+        <div class="agent-layout">
+            <nav class="agent-progress glass-panel" aria-label="步骤导航">
+                <ol class="agent-progress-list">
+                    <li><a href="#step-1" class="agent-progress-link is-active" data-step="1"><span class="agent-step-dot"></span>为什么要流式</a></li>
+                    <li><a href="#step-2" class="agent-progress-link" data-step="2"><span class="agent-step-dot"></span>实现流式</a></li>
+                    <li><a href="#step-3" class="agent-progress-link" data-step="3"><span class="agent-step-dot"></span>流式+工具调用</a></li>
+                </ol>
+            </nav>
+            <div class="agent-content">
+
+            <section id="step-1" class="agent-step glass-panel anim-slide-up">
+                <div class="agent-step-header">
+                    <span class="agent-step-badge">1</span>
+                    <div>
+                        <h2>为什么需要流式输出？</h2>
+                        <div class="agent-tags"><span class="agent-tag">体验</span><span class="agent-tag">类比</span></div>
+                    </div>
+                </div>
+                <p>想象你问朋友一个问题。你更喜欢哪种回答方式？</p>
+                <div class="agent-diagram">
+                    <div class="agent-diagram-node"><div class="agent-diagram-icon">⏳</div><div class="agent-diagram-label">等 10 秒</div><div class="agent-diagram-desc">然后一次性出现整段话</div></div>
+                    <div class="agent-diagram-arrow">vs</div>
+                    <div class="agent-diagram-node"><div class="agent-diagram-icon">⌨️</div><div class="agent-diagram-label">立刻开始</div><div class="agent-diagram-desc">一个字一个字"打"出来</div></div>
+                </div>
+                <p>大多数人更喜欢第二种——虽然总时间一样，但你<strong>马上就能看到回答在生成</strong>，不会觉得 Agent 卡死了。ChatGPT、Claude 聊天界面就是这种效果。</p>
+                <p>技术上，这叫<strong>流式输出（Streaming）</strong>——服务器每生成一个词就立刻发给你，不用等全部生成完。</p>
+            </section>
+
+            <section id="step-2" class="agent-step glass-panel anim-slide-up">
+                <div class="agent-step-header">
+                    <span class="agent-step-badge">2</span>
+                    <div>
+                        <h2>让你的 Agent 支持流式</h2>
+                        <div class="agent-tags"><span class="agent-tag">stream=True</span><span class="agent-tag">实现</span></div>
+                    </div>
+                </div>
+                <p>改动非常小：只需要加一个参数 <code>stream=True</code>，然后逐块读取回复。</p>
+                <p>原来是"等 Agent 说完 → 一次性拿到全部文字"，现在是"Agent 边说边传 → 你边收边显示"。</p>
+                <button type="button" class="agent-knowledge-toggle glass-btn"><span class="agent-toggle-icon">▶</span> 技术细节：代码实现</button>
+                <div class="agent-knowledge-body">
+                    <h3>非流式（原来的方式）</h3>
+                    <div class="agent-code-block"><div class="agent-code-header"><span class="agent-code-lang">python</span><button type="button" class="agent-copy-btn glass-btn" aria-label="复制代码">复制</button></div>
+                        <pre><code class="language-python"># 等全部生成完才返回
+response = client.chat.completions.create(
+    model="gpt-4o-mini", messages=messages
+)
+print(response.choices[0].message.content)</code></pre>
+                    </div>
+                    <h3>流式（逐字输出）</h3>
+                    <div class="agent-code-block"><div class="agent-code-header"><span class="agent-code-lang">python</span><button type="button" class="agent-copy-btn glass-btn" aria-label="复制代码">复制</button></div>
+                        <pre><code class="language-python"># 加上 stream=True，逐块接收
+stream = client.chat.completions.create(
+    model="gpt-4o-mini", messages=messages,
+    stream=True
+)
+
+for chunk in stream:
+    content = chunk.choices[0].delta.content
+    if content:
+        print(content, end="", flush=True)
+
+print()  # 最后换行</code></pre>
+                    </div>
+                    <h3>关键区别</h3>
+                    <ul>
+                        <li><code>stream=True</code>：返回一个迭代器，逐块产出</li>
+                        <li>每个 chunk 的内容在 <code>delta.content</code>（不是 <code>message.content</code>）</li>
+                        <li><code>flush=True</code> 确保每个字立刻显示，不被缓冲</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="step-3" class="agent-step glass-panel anim-slide-up">
+                <div class="agent-step-header">
+                    <span class="agent-step-badge">3</span>
+                    <div>
+                        <h2>流式中的工具调用</h2>
+                        <div class="agent-tags"><span class="agent-tag">tool_calls</span><span class="agent-tag">流式拼接</span></div>
+                    </div>
+                </div>
+                <p>当 Agent 决定调用工具时，工具调用信息也是分块传来的——你需要<strong>把碎片拼起来</strong>，拼完后执行工具。</p>
+                <p>就像收到一封被拆成很多片的信：先攒齐所有碎片，拼出完整内容，再按信里的指示行动。</p>
+                <div class="agent-callout"><strong>什么时候用流式？</strong> 面向用户的交互界面（聊天、Web 应用）建议用流式。后台批处理、自动化脚本用非流式更简单。</div>
+                <button type="button" class="agent-knowledge-toggle glass-btn"><span class="agent-toggle-icon">▶</span> 技术细节：流式 Agent 循环</button>
+                <div class="agent-knowledge-body">
+                    <div class="agent-code-block"><div class="agent-code-header"><span class="agent-code-lang">python</span><button type="button" class="agent-copy-btn glass-btn" aria-label="复制代码">复制</button></div>
+                        <pre><code class="language-python">import json
+
+def run_stream_agent(user_input):
+    messages = [
+        {"role": "system", "content": "你是智能助手。"},
+        {"role": "user", "content": user_input}
+    ]
+
+    for _ in range(10):
+        stream = client.chat.completions.create(
+            model="gpt-4o-mini", messages=messages,
+            tools=tools, stream=True
+        )
+
+        content_parts = []
+        tool_calls_data = {}
+
+        for chunk in stream:
+            delta = chunk.choices[0].delta
+
+            # 文本内容 → 立刻打印
+            if delta.content:
+                print(delta.content, end="", flush=True)
+                content_parts.append(delta.content)
+
+            # 工具调用 → 攒碎片
+            if delta.tool_calls:
+                for tc in delta.tool_calls:
+                    idx = tc.index
+                    if idx not in tool_calls_data:
+                        tool_calls_data[idx] = {
+                            "id": "", "name": "", "arguments": ""
+                        }
+                    if tc.id:
+                        tool_calls_data[idx]["id"] = tc.id
+                    if tc.function and tc.function.name:
+                        tool_calls_data[idx]["name"] = tc.function.name
+                    if tc.function and tc.function.arguments:
+                        tool_calls_data[idx]["arguments"] += tc.function.arguments
+
+        # 没有工具调用 → 输出完毕
+        if not tool_calls_data:
+            print()
+            return "".join(content_parts)
+
+        # 执行工具调用
+        assistant_msg = {"role": "assistant", "content": "".join(content_parts) or None,
+                         "tool_calls": []}
+        for idx in sorted(tool_calls_data):
+            tc = tool_calls_data[idx]
+            assistant_msg["tool_calls"].append({
+                "id": tc["id"], "type": "function",
+                "function": {"name": tc["name"], "arguments": tc["arguments"]}
+            })
+
+        messages.append(assistant_msg)
+        for tc in tool_calls_data.values():
+            fn = tool_functions.get(tc["name"])
+            result = fn(**json.loads(tc["arguments"])) if fn else '{"error":"未知工具"}'
+            messages.append({"role": "tool", "tool_call_id": tc["id"], "content": result})</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <nav class="agent-guide-nav glass-panel" aria-label="教程导航">
+                <div class="agent-guide-nav-arrows">
+                    <a href="./prompt.html" class="agent-nav-prev"><span class="agent-nav-label">上一篇</span><span class="agent-nav-title">Prompt Engineering</span></a>
+                    <a href="./rag.html" class="agent-nav-next"><span class="agent-nav-label">下一篇</span><span class="agent-nav-title">RAG 检索增强</span></a>
+                </div>
+                <div class="agent-guide-nav-list">
+                    <h4>完整教程路径</h4>
+                    <div class="agent-guide-nav-links">
+                        <a href="./index.html" class="agent-guide-nav-link">主教程</a><a href="./tools.html" class="agent-guide-nav-link">Tools</a><a href="./memory.html" class="agent-guide-nav-link">Memory</a><a href="./mcp.html" class="agent-guide-nav-link">MCP</a><a href="./multi-agent.html" class="agent-guide-nav-link">Multi-Agent</a><a href="./skills.html" class="agent-guide-nav-link">Skills</a><a href="./openclaw.html" class="agent-guide-nav-link">OpenClaw</a><a href="./prompt.html" class="agent-guide-nav-link">Prompt</a><a href="./streaming.html" class="agent-guide-nav-link is-current">Streaming</a><a href="./rag.html" class="agent-guide-nav-link">RAG</a><a href="./deploy.html" class="agent-guide-nav-link">Deploy</a><a href="./security.html" class="agent-guide-nav-link">Security</a>
+                    </div>
+                </div>
+            </nav>
+            </div>
+        </div>
+    </main>
+    <script src="../../assets/js/theme.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-python.min.js"></script>
+    <script src="./agent-guide.js"></script>
+</body>
+</html>

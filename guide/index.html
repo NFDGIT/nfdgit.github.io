@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>教程目录</title>
     <link rel="stylesheet" href="../assets/css/base.css">
-    <link rel="stylesheet" href="../assets/css/home.css">
     <link rel="stylesheet" href="./guide.css">
 </head>
 <body class="guide-page">
@@ -15,7 +14,7 @@
             <div>
                 <p class="guide-kicker">guide directory</p>
                 <h1>教程目录</h1>
-                <p class="guide-subtitle">所有教程系列汇总。推荐从主教程开始，按顺序阅读进阶篇。</p>
+                <p class="guide-subtitle">AI Agent 完整教程系列，12 篇从零到上线。</p>
             </div>
             <div class="guide-actions">
                 <a href="../index.html" class="glass-nav-link">返回首页</a>
@@ -23,90 +22,132 @@
             </div>
         </header>
 
-        <p class="guide-section-label">AI Agent 系列</p>
+        <div class="guide-categories">
 
-        <section class="home-grid guide-grid" aria-label="教程列表">
-            <a href="./agent/index.html" class="home-card guide-card anim-slide-up stagger-1">
-                <span class="home-card-icon">🤖</span>
-                <span class="guide-card-tag is-primary">推荐起点</span>
-                <div class="home-card-title">从零搭建 AI Agent</div>
-                <div class="guide-card-desc">6 步理解核心原理：LLM 调用、工具定义、Agent 循环。无需框架，纯 Python 实现。</div>
-                <div class="guide-card-meta">
-                    <span class="guide-chip">Python</span>
-                    <span class="guide-chip">OpenAI SDK</span>
-                    <span class="guide-chip">入门</span>
-                </div>
-            </a>
+            <section class="guide-category glass-panel anim-slide-up">
+                <h2 class="guide-category-title">基础入门</h2>
+                <ul class="guide-list">
+                    <li><a href="./agent/index.html" class="guide-row">
+                        <span class="guide-row-icon">🤖</span>
+                        <div class="guide-row-info">
+                            <div class="guide-row-title">从零搭建 AI Agent <span class="guide-badge-start">推荐起点</span></div>
+                            <div class="guide-row-desc">6 步理解核心原理，纯 Python 实现</div>
+                        </div>
+                        <div class="guide-row-tags"><span class="guide-row-tag">Python</span><span class="guide-row-tag">OpenAI</span></div>
+                    </a></li>
+                    <li><a href="./agent/tools.html" class="guide-row">
+                        <span class="guide-row-icon">🔧</span>
+                        <div class="guide-row-info">
+                            <div class="guide-row-title">添加更多工具</div>
+                            <div class="guide-row-desc">多工具定义、并行调用、安全校验</div>
+                        </div>
+                        <div class="guide-row-tags"><span class="guide-row-tag">多工具</span><span class="guide-row-tag">并行</span></div>
+                    </a></li>
+                    <li><a href="./agent/memory.html" class="guide-row">
+                        <span class="guide-row-icon">🧠</span>
+                        <div class="guide-row-info">
+                            <div class="guide-row-title">加入记忆</div>
+                            <div class="guide-row-desc">文件持久化、滑动窗口、摘要压缩</div>
+                        </div>
+                        <div class="guide-row-tags"><span class="guide-row-tag">持久化</span><span class="guide-row-tag">Token</span></div>
+                    </a></li>
+                    <li><a href="./agent/prompt.html" class="guide-row">
+                        <span class="guide-row-icon">✍️</span>
+                        <div class="guide-row-info">
+                            <div class="guide-row-title">Prompt Engineering</div>
+                            <div class="guide-row-desc">角色设定、约束规则、Few-shot 示例</div>
+                        </div>
+                        <div class="guide-row-tags"><span class="guide-row-tag">提示词</span><span class="guide-row-tag">Few-shot</span></div>
+                    </a></li>
+                </ul>
+            </section>
 
-            <a href="./agent/tools.html" class="home-card guide-card anim-slide-up stagger-2">
-                <span class="home-card-icon">🔧</span>
-                <span class="guide-card-tag">进阶</span>
-                <div class="home-card-title">添加更多工具</div>
-                <div class="guide-card-desc">定义多个工具、实现搜索和代码执行、处理并行调用与安全校验。</div>
-                <div class="guide-card-meta">
-                    <span class="guide-chip">多工具</span>
-                    <span class="guide-chip">并行调用</span>
-                </div>
-            </a>
+            <section class="guide-category glass-panel anim-slide-up stagger-1">
+                <h2 class="guide-category-title">架构进阶</h2>
+                <ul class="guide-list">
+                    <li><a href="./agent/multi-agent.html" class="guide-row">
+                        <span class="guide-row-icon">👥</span>
+                        <div class="guide-row-info">
+                            <div class="guide-row-title">多 Agent 协作</div>
+                            <div class="guide-row-desc">编排者模式、数据传递、审核循环</div>
+                        </div>
+                        <div class="guide-row-tags"><span class="guide-row-tag">Orchestrator</span></div>
+                    </a></li>
+                    <li><a href="./agent/skills.html" class="guide-row">
+                        <span class="guide-row-icon">📋</span>
+                        <div class="guide-row-info">
+                            <div class="guide-row-title">Agent Skills</div>
+                            <div class="guide-row-desc">SKILL.md 可复用能力模块 + 脚本命令</div>
+                        </div>
+                        <div class="guide-row-tags"><span class="guide-row-tag">SKILL.md</span></div>
+                    </a></li>
+                    <li><a href="./agent/rag.html" class="guide-row">
+                        <span class="guide-row-icon">📚</span>
+                        <div class="guide-row-info">
+                            <div class="guide-row-title">RAG 检索增强</div>
+                            <div class="guide-row-desc">文档切分、向量检索、上下文注入</div>
+                        </div>
+                        <div class="guide-row-tags"><span class="guide-row-tag">知识库</span><span class="guide-row-tag">向量</span></div>
+                    </a></li>
+                    <li><a href="./agent/streaming.html" class="guide-row">
+                        <span class="guide-row-icon">⌨️</span>
+                        <div class="guide-row-info">
+                            <div class="guide-row-title">流式输出</div>
+                            <div class="guide-row-desc">实时打字效果、流式工具调用</div>
+                        </div>
+                        <div class="guide-row-tags"><span class="guide-row-tag">Streaming</span></div>
+                    </a></li>
+                </ul>
+            </section>
 
-            <a href="./agent/memory.html" class="home-card guide-card anim-slide-up stagger-3">
-                <span class="home-card-icon">🧠</span>
-                <span class="guide-card-tag">进阶</span>
-                <div class="home-card-title">加入记忆</div>
-                <div class="guide-card-desc">文件持久化、滑动窗口裁剪、摘要压缩，让 Agent 跨会话记住上下文。</div>
-                <div class="guide-card-meta">
-                    <span class="guide-chip">持久化</span>
-                    <span class="guide-chip">Token 管理</span>
-                </div>
-            </a>
+            <section class="guide-category glass-panel anim-slide-up stagger-2">
+                <h2 class="guide-category-title">框架生态</h2>
+                <ul class="guide-list">
+                    <li><a href="./agent/mcp.html" class="guide-row">
+                        <span class="guide-row-icon">🔌</span>
+                        <div class="guide-row-info">
+                            <div class="guide-row-title">试试 MCP</div>
+                            <div class="guide-row-desc">标准化工具协议，安装并连接 MCP Server</div>
+                        </div>
+                        <div class="guide-row-tags"><span class="guide-row-tag">MCP</span><span class="guide-row-tag">标准协议</span></div>
+                    </a></li>
+                    <li><a href="./agent/openclaw.html" class="guide-row">
+                        <span class="guide-row-icon">🐾</span>
+                        <div class="guide-row-info">
+                            <div class="guide-row-title">OpenClaw 框架</div>
+                            <div class="guide-row-desc">开源 Agent 框架，50+ 集成、Skill 市场</div>
+                        </div>
+                        <div class="guide-row-tags"><span class="guide-row-tag">框架</span><span class="guide-row-tag">本地部署</span></div>
+                    </a></li>
+                </ul>
+            </section>
 
-            <a href="./agent/mcp.html" class="home-card guide-card anim-slide-up stagger-4">
-                <span class="home-card-icon">🔌</span>
-                <span class="guide-card-tag">进阶</span>
-                <div class="home-card-title">试试 MCP</div>
-                <div class="guide-card-desc">Model Context Protocol 标准化工具协议，安装 MCP Server 并连接到 Agent。</div>
-                <div class="guide-card-meta">
-                    <span class="guide-chip">MCP</span>
-                    <span class="guide-chip">标准协议</span>
-                </div>
-            </a>
+            <section class="guide-category glass-panel anim-slide-up stagger-3">
+                <h2 class="guide-category-title">生产上线</h2>
+                <ul class="guide-list">
+                    <li><a href="./agent/deploy.html" class="guide-row">
+                        <span class="guide-row-icon">🚀</span>
+                        <div class="guide-row-info">
+                            <div class="guide-row-title">部署上线</div>
+                            <div class="guide-row-desc">FastAPI 包装、接入微信/钉钉/飞书</div>
+                        </div>
+                        <div class="guide-row-tags"><span class="guide-row-tag">FastAPI</span><span class="guide-row-tag">机器人</span></div>
+                    </a></li>
+                    <li><a href="./agent/security.html" class="guide-row">
+                        <span class="guide-row-icon">🛡️</span>
+                        <div class="guide-row-info">
+                            <div class="guide-row-title">安全与防护</div>
+                            <div class="guide-row-desc">防注入、防泄露、权限控制、上线清单</div>
+                        </div>
+                        <div class="guide-row-tags"><span class="guide-row-tag">安全</span><span class="guide-row-tag">沙箱</span></div>
+                    </a></li>
+                </ul>
+            </section>
 
-            <a href="./agent/multi-agent.html" class="home-card guide-card anim-slide-up stagger-5">
-                <span class="home-card-icon">👥</span>
-                <span class="guide-card-tag">进阶</span>
-                <div class="home-card-title">多 Agent 协作</div>
-                <div class="guide-card-desc">编排者模式、Agent 间数据传递、带审核循环的写作管线实战。</div>
-                <div class="guide-card-meta">
-                    <span class="guide-chip">多 Agent</span>
-                    <span class="guide-chip">Orchestrator</span>
-                </div>
-            </a>
-
-            <a href="./agent/skills.html" class="home-card guide-card anim-slide-up stagger-6">
-                <span class="home-card-icon">📋</span>
-                <span class="guide-card-tag">进阶</span>
-                <div class="home-card-title">Agent Skills</div>
-                <div class="guide-card-desc">用 SKILL.md 文件为 Agent 添加可复用的工作流能力，16+ 工具支持的开放标准。</div>
-                <div class="guide-card-meta">
-                    <span class="guide-chip">SKILL.md</span>
-                    <span class="guide-chip">可复用</span>
-                </div>
-            </a>
-
-            <a href="./agent/openclaw.html" class="home-card guide-card anim-slide-up stagger-7">
-                <span class="home-card-icon">🐾</span>
-                <span class="guide-card-tag">进阶</span>
-                <div class="home-card-title">OpenClaw 框架</div>
-                <div class="guide-card-desc">开源自主 Agent 框架，50+ 集成、Skill 市场、本地部署，从手写到生产级。</div>
-                <div class="guide-card-meta">
-                    <span class="guide-chip">框架</span>
-                    <span class="guide-chip">Skill 系统</span>
-                </div>
-            </a>
-        </section>
+        </div>
 
         <section class="guide-note" aria-label="说明">
-            推荐阅读顺序：主教程 → 添加更多工具 → 加入记忆 → 试试 MCP → 多 Agent 协作 → Agent Skills → OpenClaw 框架。每篇教程末尾有导航链接，可按顺序跳转。
+            推荐阅读顺序：从"基础入门"开始，按分组逐篇阅读。每篇末尾有导航链接跳转到下一篇。
         </section>
     </main>
 
