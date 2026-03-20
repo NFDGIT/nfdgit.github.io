@@ -2,12 +2,33 @@
 
 .agent-page {
     min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Mobile: prevent any horizontal overflow */
+@media (max-width: 480px) {
+    .agent-page .glass-nav {
+        gap: 0.25rem;
+        padding: 0.4rem 0.5rem;
+    }
+
+    .agent-page .glass-nav-link {
+        display: inline-block;
+        padding: 0.35rem 0.55rem;
+        font-size: 0.72rem;
+        max-width: 5em;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        vertical-align: middle;
+    }
 }
 
 .agent-shell {
     max-width: 1200px;
     margin: 0 auto;
     padding: 1.25rem;
+    overflow-x: hidden;
 }
 
 /* ===== Hero ===== */
@@ -110,38 +131,53 @@
 @media (max-width: 899px) {
     .agent-progress {
         top: 44px;
-        padding: 0.4rem 0.6rem;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
+        padding: 0;
+        overflow: hidden;
         background: var(--glass-bg);
         backdrop-filter: blur(var(--glass-blur));
         -webkit-backdrop-filter: blur(var(--glass-blur));
     }
 
-    .agent-progress::-webkit-scrollbar {
-        display: none;
-    }
-
     .agent-progress-list {
         flex-direction: row;
-        gap: 0.15rem;
+        gap: 0;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        padding: 0.35rem 0.5rem;
+        mask-image: linear-gradient(to right, black 85%, transparent 100%);
+        -webkit-mask-image: linear-gradient(to right, black 85%, transparent 100%);
+    }
+
+    .agent-progress-list::-webkit-scrollbar {
+        display: none;
     }
 
     .agent-progress-link {
         white-space: nowrap;
-        padding: 0.5rem 0.7rem;
-        font-size: 0.78rem;
-        min-height: 40px;
+        padding: 0.45rem 0.6rem;
+        font-size: 0.75rem;
+        min-height: 36px;
     }
 
     .agent-progress-link.is-active {
-        background: rgba(0, 122, 255, 0.08);
+        background: rgba(0, 122, 255, 0.1);
     }
 
     .agent-step-dot {
         width: 6px;
         height: 6px;
+    }
+}
+
+@media (max-width: 480px) {
+    .agent-progress {
+        top: 38px;
+    }
+
+    .agent-progress-link {
+        padding: 0.4rem 0.5rem;
+        font-size: 0.72rem;
     }
 }
 
