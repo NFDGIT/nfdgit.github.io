@@ -25,14 +25,14 @@
 }
 
 .agent-hero h1 {
-    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    font-size: clamp(1.4rem, 4vw, 2.4rem);
     line-height: 1.25;
     margin-bottom: 0.6rem;
 }
 
 .agent-subtitle {
     color: var(--text-muted);
-    font-size: 1rem;
+    font-size: clamp(0.88rem, 2.5vw, 1rem);
     line-height: 1.6;
     max-width: 38rem;
 }
@@ -41,7 +41,7 @@
 
 .agent-layout {
     display: grid;
-    gap: 1.5rem;
+    gap: 1.25rem;
 }
 
 @media (min-width: 900px) {
@@ -57,14 +57,14 @@
     position: sticky;
     top: 68px;
     z-index: 10;
-    padding: 1rem;
+    padding: 0.75rem;
 }
 
 .agent-progress-list {
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
+    gap: 0.2rem;
 }
 
 .agent-progress-link {
@@ -106,12 +106,21 @@
     transform: scale(1.3);
 }
 
+/* Mobile progress: horizontal scrollable bar */
 @media (max-width: 899px) {
     .agent-progress {
-        top: 48px;
-        padding: 0.6rem 0.8rem;
+        top: 44px;
+        padding: 0.4rem 0.6rem;
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        background: var(--glass-bg);
+        backdrop-filter: blur(var(--glass-blur));
+        -webkit-backdrop-filter: blur(var(--glass-blur));
+    }
+
+    .agent-progress::-webkit-scrollbar {
+        display: none;
     }
 
     .agent-progress-list {
@@ -121,8 +130,18 @@
 
     .agent-progress-link {
         white-space: nowrap;
-        padding: 0.4rem 0.65rem;
-        font-size: 0.8rem;
+        padding: 0.5rem 0.7rem;
+        font-size: 0.78rem;
+        min-height: 40px;
+    }
+
+    .agent-progress-link.is-active {
+        background: rgba(0, 122, 255, 0.08);
+    }
+
+    .agent-step-dot {
+        width: 6px;
+        height: 6px;
     }
 }
 
@@ -131,7 +150,7 @@
 .agent-content {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 1.25rem;
 }
 
 .agent-step {
@@ -157,6 +176,7 @@
     border-radius: 4px;
     font-size: 0.88em;
     font-family: "SF Mono", "Fira Code", "JetBrains Mono", Menlo, Consolas, monospace;
+    word-break: break-word;
 }
 
 /* ===== Step Header ===== */
@@ -164,7 +184,7 @@
 .agent-step-header {
     display: flex;
     align-items: flex-start;
-    gap: 1rem;
+    gap: 0.75rem;
     margin-bottom: 1rem;
 }
 
@@ -172,21 +192,21 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 2.4rem;
-    height: 2.4rem;
+    width: 2.2rem;
+    height: 2.2rem;
     border-radius: 50%;
     background: var(--accent);
     color: #fff;
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-weight: 700;
     flex-shrink: 0;
     box-shadow: var(--accent-glow);
 }
 
 .agent-step-header h2 {
-    font-size: 1.2rem;
+    font-size: clamp(1rem, 3vw, 1.2rem);
     line-height: 1.35;
-    margin-bottom: 0.35rem;
+    margin-bottom: 0.3rem;
 }
 
 /* ===== Tags ===== */
@@ -194,14 +214,14 @@
 .agent-tags {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.35rem;
+    gap: 0.3rem;
 }
 
 .agent-tag {
     display: inline-block;
-    padding: 0.15rem 0.55rem;
+    padding: 0.12rem 0.5rem;
     border-radius: var(--radius-pill);
-    font-size: 0.72rem;
+    font-size: 0.7rem;
     font-weight: 600;
     letter-spacing: 0.02em;
     background: rgba(0, 122, 255, 0.1);
@@ -221,40 +241,69 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.8rem;
-    margin: 1.5rem 0;
+    gap: 0.6rem;
+    margin: 1.25rem 0;
     flex-wrap: wrap;
 }
 
 .agent-diagram-node {
     text-align: center;
-    padding: 1rem 1.2rem;
+    padding: 0.8rem 1rem;
     border-radius: var(--radius-md);
     background: rgba(128, 128, 128, 0.06);
     border: 1px solid rgba(128, 128, 128, 0.12);
-    min-width: 100px;
+    min-width: 90px;
 }
 
 .agent-diagram-icon {
-    font-size: 2rem;
-    margin-bottom: 0.3rem;
+    font-size: 1.8rem;
+    margin-bottom: 0.25rem;
 }
 
 .agent-diagram-label {
     font-weight: 700;
-    font-size: 0.95rem;
-    margin-bottom: 0.15rem;
+    font-size: 0.88rem;
+    margin-bottom: 0.1rem;
 }
 
 .agent-diagram-desc {
-    font-size: 0.78rem;
+    font-size: 0.75rem;
     color: var(--text-muted);
 }
 
 .agent-diagram-arrow {
-    font-size: 1.4rem;
+    font-size: 1.3rem;
     color: var(--accent);
     font-weight: 700;
+    flex-shrink: 0;
+}
+
+/* Mobile diagrams: vertical stack */
+@media (max-width: 480px) {
+    .agent-diagram {
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    .agent-diagram-node {
+        width: 100%;
+        max-width: 200px;
+        padding: 0.6rem 0.8rem;
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        text-align: left;
+    }
+
+    .agent-diagram-icon {
+        font-size: 1.4rem;
+        margin-bottom: 0;
+    }
+
+    .agent-diagram-arrow {
+        transform: rotate(90deg);
+        font-size: 1rem;
+    }
 }
 
 /* ===== Code Blocks ===== */
@@ -270,13 +319,13 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0.45rem 0.8rem;
+    padding: 0.4rem 0.75rem;
     background: rgba(40, 42, 54, 0.95);
     border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .agent-code-lang {
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.06em;
@@ -284,14 +333,16 @@
 }
 
 .agent-copy-btn {
-    padding: 0.25rem 0.6rem !important;
+    padding: 0.35rem 0.65rem !important;
     font-size: 0.75rem !important;
+    min-height: 32px;
     background: rgba(255, 255, 255, 0.08) !important;
     border-color: rgba(255, 255, 255, 0.12) !important;
     color: rgba(255, 255, 255, 0.7) !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
     box-shadow: none !important;
+    touch-action: manipulation;
 }
 
 .agent-copy-btn:hover {
@@ -306,7 +357,7 @@
 
 .agent-code-block pre {
     margin: 0;
-    padding: 1rem;
+    padding: 0.85rem;
     overflow-x: auto;
     background: rgba(40, 42, 54, 0.95) !important;
     -webkit-overflow-scrolling: touch;
@@ -316,10 +367,12 @@
     background: none;
     padding: 0;
     border-radius: 0;
-    font-size: 0.82rem;
-    line-height: 1.6;
+    font-size: clamp(0.78rem, 2vw, 0.82rem);
+    line-height: 1.55;
     font-family: "SF Mono", "Fira Code", "JetBrains Mono", Menlo, Consolas, monospace;
     tab-size: 4;
+    word-break: normal;
+    white-space: pre;
 }
 
 /* ===== Knowledge Collapsible ===== */
@@ -327,7 +380,9 @@
 .agent-knowledge-toggle {
     margin-top: 0.5rem;
     font-size: 0.82rem !important;
-    gap: 0.3rem;
+    gap: 0.35rem;
+    min-height: 44px;
+    touch-action: manipulation;
 }
 
 .agent-toggle-icon {
@@ -365,7 +420,7 @@
 
 .agent-knowledge-body ul,
 .agent-knowledge-body ol {
-    padding-left: 1.3rem;
+    padding-left: 1.2rem;
     color: var(--text-muted);
     line-height: 1.7;
     margin-bottom: 0.5rem;
@@ -386,12 +441,12 @@
 /* ===== Callout ===== */
 
 .agent-callout {
-    padding: 0.85rem 1rem;
+    padding: 0.8rem 1rem;
     border-radius: var(--radius-sm);
     background: rgba(0, 122, 255, 0.06);
     border-left: 3px solid var(--accent);
     margin: 1rem 0;
-    font-size: 0.9rem;
+    font-size: 0.88rem;
     line-height: 1.6;
 }
 
@@ -412,93 +467,53 @@
 
 .agent-next-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 0.75rem;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 0.65rem;
 }
 
 .agent-next-card {
-    padding: 1rem !important;
+    padding: 0.85rem !important;
 }
 
 .agent-next-card strong {
     display: block;
-    margin-bottom: 0.35rem;
-    font-size: 0.92rem;
+    margin-bottom: 0.3rem;
+    font-size: 0.9rem;
 }
 
 .agent-next-card p {
-    font-size: 0.82rem;
+    font-size: 0.8rem;
     color: var(--text-muted);
     line-height: 1.55;
     margin: 0;
 }
 
-/* ===== Responsive ===== */
-
-@media (max-width: 600px) {
-    .agent-shell {
-        padding: 0.75rem;
-    }
-
-    .agent-step {
-        padding: 1.1rem;
-    }
-
-    .agent-step-header {
-        gap: 0.7rem;
-    }
-
-    .agent-step-badge {
-        width: 2rem;
-        height: 2rem;
-        font-size: 0.95rem;
-    }
-
-    .agent-step-header h2 {
-        font-size: 1.05rem;
-    }
-
-    .agent-diagram {
-        gap: 0.5rem;
-    }
-
-    .agent-diagram-node {
-        padding: 0.7rem 0.8rem;
-        min-width: 80px;
-    }
-
-    .agent-diagram-icon {
-        font-size: 1.5rem;
-    }
-
-    .agent-next-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
 /* ===== Tutorial Cross-Navigation ===== */
 
 .agent-guide-nav {
-    margin-top: 1.5rem;
-    padding: 1.5rem;
+    margin-top: 1.25rem;
+    padding: 1.25rem;
 }
 
 .agent-guide-nav-arrows {
     display: flex;
     justify-content: space-between;
-    gap: 1rem;
-    margin-bottom: 1.25rem;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
 }
 
 .agent-guide-nav-arrows a {
     text-decoration: none;
+    padding: 0.5rem 0;
+    min-height: 44px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .agent-nav-prev,
 .agent-nav-next {
-    display: flex;
-    flex-direction: column;
-    gap: 0.15rem;
+    gap: 0.1rem;
 }
 
 .agent-nav-next {
@@ -507,14 +522,14 @@
 }
 
 .agent-nav-label {
-    font-size: 0.72rem;
+    font-size: 0.7rem;
     color: var(--text-muted);
     text-transform: uppercase;
     letter-spacing: 0.05em;
 }
 
 .agent-nav-title {
-    font-size: 0.9rem;
+    font-size: 0.88rem;
     font-weight: 600;
     color: var(--accent);
 }
@@ -524,35 +539,39 @@
 }
 
 .agent-guide-nav-list {
-    border-top: 1px solid rgba(128, 128, 128, 0.12);
-    padding-top: 1rem;
+    border-top: 1px solid rgba(128, 128, 128, 0.1);
+    padding-top: 0.85rem;
 }
 
 .agent-guide-nav-list h4 {
-    font-size: 0.78rem;
+    font-size: 0.72rem;
     color: var(--text-muted);
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    margin-bottom: 0.6rem;
+    margin-bottom: 0.5rem;
 }
 
 .agent-guide-nav-links {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.4rem;
+    gap: 0.35rem;
 }
 
 .agent-guide-nav-link {
-    display: inline-block;
-    padding: 0.3rem 0.7rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.35rem 0.65rem;
+    min-height: 34px;
     border-radius: var(--radius-pill);
-    font-size: 0.8rem;
+    font-size: 0.78rem;
     font-weight: 500;
     text-decoration: none;
     color: var(--text-muted);
     background: rgba(128, 128, 128, 0.06);
     border: 1px solid rgba(128, 128, 128, 0.1);
     transition: color 0.2s, background 0.2s, border-color 0.2s;
+    touch-action: manipulation;
 }
 
 .agent-guide-nav-link:hover {
@@ -581,16 +600,103 @@
     line-height: 1.6;
 }
 
+/* ===== Mobile: < 600px ===== */
+
 @media (max-width: 600px) {
+    .agent-shell {
+        padding: 0.5rem;
+    }
+
+    .agent-hero {
+        margin-bottom: 1.25rem;
+        padding: 0 0.25rem;
+    }
+
+    .agent-step {
+        padding: 1rem 0.85rem;
+        border-radius: var(--radius-md);
+    }
+
+    .agent-content {
+        gap: 0.85rem;
+    }
+
+    /* Code blocks: readable on small screens */
+    .agent-code-block {
+        border-radius: var(--radius-sm);
+        margin-left: -0.85rem;
+        margin-right: -0.85rem;
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+    }
+
+    .agent-code-block pre {
+        padding: 0.75rem;
+        font-size: 0.84rem;
+    }
+
+    .agent-copy-btn {
+        min-height: 36px;
+        padding: 0.4rem 0.7rem !important;
+    }
+
+    /* Knowledge toggle: full-width tap target */
+    .agent-knowledge-toggle {
+        width: 100%;
+        justify-content: flex-start;
+        padding: 0.55rem 0.8rem !important;
+        font-size: 0.84rem !important;
+    }
+
+    /* Next steps */
+    .agent-next-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* Bottom navigation */
     .agent-guide-nav {
-        padding: 1.1rem;
+        padding: 1rem 0.85rem;
+    }
+
+    .agent-guide-nav-arrows {
+        flex-direction: column;
+        gap: 0.4rem;
+    }
+
+    .agent-guide-nav-arrows a {
+        padding: 0.65rem 0.8rem;
+        border-radius: var(--radius-sm);
+        background: rgba(128, 128, 128, 0.04);
+        border: 1px solid rgba(128, 128, 128, 0.08);
+        min-height: 48px;
+    }
+
+    .agent-nav-next {
+        text-align: left;
+        margin-left: 0;
     }
 
     .agent-guide-nav-links {
-        flex-direction: column;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.3rem;
     }
 
     .agent-guide-nav-link {
-        text-align: center;
+        min-height: 38px;
+        font-size: 0.76rem;
+        padding: 0.3rem 0.5rem;
+    }
+
+    /* Inline lists */
+    .agent-step ul,
+    .agent-step ol {
+        padding-left: 1.1rem;
+    }
+
+    .agent-knowledge-body ul,
+    .agent-knowledge-body ol {
+        padding-left: 1rem;
     }
 }
