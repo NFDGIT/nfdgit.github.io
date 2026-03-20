@@ -1,0 +1,227 @@
+body.glossary-page {
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+.glossary-shell {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 1.25rem;
+    overflow-x: hidden;
+}
+
+.glossary-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    align-items: flex-start;
+    padding: 0 0 1rem;
+}
+
+.glossary-header > div { text-align: left; }
+
+.glossary-kicker {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.4rem;
+}
+
+.glossary-header h1 {
+    font-size: clamp(1.4rem, 4vw, 2rem);
+    margin-bottom: 0.4rem;
+}
+
+.glossary-subtitle {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+.glossary-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-shrink: 0;
+}
+
+/* Category jump nav */
+.glossary-jump {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin-bottom: 1rem;
+}
+
+.glossary-jump a {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.3rem 0.65rem;
+    border-radius: var(--radius-pill);
+    font-size: 0.78rem;
+    font-weight: 500;
+    text-decoration: none;
+    color: var(--text-muted);
+    background: rgba(128, 128, 128, 0.06);
+    border: 1px solid rgba(128, 128, 128, 0.1);
+    transition: color 0.2s, background 0.2s;
+    min-height: 34px;
+    touch-action: manipulation;
+}
+
+.glossary-jump a:hover {
+    color: var(--accent);
+    background: rgba(0, 122, 255, 0.06);
+    border-color: rgba(0, 122, 255, 0.15);
+}
+
+/* Category sections */
+.glossary-categories {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.glossary-category {
+    padding: 0;
+    overflow: hidden;
+    scroll-margin-top: 60px;
+}
+
+.glossary-category-title {
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    padding: 0.65rem 1rem 0.5rem;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.1);
+}
+
+/* Term rows */
+.glossary-list {
+    list-style: none;
+}
+
+.glossary-term {
+    border-bottom: 1px solid rgba(128, 128, 128, 0.06);
+}
+
+.glossary-term:last-child {
+    border-bottom: none;
+}
+
+.glossary-term-header {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    padding: 0.6rem 1rem;
+    cursor: pointer;
+    transition: background 0.15s;
+    min-height: 44px;
+    touch-action: manipulation;
+}
+
+.glossary-term-header:hover {
+    background: rgba(128, 128, 128, 0.04);
+}
+
+.glossary-term-name {
+    font-weight: 600;
+    font-size: 0.92rem;
+    flex-shrink: 0;
+}
+
+.glossary-term-en {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-weight: 400;
+    flex-shrink: 0;
+}
+
+.glossary-term-brief {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    margin-left: auto;
+    text-align: right;
+    line-height: 1.4;
+}
+
+.glossary-toggle {
+    font-size: 0.6rem;
+    color: var(--text-muted);
+    transition: transform 0.2s;
+    flex-shrink: 0;
+    margin-left: 0.3rem;
+}
+
+.glossary-term.is-open .glossary-toggle {
+    transform: rotate(90deg);
+}
+
+/* Expandable detail */
+.glossary-detail {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s var(--ease-smooth), opacity 0.25s;
+    opacity: 0;
+}
+
+.glossary-term.is-open .glossary-detail {
+    opacity: 1;
+}
+
+.glossary-detail-inner {
+    padding: 0 1rem 0.85rem;
+    font-size: 0.85rem;
+    line-height: 1.7;
+    color: var(--text-muted);
+}
+
+.glossary-detail-inner strong {
+    color: var(--text);
+}
+
+.glossary-analogy {
+    margin-top: 0.4rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--radius-sm);
+    background: rgba(0, 122, 255, 0.04);
+    border-left: 3px solid var(--accent);
+    font-size: 0.82rem;
+    line-height: 1.6;
+}
+
+[data-theme="dark"] .glossary-analogy {
+    background: rgba(10, 132, 255, 0.06);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .glossary-shell {
+        padding: 0.5rem;
+    }
+
+    .glossary-header {
+        flex-direction: column;
+    }
+
+    .glossary-actions {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .glossary-term-header {
+        flex-wrap: wrap;
+        gap: 0.2rem 0.4rem;
+        padding: 0.55rem 0.75rem;
+    }
+
+    .glossary-term-brief {
+        width: 100%;
+        text-align: left;
+        margin-left: 0;
+        font-size: 0.78rem;
+    }
+}
