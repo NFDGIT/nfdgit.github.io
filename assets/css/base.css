@@ -234,8 +234,7 @@ body {
 /* ===== 主题/大字切换按钮 ===== */
 
 .theme-toggle,
-.large-text-toggle,
-.lang-toggle {
+.large-text-toggle {
     padding: 0.45rem;
     border: none;
     border-radius: var(--radius-sm);
@@ -252,16 +251,8 @@ body {
     box-shadow: var(--glass-shadow);
 }
 
-.lang-toggle {
-    font-size: 0.78rem;
-    font-weight: 600;
-    padding: 0.4rem 0.55rem;
-    letter-spacing: 0.02em;
-}
-
 .theme-toggle:hover,
-.large-text-toggle:hover,
-.lang-toggle:hover {
+.large-text-toggle:hover {
     opacity: 1;
     transform: scale(1.06);
 }
