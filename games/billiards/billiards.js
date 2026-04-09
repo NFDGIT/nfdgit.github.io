@@ -22,20 +22,21 @@
   var mobileScore = document.getElementById('mobile-score');
   var mobileBallsLeft = document.getElementById('mobile-balls-left');
 
+  var BU = BilliardsUtils;
   var renderMode = '2d';
   var scene3d = null;
-  var CAMERA_DEFAULT_PITCH = Math.atan2(1.05, 1.08);
-  var CAMERA_MIN_PITCH = 0.22;
-  var CAMERA_MAX_PITCH = 1.15;
-  var CAMERA_ROTATE_SPEED = 0.0055;
+  var CAMERA_DEFAULT_PITCH = BU.CAMERA_DEFAULT_PITCH;
+  var CAMERA_MIN_PITCH = BU.CAMERA_MIN_PITCH;
+  var CAMERA_MAX_PITCH = BU.CAMERA_MAX_PITCH;
+  var CAMERA_ROTATE_SPEED = BU.CAMERA_ROTATE_SPEED;
 
-  var BASE_LOGIC_W = 760;
-  var BASE_LOGIC_H = 420;
-  var MOBILE_BREAKPOINT = 700;
-  var MOBILE_PORTRAIT_MIN_W = 430;
-  var MOBILE_PORTRAIT_MAX_W = 520;
-  var MOBILE_LANDSCAPE_MIN_W = 500;
-  var MOBILE_LANDSCAPE_MAX_W = 620;
+  var BASE_LOGIC_W = BU.BASE_LOGIC_W;
+  var BASE_LOGIC_H = BU.BASE_LOGIC_H;
+  var MOBILE_BREAKPOINT = BU.MOBILE_BREAKPOINT;
+  var MOBILE_PORTRAIT_MIN_W = BU.MOBILE_PORTRAIT_MIN_W;
+  var MOBILE_PORTRAIT_MAX_W = BU.MOBILE_PORTRAIT_MAX_W;
+  var MOBILE_LANDSCAPE_MIN_W = BU.MOBILE_LANDSCAPE_MIN_W;
+  var MOBILE_LANDSCAPE_MAX_W = BU.MOBILE_LANDSCAPE_MAX_W;
 
   var LOGIC_W = BASE_LOGIC_W;
   var LOGIC_H = BASE_LOGIC_H;
@@ -47,23 +48,15 @@
   var BALL_R = 11;
   var POCKET_R = 16;
   var POCKET_SNAP = POCKET_R - 2;
-  var FRICTION = 0.985;
-  var STOP_THRESHOLD = 0.08;
-  var MAX_DRAG = 150;
-  var MAX_SPEED = 18;
+  var FRICTION = BU.FRICTION;
+  var STOP_THRESHOLD = BU.STOP_THRESHOLD;
+  var MAX_DRAG = BU.MAX_DRAG;
+  var MAX_SPEED = BU.MAX_SPEED;
   var POCKETS = [];
   var layoutSignature = '';
   var attemptedLandscapeLock = false;
 
-  function clamp(value, min, max) {
-    return Math.max(min, Math.min(max, value));
-  }
-
-  var BALL_COLORS = [
-    '#f5c800', '#003caa', '#c80000', '#7b0080', '#ff6000',
-    '#006a1c', '#8b1000', '#1a1a1a', '#f5c800', '#003caa',
-    '#c80000', '#7b0080', '#ff6000', '#006a1c', '#8b1000'
-  ];
+  var BALL_COLORS = BU.BALL_COLORS;
 
   var state = 'idle';
   var balls = [];
@@ -80,14 +73,14 @@
       LOGIC_H = BASE_LOGIC_H;
     } else if (isLandscape) {
       // Keep mobile landscape in a controlled width range to preserve proportions.
-      LOGIC_W = Math.round(clamp(availW * 1.02, MOBILE_LANDSCAPE_MIN_W, MOBILE_LANDSCAPE_MAX_W));
-      LOGIC_H = Math.round(clamp(LOGIC_W / 1.86, 285, 340));
+      LOGIC_W = Math.round(BU.clamp(availW * 1.02, MOBILE_LANDSCAPE_MIN_W, MOBILE_LANDSCAPE_MAX_W));
+      LOGIC_H = Math.round(BU.clamp(LOGIC_W / 1.86, 285, 340));
     } else {
-      LOGIC_W = Math.round(clamp(availW * 1.08, MOBILE_PORTRAIT_MIN_W, MOBILE_PORTRAIT_MAX_W));
-      LOGIC_H = Math.round(clamp(LOGIC_W / 1.52, 288, 340));
+      LOGIC_W = Math.round(BU.clamp(availW * 1.08, MOBILE_PORTRAIT_MIN_W, MOBILE_PORTRAIT_MAX_W));
+      LOGIC_H = Math.round(BU.clamp(LOGIC_W / 1.52, 288, 340));
     }
 
-    RAIL_W = Math.round(clamp(LOGIC_W * 0.0315, 14, 26));
+    RAIL_W = Math.round(BU.clamp(LOGIC_W * 0.0315, 14, 26));
     TABLE_X = RAIL_W;
     TABLE_Y = RAIL_W;
     TABLE_W = LOGIC_W - RAIL_W * 2;
@@ -95,12 +88,12 @@
     var tableShortSide = Math.min(TABLE_W, TABLE_H);
     var ballMin = isMobile ? 11 : 10;
     var ballMax = isMobile ? (isLandscape ? 13 : 14) : 12;
-    BALL_R = Math.round(clamp(tableShortSide * 0.039, ballMin, ballMax));
-    POCKET_R = Math.round(clamp(BALL_R * 1.45, BALL_R + 4, BALL_R + 8));
-    POCKET_SNAP = Math.round(clamp(POCKET_R - BALL_R * 0.18, BALL_R * 0.95, POCKET_R - 1));
+    BALL_R = Math.round(BU.clamp(tableShortSide * 0.039, ballMin, ballMax));
+    POCKET_R = Math.round(BU.clamp(BALL_R * 1.45, BALL_R + 4, BALL_R + 8));
+    POCKET_SNAP = Math.round(BU.clamp(POCKET_R - BALL_R * 0.18, BALL_R * 0.95, POCKET_R - 1));
 
-    var cornerInset = Math.round(clamp(POCKET_R * 0.95, BALL_R * 1.2, RAIL_W + POCKET_R));
-    var sideInset = Math.round(clamp(POCKET_R * 0.4, BALL_R * 0.45, POCKET_R * 0.58));
+    var cornerInset = Math.round(BU.clamp(POCKET_R * 0.95, BALL_R * 1.2, RAIL_W + POCKET_R));
+    var sideInset = Math.round(BU.clamp(POCKET_R * 0.4, BALL_R * 0.45, POCKET_R * 0.58));
     POCKETS = [
       { x: TABLE_X + cornerInset, y: TABLE_Y + cornerInset },
       { x: TABLE_X + TABLE_W / 2, y: TABLE_Y + sideInset },
@@ -184,12 +177,8 @@
     ctx.imageSmoothingEnabled = true;
   }
 
-  function isTouchLikeDevice() {
-    return ('ontouchstart' in window) || ((navigator && navigator.maxTouchPoints) || 0) > 0;
-  }
-
   function isMobileLandscape() {
-    return isTouchLikeDevice() && window.innerWidth <= 950 && window.innerWidth > window.innerHeight;
+    return SiteUtils.isTouchDevice() && window.innerWidth <= 950 && window.innerWidth > window.innerHeight;
   }
 
   function updateLandscapeModeClass() {

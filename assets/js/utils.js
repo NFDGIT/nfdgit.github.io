@@ -11,5 +11,15 @@ var SiteUtils = (function () {
     return ('ontouchstart' in window) || ((navigator && navigator.maxTouchPoints) || 0) > 0;
   }
 
-  return { getCssVar: getCssVar, isMobile: isMobile, isTouchDevice: isTouchDevice };
+  function getUrlParam(name) {
+    var params = new URLSearchParams(window.location.search);
+    return params.get(name) || null;
+  }
+
+  return {
+    getCssVar: getCssVar,
+    isMobile: isMobile,
+    isTouchDevice: isTouchDevice,
+    getUrlParam: getUrlParam,
+  };
 })();
