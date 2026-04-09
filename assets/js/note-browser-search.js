@@ -36,10 +36,16 @@
   function initSearch() {
     var searchInput = document.getElementById('note-search');
     var emptyEl = document.getElementById('note-search-empty');
+    var clearBtn = document.getElementById('note-search-clear');
     if (!searchInput) return;
-    searchInput.addEventListener('input', function () {
+    var debounceTimer = null;
+
+    function performSearch() {
       var query = searchInput.value.trim().toLowerCase();
       var treeNodes = document.querySelectorAll('.note-tree-node');
+
+      if (clearBtn) clearBtn.hidden = !query;
+
       if (!query) {
         treeNodes.forEach(function (node) {
           node.closest('.note-tree-item').hidden = false;
@@ -74,7 +80,21 @@
         }
       });
       if (emptyEl) emptyEl.hidden = visibleCount > 0;
+    }
+
+    searchInput.addEventListener('input', function () {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(performSearch, 150);
     });
+
+    if (clearBtn) {
+      clearBtn.hidden = true;
+      clearBtn.addEventListener('click', function () {
+        searchInput.value = '';
+        performSearch();
+        searchInput.focus();
+      });
+    }
   }
 
   NB.renderSidebarStats = renderSidebarStats;

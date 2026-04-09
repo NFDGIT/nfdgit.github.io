@@ -39,6 +39,7 @@
         </div>
         <div class="note-search-wrap">
           <input type="text" id="note-search" class="note-search-input" placeholder="搜索文件名…" aria-label="搜索笔记">
+          <button type="button" id="note-search-clear" class="note-search-clear" aria-label="清除搜索" hidden>×</button>
         </div>
         <div id="note-search-empty" class="note-search-empty" hidden>无匹配结果</div>
         <div id="note-tree"></div>
@@ -49,6 +50,9 @@
         <div class="note-placeholder-icon">📂</div>
         <div class="note-placeholder-title">选择一篇笔记开始阅读</div>
         <div class="note-placeholder-desc">从左侧目录中点击任意 Markdown 或 HTML 文件</div>
+        <div class="note-placeholder-shortcuts">
+          <kbd>/</kbd> 搜索 &nbsp; <kbd>↑</kbd><kbd>↓</kbd> 导航 &nbsp; <kbd>Enter</kbd> 打开 &nbsp; <kbd>Esc</kbd> 关闭
+        </div>
       </div>
       <div id="note-preview-content" class="note-preview-content" style="display:none"></div>
     </main>

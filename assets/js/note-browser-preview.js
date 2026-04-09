@@ -25,19 +25,37 @@
   }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 
   function clearPreview() {
+    NB.PREVIEW_EL.classList.add('is-switching');
     NB.PREVIEW_EL.innerHTML = '';
     NB.PREVIEW_EL.style.display = 'block';
-    NB.PREVIEW_EL.style.animation = 'none';
+    var previewPane = NB.PREVIEW_EL.closest('.note-preview');
+    if (previewPane) previewPane.scrollTop = 0;
     void NB.PREVIEW_EL.offsetWidth;
-    NB.PREVIEW_EL.style.animation = '';
+    NB.PREVIEW_EL.classList.remove('is-switching');
   }
 
   function setActiveFile(path) {
     var nodes = document.querySelectorAll('.note-tree-node.file');
+    var activeNode = null;
     nodes.forEach(function (node) {
-      node.classList.toggle('active', node.dataset.path === path);
+      var isActive = node.dataset.path === path;
+      node.classList.toggle('active', isActive);
+      if (isActive) activeNode = node;
     });
     updateBreadcrumb(path);
+    if (activeNode) scrollSidebarToNode(activeNode);
+  }
+
+  function scrollSidebarToNode(node) {
+    var sidebar = document.getElementById('note-sidebar');
+    if (!sidebar || !node) return;
+    requestAnimationFrame(function () {
+      var sidebarRect = sidebar.getBoundingClientRect();
+      var nodeRect = node.getBoundingClientRect();
+      if (nodeRect.top < sidebarRect.top || nodeRect.bottom > sidebarRect.bottom) {
+        node.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      }
+    });
   }
 
   function updateBreadcrumb(path) {
@@ -47,14 +65,37 @@
       bc.innerHTML = '';
       return;
     }
+    bc.innerHTML = '';
     var parts = path.split('/');
-    bc.innerHTML = parts
-      .map(function (p, i) {
-        var isLast = i === parts.length - 1;
-        var cls = isLast ? 'note-breadcrumb-item is-current' : 'note-breadcrumb-item';
-        return '<span class="' + cls + '">' + p + '</span>';
-      })
-      .join('<span class="note-breadcrumb-sep">›</span>');
+    parts.forEach(function (p, i) {
+      if (i > 0) {
+        var sep = document.createElement('span');
+        sep.className = 'note-breadcrumb-sep';
+        sep.textContent = '›';
+        bc.appendChild(sep);
+      }
+      var isLast = i === parts.length - 1;
+      var span = document.createElement('span');
+      span.className = isLast ? 'note-breadcrumb-item is-current' : 'note-breadcrumb-item is-clickable';
+      span.textContent = p;
+      if (!isLast) {
+        var folderPath = parts.slice(0, i + 1).join('/');
+        span.dataset.folderPath = folderPath;
+        span.addEventListener('click', function () {
+          navigateBreadcrumbFolder(folderPath);
+        });
+      }
+      bc.appendChild(span);
+    });
+  }
+
+  function navigateBreadcrumbFolder(folderPath) {
+    var dirNode = document.querySelector('.note-tree-node.dir[data-path="' + folderPath + '"]');
+    if (!dirNode) return;
+    expandParentDirs(folderPath + '/dummy');
+    if (dirNode.dataset.expanded !== 'true') dirNode.click();
+    scrollSidebarToNode(dirNode);
+    dirNode.focus();
   }
 
   function getFileFromHash() {
@@ -89,7 +130,14 @@
       var href = a.getAttribute('href');
       if (!href) return;
       var lower = href.toLowerCase();
-      if (lower.indexOf('://') !== -1 || href.charAt(0) === '#') return;
+
+      if (lower.indexOf('://') !== -1) {
+        a.setAttribute('target', '_blank');
+        a.setAttribute('rel', 'noopener noreferrer');
+        return;
+      }
+
+      if (href.charAt(0) === '#') return;
       if (!lower.endsWith('.md') && !lower.endsWith('.html')) return;
       var currentPath = getFileFromHash();
       if (!currentPath) return;
@@ -170,17 +218,38 @@
       });
   }
 
+  function getIframeThemeStyle() {
+    var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    return '<style>:root{color-scheme:' + (isDark ? 'dark' : 'light') +
+      '}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC",sans-serif;' +
+      'color:' + (isDark ? '#f5f5f7' : '#1d1d1f') + ';' +
+      'background:' + (isDark ? '#1c1c1e' : '#fff') + ';' +
+      'margin:0;padding:1rem;line-height:1.6}</style>';
+  }
+
+  function injectThemeIntoSrcdoc(html) {
+    var themeStyle = getIframeThemeStyle();
+    if (html.indexOf('<head') !== -1) {
+      return html.replace(/<head([^>]*)>/, '<head$1>' + themeStyle);
+    }
+    return themeStyle + html;
+  }
+
+  function createPreviewIframe(html) {
+    var iframe = document.createElement('iframe');
+    iframe.setAttribute('sandbox', 'allow-same-origin allow-scripts');
+    iframe.style.cssText = 'width:100%;height:80vh;min-height:400px;border:none;border-radius:8px;background:var(--note-preview-bg);';
+    iframe.srcdoc = injectThemeIntoSrcdoc(html);
+    return iframe;
+  }
+
   function loadHtml(path, content) {
     NB.PLACEHOLDER_EL.style.display = 'none';
     clearPreview();
 
     if (content !== undefined && content !== null) {
       setActiveFile(path);
-      var iframe = document.createElement('iframe');
-      iframe.setAttribute('sandbox', 'allow-same-origin allow-scripts');
-      iframe.style.cssText = 'width:100%;height:80vh;min-height:400px;border:none;border-radius:6px;';
-      iframe.srcdoc = content;
-      NB.PREVIEW_EL.appendChild(iframe);
+      NB.PREVIEW_EL.appendChild(createPreviewIframe(content));
       return;
     }
 
@@ -194,11 +263,7 @@
       })
       .then(function (text) {
         clearPreview();
-        var iframe2 = document.createElement('iframe');
-        iframe2.setAttribute('sandbox', 'allow-same-origin allow-scripts');
-        iframe2.style.cssText = 'width:100%;height:80vh;min-height:400px;border:none;border-radius:6px;';
-        iframe2.srcdoc = text;
-        NB.PREVIEW_EL.appendChild(iframe2);
+        NB.PREVIEW_EL.appendChild(createPreviewIframe(text));
       })
       .catch(function () {
         NB.PREVIEW_EL.innerHTML = '<p style="color:#c00">无法加载文件</p>';

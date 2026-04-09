@@ -4,6 +4,37 @@
 (function () {
   var NB = window.NoteBrowser;
 
+  function initGlobalKeyboard() {
+    var searchInput = document.getElementById('note-search');
+
+    document.addEventListener('keydown', function (e) {
+      var tag = (e.target.tagName || '').toLowerCase();
+      var isInput = tag === 'input' || tag === 'textarea' || e.target.isContentEditable;
+
+      if (e.key === '/' && !isInput) {
+        e.preventDefault();
+        if (searchInput) {
+          if (NB.isMobile()) NB.openSidebar();
+          searchInput.focus();
+        }
+        return;
+      }
+
+      if (e.key === 'Escape') {
+        if (document.activeElement === searchInput) {
+          searchInput.blur();
+          searchInput.value = '';
+          searchInput.dispatchEvent(new Event('input'));
+          return;
+        }
+        if (NB.isMobile() && document.body.classList.contains('note-sidebar-open')) {
+          NB.closeSidebar();
+          return;
+        }
+      }
+    });
+  }
+
   function init() {
     var container = document.getElementById('note-tree');
     var data = window.NOTE_MANIFEST;
@@ -16,7 +47,9 @@
     NB.initSidebarToggle();
     NB.initPreviewLinkInterceptor();
     NB.initSearch();
+    NB.initTreeKeyboard();
     NB.syncHljsTheme();
+    initGlobalKeyboard();
     var path = NB.getFileFromHash();
     if (path) {
       NB.loadFileByPath(path);
