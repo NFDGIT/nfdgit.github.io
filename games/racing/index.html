@@ -3,7 +3,13 @@
 <head>
 <meta charset="utf-8">
 <script src="../../assets/js/theme-init.js"></script>
+<link rel="stylesheet" href="../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../assets/css/reset.css">
 <link rel="stylesheet" href="../../assets/css/base.css">
+<link rel="stylesheet" href="../../assets/css/animations.css">
+<link rel="stylesheet" href="../../assets/css/components/button.css">
+<link rel="stylesheet" href="../../assets/css/components/nav.css">
+<link rel="stylesheet" href="../../assets/css/layouts/shell.css">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="HandheldFriendly" content="True">
 <meta name="apple-touch-fullscreen" content="yes">
@@ -81,5 +87,9 @@
 <script src="TweenMax.min.js"></script>
 <script src="howler.js"></script>
 <script src="app.js"></script>
-<script src="../../assets/js/theme.js"></script>
+<script type="module">
+import { initShell } from '../../assets/js/core/shell.js';
+initShell();
+</script>
+<script nomodule src="../../assets/js/legacy.js"></script>
 </html>

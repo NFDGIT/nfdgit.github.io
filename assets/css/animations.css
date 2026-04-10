@@ -1,0 +1,60 @@
+/* ===== 动画工具类 ===== */
+
+/* --- 入场动画 --- */
+
+@keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slide-up {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scale-in {
+    from { opacity: 0; transform: scale(0.92); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.anim-fade-in { animation: fade-in 0.5s var(--ease-smooth) both; }
+.anim-slide-up { animation: slide-up 0.5s var(--ease-smooth) both; }
+.anim-scale-in { animation: scale-in 0.45s var(--ease-smooth) both; }
+
+/* --- 退场动画 --- */
+
+@keyframes fade-out {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+@keyframes slide-down {
+    from { opacity: 1; transform: translateY(0); }
+    to { opacity: 0; transform: translateY(18px); }
+}
+
+.anim-fade-out { animation: fade-out 0.3s var(--ease-smooth) both; }
+.anim-slide-down { animation: slide-down 0.3s var(--ease-smooth) both; }
+
+/* --- 交错延迟 --- */
+
+.stagger-1 { animation-delay: 0.06s; }
+.stagger-2 { animation-delay: 0.12s; }
+.stagger-3 { animation-delay: 0.18s; }
+.stagger-4 { animation-delay: 0.24s; }
+.stagger-5 { animation-delay: 0.30s; }
+.stagger-6 { animation-delay: 0.36s; }
+.stagger-7 { animation-delay: 0.42s; }
+.stagger-8 { animation-delay: 0.48s; }
+.stagger-9 { animation-delay: 0.54s; }
+.stagger-10 { animation-delay: 0.60s; }
+.stagger-11 { animation-delay: 0.66s; }
+.stagger-12 { animation-delay: 0.72s; }
+
+/* --- View Transition --- */
+
+::view-transition-old(root),
+::view-transition-new(root) {
+    animation-duration: var(--transition-normal);
+    animation-timing-function: var(--ease-smooth);
+}

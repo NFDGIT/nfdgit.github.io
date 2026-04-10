@@ -5,8 +5,15 @@
     <script src="../assets/js/theme-init.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>教程目录</title>
+    <link rel="stylesheet" href="../assets/css/tokens.css">
+    <link rel="stylesheet" href="../assets/css/reset.css">
     <link rel="stylesheet" href="../assets/css/base.css">
+    <link rel="stylesheet" href="../assets/css/animations.css">
+    <link rel="stylesheet" href="../assets/css/components/button.css">
+    <link rel="stylesheet" href="../assets/css/components/nav.css">
+    <link rel="stylesheet" href="../assets/css/components/card.css">
     <link rel="stylesheet" href="./guide.css">
+    <link rel="stylesheet" href="../assets/css/layouts/shell.css">
 </head>
 <body class="guide-page">
     <main class="guide-shell">
@@ -165,6 +172,10 @@
         </section>
     </main>
 
-    <script src="../assets/js/theme.js"></script>
+    <script type="module">
+    import { initShell } from '../assets/js/core/shell.js';
+    initShell();
+    </script>
+    <script nomodule src="../assets/js/legacy.js"></script>
 </body>
 </html>

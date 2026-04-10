@@ -1,0 +1,21 @@
+/* 液态玻璃卡片 */
+
+.glass-card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: var(--glass-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-lg);
+    box-shadow: var(--glass-shadow), var(--glass-highlight);
+    transition: transform var(--transition-normal) var(--ease-spring),
+                box-shadow var(--transition-normal) var(--ease-spring);
+}
+
+.glass-card:hover {
+    transform: translateY(-4px) scale(1.015);
+    box-shadow: var(--card-glow), var(--glass-highlight);
+}

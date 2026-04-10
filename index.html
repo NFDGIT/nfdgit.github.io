@@ -8,15 +8,18 @@
     <meta http-equiv="Permissions-Policy" content="interest-cohort=()">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>个人主页</title>
+    <link rel="stylesheet" href="./assets/css/tokens.css">
+    <link rel="stylesheet" href="./assets/css/reset.css">
     <link rel="stylesheet" href="./assets/css/base.css">
-    <link rel="stylesheet" href="./assets/css/home.css">
+    <link rel="stylesheet" href="./assets/css/animations.css">
+    <link rel="stylesheet" href="./assets/css/components/button.css">
+    <link rel="stylesheet" href="./assets/css/components/nav.css">
+    <link rel="stylesheet" href="./assets/css/components/card.css">
+    <link rel="stylesheet" href="./assets/css/layouts/shell.css">
+    <link rel="stylesheet" href="./assets/css/pages/home.css">
 </head>
 
-<body class="has-glass-nav">
-    <nav class="glass-nav">
-        <button type="button" class="large-text-toggle" aria-label="开启大字模式">A+</button>
-        <button type="button" class="theme-toggle" aria-label="切换主题">🌙</button>
-    </nav>
+<body data-shell-breadcrumb="false">
 
     <header class="home-header anim-fade-in">
         <div>
@@ -26,44 +29,47 @@
     </header>
 
     <nav class="home-grid">
-        <a href="./note/index.html" class="home-card anim-slide-up stagger-1">
+        <a href="./note/index.html" class="glass-card home-card anim-slide-up stagger-1">
             <span class="home-card-icon">📝</span>
             <div class="home-card-title">笔记</div>
             <div class="home-card-desc">技术笔记与学习记录</div>
         </a>
-        <a href="./games/index.html" class="home-card anim-slide-up stagger-2">
+        <a href="./games/index.html" class="glass-card home-card anim-slide-up stagger-2">
             <span class="home-card-icon">🎮</span>
             <div class="home-card-title">小游戏</div>
             <div class="home-card-desc">先进入游戏目录，再选择赛车或贪吃蛇等小游戏</div>
         </a>
-        <a href="./album/index.html" class="home-card anim-slide-up stagger-3">
+        <a href="./album/index.html" class="glass-card home-card anim-slide-up stagger-3">
             <span class="home-card-icon">🖼️</span>
             <div class="home-card-title">相册</div>
             <div class="home-card-desc">照片与回忆</div>
         </a>
-        <a href="./tools/index.html" class="home-card anim-slide-up stagger-4">
+        <a href="./tools/index.html" class="glass-card home-card anim-slide-up stagger-4">
             <span class="home-card-icon">🔧</span>
             <div class="home-card-title">小工具</div>
             <div class="home-card-desc">实用小工具合集</div>
         </a>
-        <a href="./insurance/index.html" class="home-card anim-slide-up stagger-5">
+        <a href="./insurance/index.html" class="glass-card home-card anim-slide-up stagger-5">
             <span class="home-card-icon">📋</span>
             <div class="home-card-title">保险</div>
             <div class="home-card-desc">贷款与保险服务</div>
         </a>
-        <a href="./showcase/index.html" class="home-card anim-slide-up stagger-6">
+        <a href="./showcase/index.html" class="glass-card home-card anim-slide-up stagger-6">
             <span class="home-card-icon">✨</span>
             <div class="home-card-title">组件库</div>
             <div class="home-card-desc">液态玻璃设计系统演示</div>
         </a>
-        <a href="./guide/index.html" class="home-card anim-slide-up stagger-7">
+        <a href="./guide/index.html" class="glass-card home-card anim-slide-up stagger-7">
             <span class="home-card-icon">📚</span>
             <div class="home-card-title">教程</div>
             <div class="home-card-desc">AI Agent 系列教程，从入门到框架实战</div>
         </a>
     </nav>
-    <script src="./assets/js/theme.js"></script>
-    <script src="./assets/js/large-text.js"></script>
+    <script type="module">
+      import { initShell } from './assets/js/core/shell.js';
+      initShell();
+    </script>
+    <script nomodule src="./assets/js/legacy.js"></script>
 </body>
 
 </html>

@@ -1,0 +1,71 @@
+/* 液态玻璃按钮 */
+
+.glass-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    padding: 0.6rem 1rem;
+    border-radius: var(--radius-sm);
+    border: var(--glass-border);
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: var(--text);
+    font: inherit;
+    font-size: 0.88rem;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    box-shadow: var(--glass-shadow);
+    transition: transform 0.25s var(--ease-smooth),
+                box-shadow 0.25s var(--ease-smooth),
+                background 0.25s;
+    touch-action: manipulation;
+}
+
+.glass-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--card-shadow-hover);
+}
+
+.glass-btn-primary {
+    background: var(--accent);
+    color: #fff;
+    border-color: transparent;
+    box-shadow: var(--accent-glow);
+}
+
+.glass-btn-primary:hover {
+    background: var(--accent-hover);
+    box-shadow: var(--accent-glow), 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 主题/大字切换按钮 */
+
+.theme-toggle,
+.large-text-toggle {
+    padding: 0.45rem;
+    border: var(--glass-border);
+    border-radius: var(--radius-sm);
+    background: var(--glass-bg);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    cursor: pointer;
+    font-size: 1.15rem;
+    line-height: 1;
+    color: var(--text);
+    opacity: 0.9;
+    transition: opacity 0.2s, transform 0.2s var(--ease-smooth), background 0.2s;
+    box-shadow: var(--glass-shadow);
+}
+
+.theme-toggle:hover,
+.large-text-toggle:hover {
+    opacity: 1;
+    transform: scale(1.06);
+}
+
+@media (min-width: 769px) {
+    .large-text-toggle { display: none; }
+}

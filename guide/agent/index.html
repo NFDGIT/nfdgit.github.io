@@ -5,17 +5,18 @@
     <script src="../../assets/js/theme-init.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>从零搭建你的第一个 AI Agent</title>
+    <link rel="stylesheet" href="../../assets/css/tokens.css">
+    <link rel="stylesheet" href="../../assets/css/reset.css">
     <link rel="stylesheet" href="../../assets/css/base.css">
+    <link rel="stylesheet" href="../../assets/css/animations.css">
+    <link rel="stylesheet" href="../../assets/css/components/button.css">
+    <link rel="stylesheet" href="../../assets/css/components/nav.css">
+    <link rel="stylesheet" href="../../assets/css/components/card.css">
     <link rel="stylesheet" href="./agent-guide.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css">
+    <link rel="stylesheet" href="../../assets/css/layouts/shell.css">
 </head>
-<body class="has-glass-nav agent-page">
-
-    <nav class="glass-nav">
-        <a class="glass-nav-link" href="../index.html">教程目录</a>
-        <a class="glass-nav-link" href="../../index.html">首页</a>
-        <button type="button" class="theme-toggle" aria-label="切换主题">🌙</button>
-    </nav>
+<body class="agent-page">
 
     <main class="agent-shell">
 
@@ -480,7 +481,11 @@ print(run_agent("北京和上海今天天气怎么样？"))</code></pre>
         </div>
     </main>
 
-    <script src="../../assets/js/theme.js"></script>
+    <script type="module">
+      import { initShell } from '../../assets/js/core/shell.js';
+      initShell();
+    </script>
+    <script nomodule src="../../assets/js/legacy.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-python.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-bash.min.js"></script>

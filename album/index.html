@@ -5,26 +5,133 @@
 <script src="../assets/js/theme-init.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>相册</title>
+<link rel="stylesheet" href="../assets/css/tokens.css">
+<link rel="stylesheet" href="../assets/css/reset.css">
 <link rel="stylesheet" href="../assets/css/base.css">
-<link type="text/css" href="css/style.css" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/components/button.css">
+<link rel="stylesheet" href="../assets/css/components/nav.css">
+<link rel="stylesheet" href="../assets/css/components/lightbox.css">
+<link rel="stylesheet" href="../assets/css/layouts/shell.css">
+<link rel="stylesheet" href="../assets/css/layouts/grid.css">
+<style>
+.album-wrap {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: var(--space-xl) var(--space-md) var(--space-2xl);
+}
+
+.album-title {
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: var(--space-xl);
+}
+
+.album-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--space-md);
+}
+
+.album-item {
+  position: relative;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  cursor: pointer;
+  background: var(--glass-bg);
+  aspect-ratio: 1;
+  transition: transform var(--transition-normal) var(--ease-spring),
+              box-shadow var(--transition-normal) var(--ease-spring);
+}
+
+.album-item:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: var(--card-glow);
+}
+
+.album-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: opacity var(--transition-normal);
+}
+
+.album-item img.is-loading {
+  opacity: 0;
+}
+
+.album-placeholder {
+  position: absolute;
+  inset: 0;
+  top: 0; right: 0; bottom: 0; left: 0;
+  background: var(--glass-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  font-size: 2rem;
+  opacity: 0.3;
+}
+
+@media (max-width: 480px) {
+  .album-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-sm);
+  }
+}
+</style>
 </head>
-<body class="has-glass-nav">
-<nav class="glass-nav">
-  <a href="../index.html" class="glass-nav-link">返回首页</a>
-  <button type="button" class="theme-toggle" aria-label="切换主题">🌙</button>
-</nav>
+<body>
 
-<div class="album-stage">
-  <div class="box">
-    <ul class="minbox">
-      <li></li><li></li><li></li><li></li><li></li><li></li>
-    </ul>
-    <ol class="maxbox">
-      <li></li><li></li><li></li><li></li><li></li><li></li>
-    </ol>
-  </div>
-</div>
+<main class="album-wrap">
+  <h1 class="album-title anim-fade-in">📷 相册</h1>
+  <div class="album-grid" id="albumGrid"></div>
+</main>
 
-<script src="../assets/js/theme.js"></script>
+<script type="module">
+import { initShell } from '../assets/js/core/shell.js';
+initShell();
+
+const images = [
+  { src: './img/1.png', thumb: './img/01.png', alt: '照片 1' },
+  { src: './img/2.png', thumb: './img/02.png', alt: '照片 2' },
+  { src: './img/3.png', thumb: './img/03.png', alt: '照片 3' },
+  { src: './img/4.png', thumb: './img/04.png', alt: '照片 4' },
+  { src: './img/5.png', thumb: './img/05.png', alt: '照片 5' },
+  { src: './img/6.png', thumb: './img/06.png', alt: '照片 6' },
+];
+
+const grid = document.getElementById('albumGrid');
+
+images.forEach((img, i) => {
+  const item = document.createElement('div');
+  item.className = `album-item anim-scale-in stagger-${i + 1}`;
+
+  const placeholder = document.createElement('div');
+  placeholder.className = 'album-placeholder';
+  placeholder.textContent = '🖼️';
+
+  const imgEl = document.createElement('img');
+  imgEl.className = 'is-loading';
+  imgEl.alt = img.alt;
+  imgEl.loading = i > 3 ? 'lazy' : 'eager';
+  imgEl.src = img.thumb;
+  imgEl.onload = () => {
+    imgEl.classList.remove('is-loading');
+    placeholder.style.display = 'none';
+  };
+
+  item.append(placeholder, imgEl);
+  item.addEventListener('click', async () => {
+    const { open } = await import('../assets/js/components/lightbox.js');
+    open(images.map(im => ({ src: im.src, alt: im.alt })), i);
+  });
+
+  grid.appendChild(item);
+});
+</script>
+<script nomodule src="../assets/js/legacy.js"></script>
 </body>
 </html>

@@ -7,14 +7,21 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>笔记</title>
+  <link rel="stylesheet" href="../assets/css/tokens.css">
+  <link rel="stylesheet" href="../assets/css/reset.css">
   <link rel="stylesheet" href="../assets/css/base.css">
-  <link rel="stylesheet" href="../assets/css/note-browser.css">
+  <link rel="stylesheet" href="../assets/css/animations.css">
+  <link rel="stylesheet" href="../assets/css/components/button.css">
+  <link rel="stylesheet" href="../assets/css/components/nav.css">
+  <link rel="stylesheet" href="../assets/css/components/panel.css">
+  <link rel="stylesheet" href="../assets/css/components/form.css">
+  <link rel="stylesheet" href="../assets/css/pages/note-browser.css">
   <link rel="stylesheet" id="hljs-theme" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/github.min.css">
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
 </head>
 
-<body>
+<body data-shell-nav="custom" data-shell-footer="false">
   <script>!function () { if (window.matchMedia('(min-width:769px)').matches && localStorage.getItem('note-sidebar-collapsed') === '1') document.body.classList.add('note-sidebar-collapsed'); }();</script>
 
   <header class="note-toolbar" id="note-toolbar">
@@ -57,16 +64,25 @@
       <div id="note-preview-content" class="note-preview-content" style="display:none"></div>
     </main>
   </div>
-  <script src="../assets/js/theme.js"></script>
-  <script src="../assets/js/large-text.js"></script>
   <script src="./manifest.js"></script>
-  <!-- 笔记浏览器：state → 侧栏 → 预览(loadFileByPath) → 目录树 → 搜索 → 入口 -->
-  <script src="../assets/js/note-browser-state.js"></script>
-  <script src="../assets/js/note-browser-sidebar.js"></script>
-  <script src="../assets/js/note-browser-preview.js"></script>
-  <script src="../assets/js/note-browser-tree.js"></script>
-  <script src="../assets/js/note-browser-search.js"></script>
-  <script src="../assets/js/note-browser.js"></script>
+  <script type="module">
+    import { initShell } from '../assets/js/core/shell.js';
+    import { initNoteBrowser } from '../assets/js/note-browser.js';
+    initShell();
+    initNoteBrowser();
+    window.__NOTE_INIT__ = true;
+  </script>
+  <script nomodule src="../assets/js/legacy.js"></script>
+  <script>
+    setTimeout(function() {
+      if (!window.__NOTE_INIT__) {
+        var tree = document.getElementById('note-tree');
+        if (tree && !tree.children.length) {
+          tree.innerHTML = '<p style="padding:1rem;color:var(--note-text-muted,#999);font-size:0.88rem">⚠️ 请通过本地服务器访问（<code>python3 -m http.server 8080</code>），直接打开文件无法加载 ES 模块。</p>';
+        }
+      }
+    }, 2000);
+  </script>
 </body>
 
 </html>

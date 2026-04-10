@@ -1,0 +1,38 @@
+/* 面包屑导航 */
+
+.glass-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.15rem;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    overflow: hidden;
+    white-space: nowrap;
+    mask-image: linear-gradient(to right, black 90%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, black 90%, transparent 100%);
+}
+
+.glass-breadcrumb-item {
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: background var(--transition-fast) ease, color var(--transition-fast) ease;
+}
+
+a.glass-breadcrumb-item:hover {
+    background: rgba(0, 122, 255, 0.06);
+    color: var(--text);
+}
+
+.glass-breadcrumb-item.is-current {
+    color: var(--text);
+    font-weight: 600;
+}
+
+.glass-breadcrumb-sep {
+    color: var(--text-muted);
+    opacity: 0.4;
+    margin: 0 0.05rem;
+    font-size: 0.7rem;
+}

@@ -5,15 +5,20 @@
     <script src="../assets/js/theme-init.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>液态玻璃组件库</title>
+    <link rel="stylesheet" href="../assets/css/tokens.css">
+    <link rel="stylesheet" href="../assets/css/reset.css">
     <link rel="stylesheet" href="../assets/css/base.css">
+    <link rel="stylesheet" href="../assets/css/animations.css">
+    <link rel="stylesheet" href="../assets/css/components/button.css">
+    <link rel="stylesheet" href="../assets/css/components/nav.css">
+    <link rel="stylesheet" href="../assets/css/components/card.css">
+    <link rel="stylesheet" href="../assets/css/components/panel.css">
+    <link rel="stylesheet" href="../assets/css/components/form.css">
+    <link rel="stylesheet" href="../assets/css/components/overlay.css">
     <link rel="stylesheet" href="./showcase.css">
+    <link rel="stylesheet" href="../assets/css/layouts/shell.css">
 </head>
-<body class="showcase-page has-glass-nav">
-
-<nav class="glass-nav">
-    <a href="../index.html" class="glass-nav-link">返回首页</a>
-    <button type="button" class="theme-toggle" aria-label="切换主题">🌙</button>
-</nav>
+<body class="showcase-page">
 
 <div class="showcase-shell">
 
@@ -203,7 +208,11 @@
 
 </div>
 
-<script src="../assets/js/theme.js"></script>
+<script type="module">
+import { initShell } from '../assets/js/core/shell.js';
+initShell();
+</script>
+<script nomodule src="../assets/js/legacy.js"></script>
 <script src="./showcase.js"></script>
 </body>
 </html>

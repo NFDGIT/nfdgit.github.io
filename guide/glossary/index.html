@@ -5,8 +5,15 @@
     <script src="../../assets/js/theme-init.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>AI 术语速查</title>
+    <link rel="stylesheet" href="../../assets/css/tokens.css">
+    <link rel="stylesheet" href="../../assets/css/reset.css">
     <link rel="stylesheet" href="../../assets/css/base.css">
+    <link rel="stylesheet" href="../../assets/css/animations.css">
+    <link rel="stylesheet" href="../../assets/css/components/button.css">
+    <link rel="stylesheet" href="../../assets/css/components/nav.css">
+    <link rel="stylesheet" href="../../assets/css/components/card.css">
     <link rel="stylesheet" href="./glossary.css">
+    <link rel="stylesheet" href="../../assets/css/layouts/shell.css">
 </head>
 <body class="glossary-page">
     <main class="glossary-shell">
@@ -392,7 +399,11 @@
         </div>
     </main>
 
-    <script src="../../assets/js/theme.js"></script>
+    <script type="module">
+      import { initShell } from '../../assets/js/core/shell.js';
+      initShell();
+    </script>
+    <script nomodule src="../../assets/js/legacy.js"></script>
     <script>
     (function() {
         document.querySelectorAll('.glossary-term-header').forEach(function(header) {

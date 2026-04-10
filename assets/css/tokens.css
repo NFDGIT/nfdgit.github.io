@@ -1,0 +1,84 @@
+/* ===== 设计令牌（Design Tokens） ===== */
+/* 所有 CSS 自定义属性的单一来源 */
+
+/*
+  断点约定（CSS 自定义属性不支持 media query，此处以注释形式约定）：
+  - 主要移动端断点：768px
+  - 超小屏辅助断点：480px
+*/
+
+/* --- 亮色主题 --- */
+:root,
+[data-theme="light"] {
+    --bg: linear-gradient(135deg, #f0f2f5 0%, #e2e6eb 100%);
+    --text: #1d1d1f;
+    --text-muted: #6e6e73;
+    --card-bg: #fff;
+    --card-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    --card-shadow-hover: 0 8px 28px rgba(0, 0, 0, 0.12);
+    --card-glow: 0 0 0 1px rgba(37, 99, 235, 0.15), 0 8px 32px rgba(37, 99, 235, 0.10);
+    --focus-ring: 0 0 0 4px rgba(0, 125, 250, 0.35);
+    --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-spring: cubic-bezier(0.32, 0.72, 0, 1);
+
+    --glass-bg: rgba(255, 255, 255, 0.72);
+    --glass-blur: 20px;
+    --glass-border: 1px solid rgba(255, 255, 255, 0.45);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+    --glass-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+
+    --accent: #007aff;
+    --accent-hover: #0066d6;
+    --accent-glow: 0 4px 16px rgba(0, 122, 255, 0.3);
+
+    --radius-sm: 10px;
+    --radius-md: 16px;
+    --radius-lg: 24px;
+    --radius-pill: 999px;
+
+    /* 间距体系 */
+    --space-xs: 4px;
+    --space-sm: 8px;
+    --space-md: 16px;
+    --space-lg: 24px;
+    --space-xl: 32px;
+    --space-2xl: 48px;
+
+    /* 阴影层级 */
+    --shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.04);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.08);
+    --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.12);
+
+    /* 过渡时长 */
+    --transition-fast: 150ms;
+    --transition-normal: 300ms;
+    --transition-slow: 500ms;
+}
+
+/* --- 暗色主题 --- */
+[data-theme="dark"] {
+    --bg: linear-gradient(135deg, #0d0d0f 0%, #1a1a1e 100%);
+    --text: #f5f5f7;
+    --text-muted: #a1a1a6;
+    --card-bg: rgba(44, 44, 46, 0.8);
+    --card-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+    --card-shadow-hover: 0 8px 28px rgba(0, 0, 0, 0.5);
+    --card-glow: 0 0 0 1px rgba(96, 165, 250, 0.18), 0 8px 32px rgba(96, 165, 250, 0.10);
+    --focus-ring: 0 0 0 4px rgba(64, 156, 255, 0.4);
+
+    --glass-bg: rgba(30, 30, 32, 0.65);
+    --glass-border: 1px solid rgba(255, 255, 255, 0.08);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.1);
+    --glass-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+
+    --accent: #0a84ff;
+    --accent-hover: #409cff;
+    --accent-glow: 0 4px 16px rgba(10, 132, 255, 0.35);
+
+    /* 暗色阴影层级 */
+    --shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.15);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.2);
+    --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.25);
+    --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.35);
+}

@@ -6,8 +6,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>台球游戏</title>
+    <link rel="stylesheet" href="../../assets/css/tokens.css">
+    <link rel="stylesheet" href="../../assets/css/reset.css">
     <link rel="stylesheet" href="../../assets/css/base.css">
+    <link rel="stylesheet" href="../../assets/css/animations.css">
+    <link rel="stylesheet" href="../../assets/css/components/button.css">
+    <link rel="stylesheet" href="../../assets/css/components/nav.css">
+    <link rel="stylesheet" href="../../assets/css/components/overlay.css">
     <link rel="stylesheet" href="./billiards.css">
+    <link rel="stylesheet" href="../../assets/css/layouts/shell.css">
 </head>
 <body class="billiards-page">
     <main class="billiards-shell">
@@ -100,7 +107,11 @@
         </div>
     </div>
 
-    <script src="../../assets/js/theme.js"></script>
+    <script type="module">
+    import { initShell } from '../../assets/js/core/shell.js';
+    initShell();
+    </script>
+    <script nomodule src="../../assets/js/legacy.js"></script>
     <script src="../../assets/js/utils.js"></script>
     <script src="./billiards-utils.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js" crossorigin="anonymous"></script>

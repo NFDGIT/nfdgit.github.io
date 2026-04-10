@@ -1,0 +1,10 @@
+{
+  "name": "nfdgit-github-io",
+  "version": "2.0.0",
+  "private": true,
+  "description": "个人静态网站 - GitHub Pages",
+  "scripts": {
+    "serve": "python3 -m http.server 8080",
+    "generate-manifest": "node scripts/generate-note-manifest.js"
+  }
+}

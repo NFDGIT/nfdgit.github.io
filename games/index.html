@@ -6,9 +6,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>小游戏目录</title>
+    <link rel="stylesheet" href="../assets/css/tokens.css">
+    <link rel="stylesheet" href="../assets/css/reset.css">
     <link rel="stylesheet" href="../assets/css/base.css">
-    <link rel="stylesheet" href="../assets/css/home.css">
+    <link rel="stylesheet" href="../assets/css/animations.css">
+    <link rel="stylesheet" href="../assets/css/components/button.css">
+    <link rel="stylesheet" href="../assets/css/components/nav.css">
+    <link rel="stylesheet" href="../assets/css/components/card.css">
+    <link rel="stylesheet" href="../assets/css/pages/home.css">
     <link rel="stylesheet" href="./assets/games.css">
+    <link rel="stylesheet" href="../assets/css/layouts/shell.css">
 </head>
 <body class="games-page">
     <main class="games-shell">
@@ -26,7 +33,7 @@
         </header>
 
         <section class="home-grid games-grid" aria-label="游戏列表">
-            <a href="./racing/index.html" class="home-card games-card anim-slide-up stagger-1">
+            <a href="./racing/index.html" class="glass-card home-card games-card anim-slide-up stagger-1">
                 <span class="home-card-icon">🏎️</span>
                 <span class="games-card-tag">街机赛车</span>
                 <div class="home-card-title">赛车游戏</div>
@@ -37,7 +44,7 @@
                 </div>
             </a>
 
-            <a href="./snake/index.html" class="home-card games-card anim-slide-up stagger-2">
+            <a href="./snake/index.html" class="glass-card home-card games-card anim-slide-up stagger-2">
                 <span class="home-card-icon">🐍</span>
                 <span class="games-card-tag">经典街机</span>
                 <div class="home-card-title">贪吃蛇</div>
@@ -48,7 +55,7 @@
                 </div>
             </a>
 
-            <a href="./billiards/index.html" class="home-card games-card anim-slide-up stagger-3">
+            <a href="./billiards/index.html" class="glass-card home-card games-card anim-slide-up stagger-3">
                 <span class="home-card-icon">🎱</span>
                 <span class="games-card-tag">桌球竞技</span>
                 <div class="home-card-title">台球</div>
@@ -65,7 +72,10 @@
         </section>
     </main>
 
-    <script src="../assets/js/theme.js"></script>
-    <script src="../assets/js/large-text.js"></script>
+    <script type="module">
+    import { initShell } from '../assets/js/core/shell.js';
+    initShell();
+    </script>
+    <script nomodule src="../assets/js/legacy.js"></script>
 </body>
 </html>

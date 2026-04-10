@@ -54,9 +54,11 @@ function scanDir(dirPath, basePath = '') {
 
 function main() {
   const tree = { children: scanDir(NOTE_DIR) };
+  tree.version = new Date().toISOString();
   fs.writeFileSync(OUTPUT_JSON, JSON.stringify(tree, null, 2), 'utf8');
   fs.writeFileSync(OUTPUT_JS, 'window.NOTE_MANIFEST = ' + JSON.stringify(tree) + ';', 'utf8');
   console.log('manifest.json and manifest.js generated at', NOTE_DIR);
+  console.log('version:', tree.version);
 }
 
 main();

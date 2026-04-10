@@ -1,0 +1,209 @@
+/* 页面 Shell 布局 */
+
+.shell-nav {
+    --shell-nav-height: 52px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    height: var(--shell-nav-height);
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: 0 var(--space-md);
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border-bottom: var(--glass-border);
+    box-shadow: var(--glass-shadow);
+}
+
+.shell-nav-brand {
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--text);
+    text-decoration: none;
+    flex-shrink: 0;
+}
+
+.shell-nav-links {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    flex: 1;
+    justify-content: center;
+}
+
+.shell-nav-link {
+    padding: 0.4rem 0.75rem;
+    border-radius: var(--radius-pill);
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.82rem;
+    font-weight: 500;
+    transition: color var(--transition-fast), background var(--transition-fast);
+}
+
+.shell-nav-link:hover,
+.shell-nav-link.is-active {
+    color: var(--text);
+    background: rgba(0, 122, 255, 0.08);
+}
+
+.shell-nav-link.is-active {
+    color: var(--accent);
+    font-weight: 600;
+}
+
+.shell-nav-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    flex-shrink: 0;
+}
+
+/* 汉堡菜单（默认隐藏） */
+.shell-hamburger {
+    display: none;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: none;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--text);
+    font-size: 1.25rem;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 移动端菜单抽屉 */
+.shell-menu-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 99;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    opacity: 0;
+    transition: opacity var(--transition-normal) var(--ease-smooth);
+}
+
+.shell-menu-overlay.is-open {
+    opacity: 1;
+}
+
+.shell-menu-drawer {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 280px;
+    max-width: 80vw;
+    z-index: 101;
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border-left: var(--glass-border);
+    box-shadow: -4px 0 32px rgba(0, 0, 0, 0.2);
+    padding: var(--space-2xl) var(--space-lg) var(--space-lg);
+    transform: translateX(100%);
+    transition: transform var(--transition-normal) var(--ease-spring);
+}
+
+.shell-menu-drawer.is-open {
+    transform: translateX(0);
+}
+
+.shell-menu-drawer .shell-nav-link {
+    display: block;
+    padding: 0.75rem var(--space-md);
+    font-size: 1rem;
+    border-radius: var(--radius-sm);
+}
+
+.shell-menu-close {
+    position: absolute;
+    top: var(--space-md);
+    right: var(--space-md);
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--text);
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Shell 内容区偏移 */
+.has-shell-nav {
+    padding-top: 52px;
+}
+
+/* Shell 页脚 */
+.shell-footer {
+    padding: var(--space-xl) var(--space-md);
+    text-align: center;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    border-top: 1px solid rgba(128, 128, 128, 0.1);
+    margin-top: auto;
+}
+
+.shell-footer a {
+    color: var(--accent);
+    text-decoration: none;
+}
+
+.shell-footer a:hover {
+    text-decoration: underline;
+}
+
+/* 面包屑容器 */
+.shell-breadcrumb-wrap {
+    padding: var(--space-sm) var(--space-md) 0;
+    max-width: 960px;
+    margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+    .shell-nav {
+        --shell-nav-height: 48px;
+        padding: 0 var(--space-sm);
+    }
+
+    .shell-nav-links {
+        display: none;
+    }
+
+    .shell-hamburger {
+        display: flex;
+    }
+
+    .shell-menu-overlay,
+    .shell-menu-drawer {
+        display: block;
+    }
+
+    .has-shell-nav {
+        padding-top: 48px;
+    }
+
+    .shell-nav-link {
+        padding: 0.35rem 0.6rem;
+        font-size: 0.78rem;
+    }
+
+    .shell-breadcrumb-wrap {
+        padding: var(--space-xs) var(--space-sm) 0;
+    }
+}

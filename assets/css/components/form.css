@@ -1,0 +1,102 @@
+/* 液态玻璃表单控件 */
+
+.glass-input,
+.glass-textarea,
+.glass-select {
+    width: 100%;
+    padding: 0.6rem 0.85rem;
+    border-radius: var(--radius-sm);
+    border: var(--glass-border);
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: var(--text);
+    font: inherit;
+    font-size: 0.9rem;
+    outline: none;
+    box-shadow: var(--glass-shadow);
+    transition: border-color 0.2s var(--ease-smooth), box-shadow 0.2s var(--ease-smooth);
+}
+
+.glass-input:focus,
+.glass-textarea:focus,
+.glass-select:focus {
+    border-color: var(--accent);
+    box-shadow: var(--focus-ring);
+}
+
+.glass-input::placeholder,
+.glass-textarea::placeholder {
+    color: var(--text-muted);
+    opacity: 0.6;
+}
+
+.glass-textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.glass-select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='%236e6e73' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M3 4.5l3 3 3-3'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    padding-right: 2rem;
+}
+
+/* 复选框和单选框 */
+
+.glass-checkbox,
+.glass-radio {
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border: var(--glass-border);
+    background: var(--glass-bg);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    cursor: pointer;
+    transition: background var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+    vertical-align: middle;
+    flex-shrink: 0;
+}
+
+.glass-checkbox {
+    border-radius: 5px;
+}
+
+.glass-radio {
+    border-radius: 50%;
+}
+
+.glass-checkbox:checked,
+.glass-radio:checked {
+    background: var(--accent);
+    border-color: var(--accent);
+}
+
+.glass-checkbox:checked::after {
+    content: '✓';
+    display: block;
+    text-align: center;
+    color: #fff;
+    font-size: 12px;
+    line-height: 18px;
+    font-weight: 700;
+}
+
+.glass-radio:checked::after {
+    content: '';
+    display: block;
+    width: 8px;
+    height: 8px;
+    margin: 4px auto;
+    border-radius: 50%;
+    background: #fff;
+}
+
+.glass-checkbox:focus-visible,
+.glass-radio:focus-visible {
+    box-shadow: var(--focus-ring);
+}

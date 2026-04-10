@@ -5,8 +5,17 @@
     <script src="../assets/js/theme-init.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>小工具</title>
+    <link rel="stylesheet" href="../assets/css/tokens.css">
+    <link rel="stylesheet" href="../assets/css/reset.css">
     <link rel="stylesheet" href="../assets/css/base.css">
-    <link rel="stylesheet" href="../assets/css/home.css">
+    <link rel="stylesheet" href="../assets/css/animations.css">
+    <link rel="stylesheet" href="../assets/css/components/button.css">
+    <link rel="stylesheet" href="../assets/css/components/nav.css">
+    <link rel="stylesheet" href="../assets/css/components/card.css">
+    <link rel="stylesheet" href="../assets/css/components/form.css">
+    <link rel="stylesheet" href="../assets/css/components/toast.css">
+    <link rel="stylesheet" href="../assets/css/pages/home.css">
+    <link rel="stylesheet" href="../assets/css/layouts/shell.css">
     <style>
         .tools-shell { max-width: 760px; margin: 0 auto; padding: 2rem 1.5rem; }
         .tools-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem; }
@@ -90,7 +99,11 @@
         </details>
     </div>
 
-    <script src="../assets/js/theme.js"></script>
+    <script type="module">
+    import { initShell } from '../assets/js/core/shell.js';
+    initShell();
+    </script>
+    <script nomodule src="../assets/js/legacy.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
     <script src="./tools.js"></script>
 </body>
