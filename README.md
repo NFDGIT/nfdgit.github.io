@@ -50,7 +50,8 @@ assets/js/
 │   ├── toast.js        # Toast 通知
 │   ├── lightbox.js     # 灯箱预览
 │   └── lazy-load.js    # 图片懒加载
-└── note-browser*.js    # 笔记浏览器模块
+└── pages/              # 页面层
+    └── note-browser/   # 笔记浏览器（index/state/sidebar/preview/tree/search）
 ```
 
 ## 目录概览

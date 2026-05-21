@@ -171,7 +171,19 @@ function injectBreadcrumb(customLabel) {
 function injectFooter() {
   const footer = document.createElement('footer');
   footer.className = 'shell-footer';
-  footer.innerHTML = `<a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">↑ 回到顶部</a> · © ${new Date().getFullYear()} 个人主页`;
+
+  const top = document.createElement('a');
+  top.href = '#';
+  top.textContent = '↑ 回到顶部';
+  top.addEventListener('click', e => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  const meta = document.createElement('span');
+  meta.textContent = ` · © ${new Date().getFullYear()} 个人主页`;
+
+  footer.append(top, meta);
   document.body.appendChild(footer);
 }
 

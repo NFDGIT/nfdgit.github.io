@@ -5,6 +5,7 @@
   "description": "个人静态网站 - GitHub Pages",
   "scripts": {
     "serve": "python3 -m http.server 8080",
-    "generate-manifest": "node scripts/generate-note-manifest.js"
+    "generate-manifest": "node scripts/generate-note-manifest.js",
+    "verify-sw": "node scripts/verify-sw-cache.js"
   }
 }

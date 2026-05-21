@@ -1,11 +1,11 @@
 /**
  * 笔记浏览器：入口（manifest、hash、初始化）
  */
-import { PREVIEW_EL, PLACEHOLDER_EL } from './note-browser-state.js';
-import { isMobile, openSidebar, closeSidebar, initSidebarToggle } from './note-browser-sidebar.js';
-import { syncHljsTheme, getFileFromHash, initPreviewLinkInterceptor, loadFileByPath, setActiveFile } from './note-browser-preview.js';
-import { renderTree, initTreeKeyboard } from './note-browser-tree.js';
-import { renderSidebarStats, initSearch } from './note-browser-search.js';
+import { PREVIEW_EL, PLACEHOLDER_EL } from './state.js';
+import { isMobile, openSidebar, closeSidebar, initSidebarToggle } from './sidebar.js';
+import { syncHljsTheme, getFileFromHash, initPreviewLinkInterceptor, loadFileByPath, setActiveFile } from './preview.js';
+import { renderTree, initTreeKeyboard } from './tree.js';
+import { renderSidebarStats, initSearch } from './search.js';
 
 function initGlobalKeyboard() {
   var searchInput = document.getElementById('note-search');

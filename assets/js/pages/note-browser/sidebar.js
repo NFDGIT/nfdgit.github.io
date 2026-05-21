@@ -1,7 +1,7 @@
 /**
  * 笔记浏览器：侧栏展开/收起与移动端 overlay
  */
-import { MOBILE_BREAKPOINT, STORAGE_KEY } from './note-browser-state.js';
+import { MOBILE_BREAKPOINT, STORAGE_KEY } from './state.js';
 
 export function isMobile() {
   return window.innerWidth <= MOBILE_BREAKPOINT;

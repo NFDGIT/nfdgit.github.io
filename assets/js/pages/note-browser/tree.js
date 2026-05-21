@@ -1,8 +1,8 @@
 /**
  * 笔记浏览器：目录树渲染
  */
-import { loadFileByPath } from './note-browser-preview.js';
-import { isMobile, closeSidebar } from './note-browser-sidebar.js';
+import { loadFileByPath } from './preview.js';
+import { isMobile, closeSidebar } from './sidebar.js';
 
 function toggleFolder(dirNode, arrow, childrenEl) {
   var expanded = dirNode.dataset.expanded === 'true';

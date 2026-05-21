@@ -1,7 +1,7 @@
 /**
  * 笔记浏览器：预览区、hash、面包屑、Markdown/HTML 加载
  */
-import { PREVIEW_EL, PLACEHOLDER_EL } from './note-browser-state.js';
+import { PREVIEW_EL, PLACEHOLDER_EL } from './state.js';
 
 function highlightCodeBlocks() {
   if (typeof hljs !== 'undefined' && PREVIEW_EL) {
