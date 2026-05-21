@@ -1,18 +1,12 @@
-const CACHE_VERSION = 'v1';
+const CACHE_VERSION = 'v2';
 const CORE_CACHE = `${CACHE_VERSION}-core`;
 const CONTENT_CACHE = `${CACHE_VERSION}-content`;
 
 const CORE_ASSETS = [
   '/',
   '/index.html',
-  '/assets/css/tokens.css',
-  '/assets/css/reset.css',
-  '/assets/css/base.css',
-  '/assets/css/animations.css',
-  '/assets/css/components/button.css',
-  '/assets/css/components/card.css',
-  '/assets/css/components/nav.css',
-  '/assets/css/layouts/shell.css',
+  '/offline.html',
+  '/assets/css/theme.css',
   '/assets/css/pages/home.css',
   '/assets/js/theme-init.js',
   '/assets/js/core/shell.js',
@@ -23,7 +17,6 @@ const CORE_ASSETS = [
   '/assets/js/utils/storage.js',
   '/assets/js/utils/event-bus.js',
   '/assets/js/legacy.js',
-  '/offline.html',
 ];
 
 self.addEventListener('install', event => {
